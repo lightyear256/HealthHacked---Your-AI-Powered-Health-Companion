@@ -1,3 +1,4 @@
+
 ┌─────────────────┐    ┌──────────────────┐    ┌─────────────────┐
 │   Frontend UI   │────│   API Gateway    │────│   Auth Service  │
 │   (React/Vue)   │    │   (Express.js)   │    │   (JWT/OAuth)   │
@@ -33,3 +34,4 @@
                     │   - Chat History    │
                     │   - Care Plans      │
                     └─────────────────────┘
+
