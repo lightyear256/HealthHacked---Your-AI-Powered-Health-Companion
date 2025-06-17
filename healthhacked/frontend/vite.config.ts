@@ -11,6 +11,9 @@ export default defineConfig({
   },
   server: {
     port: 5173,
+    hmr: {
+      overlay: false  // This disables the error overlay
+    },
     proxy: {
       '/api': {
         target: 'http://localhost:5000',

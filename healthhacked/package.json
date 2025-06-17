@@ -14,6 +14,7 @@
     "setup": "npm run install:all && cd backend && npm run setup"
   },
   "devDependencies": {
+    "@tailwindcss/postcss": "^4.1.10",
     "concurrently": "^8.2.2"
   },
   "workspaces": [
