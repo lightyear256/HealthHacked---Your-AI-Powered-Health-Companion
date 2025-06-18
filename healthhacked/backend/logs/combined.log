@@ -1,0 +1,75 @@
+{"level":"info","message":"🚀 HealthHacked server running on port 5000","service":"healthhacked-api","timestamp":"2025-06-18 02:33:50"}
+{"level":"info","message":"📍 Environment: development","service":"healthhacked-api","timestamp":"2025-06-18 02:33:50"}
+{"level":"info","message":"🔗 API Base URL: http://localhost:5000/api","service":"healthhacked-api","timestamp":"2025-06-18 02:33:50"}
+{"level":"info","message":"🍃 MongoDB Connected: undefined","service":"healthhacked-api","timestamp":"2025-06-18 02:33:50"}
+{"level":"info","message":"🚀 HealthHacked server running on port 5000","service":"healthhacked-api","timestamp":"2025-06-18 02:34:27"}
+{"level":"info","message":"📍 Environment: development","service":"healthhacked-api","timestamp":"2025-06-18 02:34:27"}
+{"level":"info","message":"🔗 API Base URL: http://localhost:5000/api","service":"healthhacked-api","timestamp":"2025-06-18 02:34:27"}
+{"level":"info","message":"🍃 MongoDB Connected: undefined","service":"healthhacked-api","timestamp":"2025-06-18 02:34:27"}
+{"email":"javvadmalik2020@gmail.com","level":"info","message":"User registered successfully","service":"healthhacked-api","timestamp":"2025-06-18 02:34:32","userId":"6851d8608fa96d850309ca34"}
+{"email":"javvadmalik2020@gmail.com","level":"info","message":"User logged in successfully","service":"healthhacked-api","timestamp":"2025-06-18 02:55:04","userId":"6851d8608fa96d850309ca34"}
+{"email":"javvadmalik2020@gmail.com","level":"info","message":"User logged in successfully","service":"healthhacked-api","timestamp":"2025-06-18 02:55:07","userId":"6851d8608fa96d850309ca34"}
+{"email":"javvadmalik2020@gmail.com","level":"info","message":"User logged in successfully","service":"healthhacked-api","timestamp":"2025-06-18 02:55:11","userId":"6851d8608fa96d850309ca34"}
+{"email":"javvadmalik2020@gmail.com","level":"info","message":"User logged in successfully","service":"healthhacked-api","timestamp":"2025-06-18 02:55:16","userId":"6851d8608fa96d850309ca34"}
+{"email":"javvadmalik2020@gmail.com","level":"info","message":"User logged in successfully","service":"healthhacked-api","timestamp":"2025-06-18 02:55:36","userId":"6851d8608fa96d850309ca34"}
+{"email":"javvadmalik2020@gmail.com","level":"info","message":"User logged in successfully","service":"healthhacked-api","timestamp":"2025-06-18 02:55:37","userId":"6851d8608fa96d850309ca34"}
+{"email":"javvadmalik2020@gmail.com","level":"info","message":"User logged in successfully","service":"healthhacked-api","timestamp":"2025-06-18 02:55:40","userId":"6851d8608fa96d850309ca34"}
+{"email":"javvadmalik2020@gmail.com","level":"info","message":"User logged in successfully","service":"healthhacked-api","timestamp":"2025-06-18 02:55:42","userId":"6851d8608fa96d850309ca34"}
+{"email":"javvadmalik2020@gmail.com","level":"info","message":"User logged in successfully","service":"healthhacked-api","timestamp":"2025-06-18 02:55:43","userId":"6851d8608fa96d850309ca34"}
+{"email":"javvadmalik2020@gmail.com","level":"info","message":"User logged in successfully","service":"healthhacked-api","timestamp":"2025-06-18 02:55:45","userId":"6851d8608fa96d850309ca34"}
+{"email":"javvadmalik2020@gmail.com","level":"info","message":"User logged in successfully","service":"healthhacked-api","timestamp":"2025-06-18 02:56:27","userId":"6851d8608fa96d850309ca34"}
+{"email":"javvadmalik2020@gmail.com","level":"info","message":"User logged in successfully","service":"healthhacked-api","timestamp":"2025-06-18 02:56:28","userId":"6851d8608fa96d850309ca34"}
+{"level":"info","message":"🚀 HealthHacked server running on port 5000","service":"healthhacked-api","timestamp":"2025-06-18 02:57:29"}
+{"level":"info","message":"📍 Environment: development","service":"healthhacked-api","timestamp":"2025-06-18 02:57:29"}
+{"level":"info","message":"🔗 API Base URL: http://localhost:5000/api","service":"healthhacked-api","timestamp":"2025-06-18 02:57:29"}
+{"level":"info","message":"🍃 MongoDB Connected: undefined","service":"healthhacked-api","timestamp":"2025-06-18 02:57:29"}
+{"email":"javvadmalik2020@gmail.com","level":"info","message":"User logged in successfully","service":"healthhacked-api","timestamp":"2025-06-18 02:57:30","userId":"6851d8608fa96d850309ca34"}
+{"email":"javvadmalik2020@gmail.com","level":"info","message":"User logged in successfully","service":"healthhacked-api","timestamp":"2025-06-18 03:13:32","userId":"6851d8608fa96d850309ca34"}
+{"email":"javvadmalik2020@gmail.com","level":"info","message":"User logged in successfully","service":"healthhacked-api","timestamp":"2025-06-18 03:13:37","userId":"6851d8608fa96d850309ca34"}
+{"email":"javvadmalik2020@gmail.com","level":"info","message":"User logged in successfully","service":"healthhacked-api","timestamp":"2025-06-18 03:15:04","userId":"6851d8608fa96d850309ca34"}
+{"email":"javvadmalik2020@gmail.com","level":"info","message":"User logged in successfully","service":"healthhacked-api","timestamp":"2025-06-18 03:15:18","userId":"6851d8608fa96d850309ca34"}
+{"email":"javvadmalik2020@gmail.com","level":"info","message":"User logged in successfully","service":"healthhacked-api","timestamp":"2025-06-18 03:48:55","userId":"6851d8608fa96d850309ca34"}
+{"email":"javvadmalik2020@gmail.com","level":"info","message":"User logged in successfully","service":"healthhacked-api","timestamp":"2025-06-18 03:50:11","userId":"6851d8608fa96d850309ca34"}
+{"email":"javvadmalik2020@gmail.com","level":"info","message":"User logged in successfully","service":"healthhacked-api","timestamp":"2025-06-18 04:07:44","userId":"6851d8608fa96d850309ca34"}
+{"level":"info","message":"🚀 HealthHacked server running on port 5000","service":"healthhacked-api","timestamp":"2025-06-18 04:24:29"}
+{"level":"info","message":"📍 Environment: development","service":"healthhacked-api","timestamp":"2025-06-18 04:24:29"}
+{"level":"info","message":"🔗 API Base URL: http://localhost:5000/api","service":"healthhacked-api","timestamp":"2025-06-18 04:24:29"}
+{"level":"info","message":"🍃 MongoDB Connected: undefined","service":"healthhacked-api","timestamp":"2025-06-18 04:24:29"}
+{"level":"info","message":"🤖 Gemini Service initialized (without Redis)","service":"healthhacked-api","timestamp":"2025-06-18 04:25:17"}
+{"level":"info","message":"🚀 HealthHacked server running on port 5000","service":"healthhacked-api","timestamp":"2025-06-18 04:25:17"}
+{"level":"info","message":"📍 Environment: development","service":"healthhacked-api","timestamp":"2025-06-18 04:25:17"}
+{"level":"info","message":"🔗 API Base URL: http://localhost:5000/api","service":"healthhacked-api","timestamp":"2025-06-18 04:25:17"}
+{"level":"info","message":"🍃 MongoDB Connected: undefined","service":"healthhacked-api","timestamp":"2025-06-18 04:25:17"}
+{"level":"info","message":"🚀 HealthHacked server running on port 5000","service":"healthhacked-api","timestamp":"2025-06-18 04:25:24"}
+{"level":"info","message":"📍 Environment: development","service":"healthhacked-api","timestamp":"2025-06-18 04:25:24"}
+{"level":"info","message":"🔗 API Base URL: http://localhost:5000/api","service":"healthhacked-api","timestamp":"2025-06-18 04:25:24"}
+{"level":"info","message":"🍃 MongoDB Connected: undefined","service":"healthhacked-api","timestamp":"2025-06-18 04:25:24"}
+{"level":"info","message":"🤖 Gemini Service initialized (without Redis)","service":"healthhacked-api","timestamp":"2025-06-18 04:25:25"}
+{"level":"info","message":"🚀 HealthHacked server running on port 5000","service":"healthhacked-api","timestamp":"2025-06-18 04:25:25"}
+{"level":"info","message":"📍 Environment: development","service":"healthhacked-api","timestamp":"2025-06-18 04:25:25"}
+{"level":"info","message":"🔗 API Base URL: http://localhost:5000/api","service":"healthhacked-api","timestamp":"2025-06-18 04:25:25"}
+{"level":"info","message":"🍃 MongoDB Connected: undefined","service":"healthhacked-api","timestamp":"2025-06-18 04:25:25"}
+{"level":"info","message":"🤖 Gemini Service initialized (without Redis)","service":"healthhacked-api","timestamp":"2025-06-18 04:25:30"}
+{"level":"info","message":"🚀 HealthHacked server running on port 5000","service":"healthhacked-api","timestamp":"2025-06-18 04:25:30"}
+{"level":"info","message":"📍 Environment: development","service":"healthhacked-api","timestamp":"2025-06-18 04:25:30"}
+{"level":"info","message":"🔗 API Base URL: http://localhost:5000/api","service":"healthhacked-api","timestamp":"2025-06-18 04:25:30"}
+{"level":"info","message":"🍃 MongoDB Connected: undefined","service":"healthhacked-api","timestamp":"2025-06-18 04:25:30"}
+{"level":"info","message":"🤖 Gemini Service initialized (without Redis)","service":"healthhacked-api","timestamp":"2025-06-18 04:25:32"}
+{"level":"info","message":"🚀 HealthHacked server running on port 5000","service":"healthhacked-api","timestamp":"2025-06-18 04:25:32"}
+{"level":"info","message":"📍 Environment: development","service":"healthhacked-api","timestamp":"2025-06-18 04:25:32"}
+{"level":"info","message":"🔗 API Base URL: http://localhost:5000/api","service":"healthhacked-api","timestamp":"2025-06-18 04:25:32"}
+{"level":"info","message":"🍃 MongoDB Connected: undefined","service":"healthhacked-api","timestamp":"2025-06-18 04:25:32"}
+{"level":"info","message":"🤖 Gemini Service initialized (without Redis)","service":"healthhacked-api","timestamp":"2025-06-18 04:25:33"}
+{"level":"info","message":"🚀 HealthHacked server running on port 5000","service":"healthhacked-api","timestamp":"2025-06-18 04:25:33"}
+{"level":"info","message":"📍 Environment: development","service":"healthhacked-api","timestamp":"2025-06-18 04:25:33"}
+{"level":"info","message":"🔗 API Base URL: http://localhost:5000/api","service":"healthhacked-api","timestamp":"2025-06-18 04:25:33"}
+{"level":"info","message":"🍃 MongoDB Connected: undefined","service":"healthhacked-api","timestamp":"2025-06-18 04:25:33"}
+{"level":"info","message":"Gemini request","promptLength":441,"service":"healthhacked-api","timestamp":"2025-06-18 04:25:54","userId":"6851d8608fa96d850309ca34"}
+{"error":"[GoogleGenerativeAI Error]: Error fetching from https://generativelanguage.googleapis.com/v1/models/gemini-2.0-flash-exp:generateContent: [404 Not Found] models/gemini-2.0-flash-exp is not found for API version v1, or is not supported for generateContent. Call ListModels to see the list of available models and their supported methods.","level":"error","message":"Gemini API error:","processingTime":1515,"service":"healthhacked-api","timestamp":"2025-06-18 04:25:56"}
+{"level":"info","message":"Gemini request","promptLength":425,"service":"healthhacked-api","timestamp":"2025-06-18 04:28:06","userId":"6851d8608fa96d850309ca34"}
+{"error":"[GoogleGenerativeAI Error]: Error fetching from https://generativelanguage.googleapis.com/v1/models/gemini-2.0-flash-exp:generateContent: [404 Not Found] models/gemini-2.0-flash-exp is not found for API version v1, or is not supported for generateContent. Call ListModels to see the list of available models and their supported methods.","level":"error","message":"Gemini API error:","processingTime":1471,"service":"healthhacked-api","timestamp":"2025-06-18 04:28:08"}
+{"level":"info","message":"🚀 HealthHacked server running on port 5000","service":"healthhacked-api","timestamp":"2025-06-18 17:13:46"}
+{"level":"info","message":"📍 Environment: development","service":"healthhacked-api","timestamp":"2025-06-18 17:13:46"}
+{"level":"info","message":"🔗 API Base URL: http://localhost:5000/api","service":"healthhacked-api","timestamp":"2025-06-18 17:13:46"}
+{"level":"info","message":"🍃 MongoDB Connected: undefined","service":"healthhacked-api","timestamp":"2025-06-18 17:13:46"}
+{"level":"warn","message":"MongoDB disconnected","service":"healthhacked-api","timestamp":"2025-06-18 17:19:09"}

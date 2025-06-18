@@ -1,180 +1,187 @@
-// ================================
-// File: backend/src/routes/chat.js
-// ================================
+// const express = require('express');
+// const jwt = require('jsonwebtoken');
+// const User = require('../models/User');
+// const geminiService = require('../services/ai/geminiService');
+
+// const router = express.Router();
+
+// // Simple auth middleware
+// const protect = async (req, res, next) => {
+//   try {
+//     const token = req.headers.authorization?.split(' ')[1];
+//     if (!token) {
+//       return res.status(401).json({ success: false, error: 'No token provided' });
+//     }
+
+//     const decoded = jwt.verify(token, process.env.JWT_SECRET || 'fallback-secret');
+//     const user = await User.findById(decoded.id);
+    
+//     if (!user) {
+//       return res.status(401).json({ success: false, error: 'User not found' });
+//     }
+
+//     req.user = user;
+//     next();
+//   } catch (error) {
+//     res.status(401).json({ success: false, error: 'Invalid token' });
+//   }
+// };
+
+// // Chat endpoint
+// router.post('/', protect, async (req, res) => {
+//   try {
+//     const { message } = req.body;
+    
+//     if (!message || !message.trim()) {
+//       return res.status(400).json({
+//         success: false,
+//         error: 'Message is required'
+//       });
+//     }
+
+//     console.log('Processing chat message:', message);
+
+//     // Create a health-focused prompt
+//     const healthPrompt = `
+// You are a helpful health information assistant. A user asks: "${message}"
+
+// Please provide a helpful, empathetic response that:
+// 1. Acknowledges their concern
+// 2. Provides general health information (not medical diagnosis)
+// 3. Suggests practical steps they can take
+// 4. Recommends consulting healthcare professionals when appropriate
+// 5. Is encouraging and supportive
+
+// Keep your response conversational and under 200 words.
+//     `;
+
+//     // Call Gemini AI
+//     const aiResult = await geminiService.generateWithSafety(
+//       healthPrompt,
+//       req.user._id.toString(),
+//       { type: 'health_chat' }
+//     );
+
+//     console.log('AI response generated successfully');
+
+//     res.json({
+//       success: true,
+//       data: {
+//         response: aiResult.content,
+//         sessionId: 'session-' + Date.now(),
+//         intent: 'health_query',
+//         confidence: 0.9,
+//         processingTime: aiResult.processingTime
+//       }
+//     });
+
+//   } catch (error) {
+//     console.error('Chat error:', error);
+    
+//     // Fallback response if AI fails
+//     const fallbackResponse = `I understand you're asking about "${req.body.message}". While I'm having some technical difficulties right now, I want to help. For any health concerns, I always recommend consulting with a healthcare professional who can provide personalized advice. In the meantime, monitor your symptoms and don't hesitate to seek immediate medical attention if you're worried.`;
+    
+//     res.json({
+//       success: true,
+//       data: {
+//         response: fallbackResponse,
+//         sessionId: 'fallback-' + Date.now(),
+//         intent: 'health_query',
+//         confidence: 0.5
+//       }
+//     });
+//   }
+// });
+
+// module.exports = router;
+
 const express = require('express');
-const { protect } = require('../middleware/auth');
-const { validateChatMessage } = require('../middleware/validation');
-const { chatLimiter } = require('../middleware/rateLimiter');
-const IntentClassifier = require('../services/ai/intentClassifier');
-const ChatRouter = require('../services/core/chatRouter');
-const ContextManager = require('../services/core/contextManager');
-const { AppError } = require('../middleware/errorHandler');
-const logger = require('../utils/logger');
+const jwt = require('jsonwebtoken');
+const User = require('../models/User');
 
 const router = express.Router();
 
-// Apply protection and rate limiting to all chat routes
-router.use(protect);
-router.use(chatLimiter);
-
-// @route   POST /api/chat
-// @desc    Send a chat message
-// @access  Private
-router.post('/', validateChatMessage, async (req, res, next) => {
+// Simple auth middleware
+const protect = async (req, res, next) => {
   try {
-    const { message, sessionId } = req.body;
-    const userId = req.user._id;
+    const token = req.headers.authorization?.split(' ')[1];
+    if (!token) {
+      return res.status(401).json({ success: false, error: 'No token provided' });
+    }
 
-    // Get user context
-    const userContext = await ContextManager.getUserContext(userId, sessionId);
+    const decoded = jwt.verify(token, process.env.JWT_SECRET || 'fallback-secret');
+    const user = await User.findById(decoded.id);
+    
+    if (!user) {
+      return res.status(401).json({ success: false, error: 'User not found' });
+    }
 
-    // Classify intent
-    const intent = await IntentClassifier.classifyIntent(message, userContext);
+    req.user = user;
+    next();
+  } catch (error) {
+    res.status(401).json({ success: false, error: 'Invalid token' });
+  }
+};
 
-    // Route to appropriate chatbot
-    const response = await ChatRouter.routeMessage(intent, message, userContext);
+// Chat endpoint - DIRECT GEMINI CALL (bypass our service for now)
+router.post('/', protect, async (req, res) => {
+  try {
+    const { message } = req.body;
+    
+    console.log('🔍 Environment variables check:');
+    console.log('🔍 GOOGLE_API_KEY exists:', !!process.env.GOOGLE_API_KEY);
+    console.log('🔍 GEMINI_API_KEY exists:', !!process.env.GEMINI_API_KEY);
+    console.log('🔍 NODE_ENV:', process.env.NODE_ENV);
+    
+    // Try direct Gemini call
+    const { GoogleGenerativeAI } = require('@google/generative-ai');
+    
+    const apiKey = process.env.GOOGLE_API_KEY || process.env.GEMINI_API_KEY;
+    console.log('🔍 Using API key (first 10 chars):', apiKey?.substring(0, 10) + '...');
+    
+    if (!apiKey) {
+      throw new Error('No API key found in environment variables');
+    }
 
-    // Store user message
-    await ContextManager.storeChatMessage(userId, userContext.sessionId, {
-      role: 'user',
-      content: message,
-      metadata: {
-        intent: intent.intent,
-        confidence: intent.confidence
-      }
-    }, response.contextId);
+    const genAI = new GoogleGenerativeAI(apiKey);
+    const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash-exp" });
 
-    // Store AI response
-    await ContextManager.storeChatMessage(userId, userContext.sessionId, {
-      role: 'assistant',
-      content: response.response,
-      chatbotType: intent.intent === 'follow_up' ? 'secondary' : 'primary',
-      metadata: {
-        intent: intent.intent,
-        processingTime: response.totalProcessingTime
-      }
-    }, response.contextId);
+    const healthPrompt = `You are a helpful health assistant. User asks: "${message}". Provide a brief, empathetic response with general health information (not medical diagnosis). Keep it under 150 words.`;
 
-    // Update context
-    await ContextManager.updateContext(userId, userContext.sessionId, {
-      lastIntent: intent.intent
-    });
-
-    logger.info('Chat message processed', {
-      userId,
-      sessionId: userContext.sessionId,
-      intent: intent.intent,
-      confidence: intent.confidence,
-      processingTime: response.totalProcessingTime
-    });
+    console.log('🔍 Calling Gemini directly...');
+    const result = await model.generateContent(healthPrompt);
+    const response = await result.response;
+    const text = response.text();
+    
+    console.log('✅ Direct Gemini call successful!');
+    console.log('🔍 Response length:', text.length);
 
     res.json({
       success: true,
       data: {
-        response: response.response,
-        sessionId: userContext.sessionId,
-        intent: intent.intent,
-        confidence: intent.confidence,
-        processingTime: response.totalProcessingTime,
-        ...(response.contextId && { contextId: response.contextId }),
-        ...(response.potentialCauses && { potentialCauses: response.potentialCauses }),
-        ...(response.immediateSteps && { immediateSteps: response.immediateSteps }),
-        ...(response.recommendations && { recommendations: response.recommendations }),
-        ...(response.isEmergency && { 
-          emergency: {
-            type: response.emergencyType,
-            instructions: response.emergencyInstructions,
-            contacts: response.emergencyContacts
-          }
-        })
+        response: text,
+        sessionId: 'direct-' + Date.now(),
+        intent: 'health_query',
+        confidence: 0.9
       }
     });
 
   } catch (error) {
-    next(error);
-  }
-});
-
-// @route   GET /api/chat/history/:sessionId
-// @desc    Get chat history for a session
-// @access  Private
-router.get('/history/:sessionId', async (req, res, next) => {
-  try {
-    const { sessionId } = req.params;
-    const { limit = 50 } = req.query;
-
-    const sessionHistory = await ContextManager.getSessionHistory(sessionId, parseInt(limit));
-
-    if (!sessionHistory) {
-      return next(new AppError('Session not found', 404));
-    }
-
-    // Verify user owns this session
-    if (sessionHistory.user._id.toString() !== req.user._id.toString()) {
-      return next(new AppError('Not authorized to access this session', 403));
-    }
-
-    res.json({
-      success: true,
-      data: sessionHistory
-    });
-
-  } catch (error) {
-    next(error);
-  }
-});
-
-// @route   GET /api/chat/sessions
-// @desc    Get user's chat sessions
-// @access  Private
-router.get('/sessions', async (req, res, next) => {
-  try {
-    const { limit = 20 } = req.query;
-    const userId = req.user._id;
-
-    const sessions = await ContextManager.getUserSessions(userId, parseInt(limit));
-
+    console.error('❌ DETAILED ERROR:');
+    console.error('❌ Error message:', error.message);
+    console.error('❌ Error name:', error.name);
+    console.error('❌ Full error:', error);
+    
+    // Send error details to frontend for debugging
     res.json({
       success: true,
       data: {
-        sessions,
-        count: sessions.length
+        response: `DEBUG ERROR: ${error.message}. This helps us fix the issue!`,
+        sessionId: 'error-' + Date.now(),
+        intent: 'error',
+        confidence: 0.1
       }
     });
-
-  } catch (error) {
-    next(error);
-  }
-});
-
-// @route   POST /api/chat/feedback
-// @desc    Submit feedback for a chat response
-// @access  Private
-router.post('/feedback', async (req, res, next) => {
-  try {
-    const { sessionId, messageIndex, rating, feedback } = req.body;
-
-    if (!sessionId || messageIndex === undefined || !rating) {
-      return next(new AppError('Session ID, message index, and rating are required', 400));
-    }
-
-    // Here you would typically store feedback in a feedback collection
-    // For now, we'll just log it
-    logger.info('Chat feedback received', {
-      userId: req.user._id,
-      sessionId,
-      messageIndex,
-      rating,
-      feedback
-    });
-
-    res.json({
-      success: true,
-      message: 'Feedback submitted successfully'
-    });
-
-  } catch (error) {
-    next(error);
   }
 });
 

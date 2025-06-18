@@ -1,7 +1,7 @@
 // ================================
 // File: frontend/src/components/layout/Header.tsx
 // ================================
-import React from 'react';
+
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuthStore } from '../../hooks/useAuth';
 import { Button } from '../ui/Button';
@@ -22,7 +22,7 @@ export function Header() {
         <div className="flex justify-between items-center h-16">
           {/* Logo */}
           <Link to="/" className="flex items-center space-x-2">
-            <Heart className="h-8 w-8 text-health-600" />
+            <Heart className="h-8 w-8 text-green-600" />
             <span className="text-xl font-bold text-gray-900">HealthHacked</span>
           </Link>
 
