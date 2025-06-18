@@ -1,18 +1,18 @@
-// ================================
-// File: backend/src/config/gemini.js
-// ================================
 const { GoogleGenerativeAI } = require('@google/generative-ai');
 const logger = require('../utils/logger');
 
 class GeminiConfig {
   constructor() {
-    if (!process.env.GEMINI_API_KEY) {
-      throw new Error('GEMINI_API_KEY is required in environment variables');
+    if (!process.env.GOOGLE_API_KEY && !process.env.GEMINI_API_KEY) {
+      throw new Error('GOOGLE_API_KEY or GEMINI_API_KEY is required in environment variables');
     }
     
-    this.genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
+    const apiKey = process.env.GOOGLE_API_KEY || process.env.GEMINI_API_KEY;
+    this.genAI = new GoogleGenerativeAI(apiKey);
+    
+    // FIXED: Use valid model name
     this.model = this.genAI.getGenerativeModel({ 
-      model: "gemini-2.0-flash-exp",
+      model: "gemini-1.5-flash", // Changed from "gemini-2.0-flash-exp"
       generationConfig: {
         temperature: 0.7,
         topK: 40,
