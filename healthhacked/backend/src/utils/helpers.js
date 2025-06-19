@@ -1,6 +1,4 @@
-// ================================
-// File: backend/src/utils/helpers.js
-// ================================
+
 const crypto = require('crypto');
 
 // Generate unique session ID

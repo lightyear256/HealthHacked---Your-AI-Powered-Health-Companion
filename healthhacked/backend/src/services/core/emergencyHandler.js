@@ -1,6 +1,4 @@
-// ================================
-// File: backend/src/services/core/emergencyHandler.js
-// ================================
+
 const logger = require('../../utils/logger');
 const Notification = require('../../models/Notification');
 

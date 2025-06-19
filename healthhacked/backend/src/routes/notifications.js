@@ -1,6 +1,4 @@
-// ================================
-// File: backend/src/routes/notifications.js
-// ================================
+
 const express = require('express');
 const { protect } = require('../middleware/auth');
 const Notification = require('../models/Notification');

@@ -1,6 +1,4 @@
-// ================================
-// File: backend/src/jobs/notificationJobs.js
-// ================================
+
 const cron = require('cron');
 const HealthContext = require('../models/HealthContext');
 const CarePlan = require('../models/CarePlan');
@@ -129,7 +127,7 @@ class NotificationJobs {
 
   async scheduleUserSpecificNotifications() {
     try {
-      // This method can be called to reschedule notifications for all active users
+      
       const User = require('../models/User');
       const activeUsers = await User.find({
         isActive: true,

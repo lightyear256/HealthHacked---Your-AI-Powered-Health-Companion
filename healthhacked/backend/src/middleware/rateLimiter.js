@@ -1,6 +1,4 @@
-// ================================
-// File: backend/src/middleware/rateLimiter.js
-// ================================
+
 const rateLimit = require('express-rate-limit');
 
 // Chat-specific rate limiter (more restrictive)

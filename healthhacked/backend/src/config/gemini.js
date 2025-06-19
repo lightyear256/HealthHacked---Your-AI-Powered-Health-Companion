@@ -10,9 +10,9 @@ class GeminiConfig {
     const apiKey = process.env.GOOGLE_API_KEY || process.env.GEMINI_API_KEY;
     this.genAI = new GoogleGenerativeAI(apiKey);
     
-    // FIXED: Use valid model name
+    
     this.model = this.genAI.getGenerativeModel({ 
-      model: "gemini-1.5-flash", // Changed from "gemini-2.0-flash-exp"
+      model: "gemini-1.5-flash", 
       generationConfig: {
         temperature: 0.7,
         topK: 40,

@@ -5,15 +5,15 @@ require('dotenv').config();
 
 async function setupDatabase() {
   try {
-    // Connect to MongoDB
+   
     await mongoose.connect(process.env.MONGODB_URI);
     console.log('✅ Connected to MongoDB');
 
-    // Create indexes
+    
     await User.createIndexes();
     console.log('✅ Database indexes created');
 
-    // Create logs directory
+    
     const fs = require('fs');
     if (!fs.existsSync('logs')) {
       fs.mkdirSync('logs');

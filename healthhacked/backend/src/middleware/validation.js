@@ -1,6 +1,4 @@
-// ================================
-// File: backend/src/middleware/validation.js
-// ================================
+
 const { body, param, query, validationResult } = require('express-validator');
 const { AppError } = require('./errorHandler');
 

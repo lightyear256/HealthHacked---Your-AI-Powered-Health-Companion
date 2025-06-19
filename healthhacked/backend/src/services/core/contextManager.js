@@ -1,6 +1,4 @@
-// ================================
-// File: backend/src/services/core/contextManager.js
-// ================================
+
 const User = require('../../models/User');
 const HealthContext = require('../../models/HealthContext');
 const ChatHistory = require('../../models/ChatHistory');

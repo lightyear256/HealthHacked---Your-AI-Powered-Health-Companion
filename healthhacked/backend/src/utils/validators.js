@@ -1,6 +1,4 @@
-// ================================
-// File: backend/src/utils/validators.js
-// ================================
+
 const validator = require('validator');
 
 class Validators {

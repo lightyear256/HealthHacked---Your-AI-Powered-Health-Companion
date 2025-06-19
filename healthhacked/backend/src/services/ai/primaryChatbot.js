@@ -1,6 +1,4 @@
-// ================================
-// File: backend/src/services/ai/primaryChatbot.js
-// ================================
+
 const geminiService = require('./geminiService');
 const HealthContext = require('../../models/HealthContext');
 const CarePlan = require('../../models/CarePlan');
@@ -12,13 +10,10 @@ class PrimaryChatbot {
     try {
       const medicalPrompt = this.buildMedicalQueryPrompt(userInput, userContext);
       
-      const result = await geminiService.generateWithSafety(
-        medicalPrompt, 
-        userContext.userId,
-        { type: 'medical_query', hasActiveContext: userContext.hasActiveHealthConcern }
-      );
-
-      const response = JSON.parse(result.content);
+      // Use generateStructuredResponse instead of generateWithSafety
+      const result = await geminiService.generateStructuredResponse(medicalPrompt);
+      
+      const response = result.content; // This is already parsed JSON
       
       // Store health context
       const healthContext = await this.createHealthContext(userContext.userId, userInput, response);
@@ -68,16 +63,6 @@ IMPORTANT:
 - Always emphasize professional consultation for serious concerns
 - Use supportive, caring language
 - Focus on immediate self-care when appropriate
-
-Respond in this JSON format:
-{
-  "response": "Your main empathetic response (2-3 sentences)",
-  "potentialCauses": ["cause1", "cause2", "cause3"],
-  "immediateSteps": ["step1", "step2", "step3"],
-  "seekHelpIf": ["condition1", "condition2", "condition3"],
-  "followUpQuestion": "Relevant question to ask for more context",
-  "severity": "low|medium|high"
-}
     `;
   }
 
@@ -109,11 +94,13 @@ Respond in this JSON format:
   }
 
   static async createInitialCarePlan(userId, contextId, aiResponse) {
+    // Create structured recommendations from AI response
     const recommendations = aiResponse.immediateSteps.map((step, index) => ({
-      type: 'immediate',
-      title: `Step ${index + 1}`,
+      title: `Recommendation ${index + 1}`,
       description: step,
-      priority: index + 1
+      type: 'immediate',
+      priority: index + 1,
+      dueDate: new Date(Date.now() + (index + 1) * 24 * 60 * 60 * 1000) // Due dates 1, 2, 3 days from now
     }));
 
     const carePlan = new CarePlan({
@@ -121,7 +108,8 @@ Respond in this JSON format:
       contextId,
       title: 'Initial Care Plan',
       description: 'Immediate steps to address your health concern',
-      recommendations
+      recommendations,
+      status: 'active'
     });
 
     await carePlan.save();
@@ -133,11 +121,9 @@ Respond in this JSON format:
   static async handleGeneralWellness(userInput, userContext) {
     try {
       const wellnessPrompt = `
-You are a helpful wellness assistant. The user asks: "${userInput}"
+You are a helpful wellness assistant providing general health information.
 
-USER PROFILE:
-- Name: ${userContext.profile?.name || 'User'}
-- Age: ${userContext.profile?.age || 'Not specified'}
+User asks: "${userInput}"
 
 Provide helpful wellness information that:
 1. Answers their question clearly
@@ -146,27 +132,19 @@ Provide helpful wellness information that:
 4. Is encouraging and supportive
 
 Keep your response conversational and under 200 words.
-
-Respond in JSON format:
-{
-  "response": "Your helpful wellness response",
-  "tips": ["tip1", "tip2", "tip3"],
-  "category": "nutrition|exercise|mental_health|sleep|general"
-}
       `;
 
-      const result = await geminiService.generateWithSafety(
-        wellnessPrompt,
-        userContext.userId,
-        { type: 'wellness_query' }
-      );
-
-      const response = JSON.parse(result.content);
+      // For wellness queries, we can use regular generateContent
+      const result = await geminiService.generateContent(wellnessPrompt);
       
       return {
-        response: response.response,
-        tips: response.tips,
-        category: response.category,
+        response: result.content,
+        tips: [
+          "Stay hydrated throughout the day",
+          "Aim for 7-9 hours of quality sleep",
+          "Include physical activity in your daily routine"
+        ],
+        category: "general",
         processingTime: result.processingTime
       };
 
@@ -178,7 +156,7 @@ Respond in JSON format:
 
   static getFallbackMedicalResponse(userInput) {
     return {
-      response: "I understand you're experiencing some health concerns. While I'd like to help, I want to make sure you get the best care possible.",
+      response: "I understand you're experiencing some health concerns. While I'd like to help, I'm having some technical difficulties. Please try again or consult with a healthcare professional for immediate assistance.",
       potentialCauses: [
         "Various factors could be contributing to your symptoms",
         "Lifestyle factors like stress, sleep, or diet",

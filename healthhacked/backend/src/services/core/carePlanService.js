@@ -1,6 +1,4 @@
-// ================================
-// File: backend/src/services/core/carePlanService.js
-// ================================
+
 const CarePlan = require('../../models/CarePlan');
 const HealthContext = require('../../models/HealthContext');
 const SecondaryChatbot = require('../ai/secondaryChatbot');

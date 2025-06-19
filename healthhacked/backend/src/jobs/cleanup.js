@@ -1,6 +1,4 @@
-// ================================
-// File: backend/src/jobs/cleanup.js
-// ================================
+
 const cron = require('cron');
 const logger = require('../utils/logger');
 const ChatHistory = require('../models/ChatHistory');

@@ -1,5 +1,4 @@
-// File: backend/src/config/index.js
-// CREATE THIS FILE
+
 
 module.exports = {
   // Server configuration
@@ -28,6 +27,6 @@ module.exports = {
   // Notification settings
   notifications: {
     intervalHours: parseInt(process.env.NOTIFICATION_INTERVAL_HOURS) || 24,
-    defaultTime: '09:00' // 9 AM
+    defaultTime: '09:00' 
   }
 };

@@ -1,6 +1,4 @@
-// ================================
-// File: backend/src/controllers/chatController.js
-// ================================
+
 const IntentClassifier = require('../services/ai/intentClassifier');
 const ChatRouter = require('../services/core/chatRouter');
 const ContextManager = require('../services/core/contextManager');
