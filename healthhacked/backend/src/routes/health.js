@@ -1,241 +1,283 @@
 const express = require('express');
-const jwt = require('jsonwebtoken');
-const User = require('../models/User');
+const { protect } = require('../middleware/auth');
+const HealthContext = require('../models/HealthContext');
+const CarePlan = require('../models/CarePlan');
+const CarePlanService = require('../services/core/carePlanService');
+const SecondaryChatbot = require('../services/ai/secondaryChatbot');
+const { AppError } = require('../middleware/errorHandler');
+const logger = require('../utils/logger');
 
 const router = express.Router();
 
-// Simple auth middleware
-const protect = async (req, res, next) => {
-  try {
-    const token = req.headers.authorization?.split(' ')[1];
-    if (!token) {
-      return res.status(401).json({ success: false, error: 'No token provided' });
-    }
-
-    const decoded = jwt.verify(token, process.env.JWT_SECRET || 'fallback-secret');
-    const user = await User.findById(decoded.id);
-    
-    if (!user) {
-      return res.status(401).json({ success: false, error: 'User not found' });
-    }
-
-    req.user = user;
-    next();
-  } catch (error) {
-    console.error('Auth error:', error);
-    res.status(401).json({ success: false, error: 'Invalid token' });
-  }
-};
+// Apply protection to all health routes
+router.use(protect);
 
 // @route   GET /api/health/dashboard
 // @desc    Get user's health dashboard data
 // @access  Private
-router.get('/dashboard', protect, async (req, res) => {
+router.get('/dashboard', async (req, res, next) => {
   try {
-    console.log('📊 Dashboard request for user:', req.user._id);
-    
-    // Mock dashboard data for now - replace with real data later
-    const dashboardData = {
-      stats: {
-        activeHealthConcerns: 0,
-        activeCarePlans: 0,
-        totalRecommendations: 0,
-        completedRecommendations: 0
-      },
-      activeContexts: [],
-      activeCarePlans: [],
-      recentActivity: []
+    const userId = req.user._id;
+
+    logger.info('Loading dashboard data', { userId });
+
+    // Get active health contexts
+    const activeContexts = await HealthContext.find({
+      userId,
+      status: 'active'
+    }).sort({ createdAt: -1 }).limit(5);
+
+    // Get active care plans
+    const activeCarePlans = await CarePlan.find({
+      userId,
+      isActive: true
+    }).populate('contextId', 'primaryConcern symptoms status').limit(3);
+
+    // Calculate dashboard statistics
+    const stats = {
+      activeHealthConcerns: activeContexts.length,
+      activeCarePlans: activeCarePlans.length,
+      totalRecommendations: activeCarePlans.reduce((total, plan) => total + (plan.recommendations?.length || 0), 0),
+      completedRecommendations: activeCarePlans.reduce((total, plan) => 
+        total + (plan.recommendations?.filter(rec => rec.completed).length || 0), 0
+      )
     };
+
+    // Get recent activity (last 7 days)
+    const sevenDaysAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);
+    const recentActivity = await HealthContext.find({
+      userId,
+      createdAt: { $gte: sevenDaysAgo }
+    }).sort({ createdAt: -1 }).limit(10);
+
+    logger.info('Dashboard data loaded successfully', {
+      userId,
+      activeContexts: activeContexts.length,
+      activeCarePlans: activeCarePlans.length
+    });
 
     res.json({
       success: true,
-      data: dashboardData
+      data: {
+        stats,
+        activeContexts,
+        activeCarePlans,
+        recentActivity
+      }
     });
 
   } catch (error) {
-    console.error('Dashboard error:', error);
-    res.status(500).json({
-      success: false,
-      error: 'Failed to load dashboard data'
-    });
+    logger.error('Dashboard load error', { userId: req.user._id, error: error.message });
+    next(error);
   }
 });
 
 // @route   GET /api/health/contexts
 // @desc    Get user's health contexts
 // @access  Private
-router.get('/contexts', protect, async (req, res) => {
+router.get('/contexts', async (req, res, next) => {
   try {
-    console.log('📋 Health contexts request for user:', req.user._id);
-    
-    // Mock data for now
+    const { status, limit = 20 } = req.query;
+    const userId = req.user._id;
+
+    const query = { userId };
+    if (status) query.status = status;
+
+    const contexts = await HealthContext.find(query)
+      .sort({ createdAt: -1 })
+      .limit(parseInt(limit));
+
     res.json({
       success: true,
       data: {
-        contexts: [],
-        count: 0
+        contexts,
+        count: contexts.length
       }
     });
 
   } catch (error) {
-    console.error('Health contexts error:', error);
-    res.status(500).json({
-      success: false,
-      error: 'Failed to load health contexts'
-    });
-  }
-});
-
-// @route   GET /api/health/care-plans
-// @desc    Get user's care plans
-// @access  Private
-router.get('/care-plans', protect, async (req, res) => {
-  try {
-    console.log('📋 Care plans request for user:', req.user._id);
-    
-    // Mock data for now
-    res.json({
-      success: true,
-      data: {
-        carePlans: [],
-        count: 0
-      }
-    });
-
-  } catch (error) {
-    console.error('Care plans error:', error);
-    res.status(500).json({
-      success: false,
-      error: 'Failed to load care plans'
-    });
+    next(error);
   }
 });
 
 // @route   GET /api/health/contexts/:id
 // @desc    Get specific health context
 // @access  Private
-router.get('/contexts/:id', protect, async (req, res) => {
+router.get('/contexts/:id', async (req, res, next) => {
   try {
-    console.log('📋 Health context request:', req.params.id);
-    
-    // Mock data for now
+    const context = await HealthContext.findById(req.params.id);
+
+    if (!context) {
+      return next(new AppError('Health context not found', 404));
+    }
+
+    // Verify user owns this context
+    if (context.userId.toString() !== req.user._id.toString()) {
+      return next(new AppError('Not authorized to access this health context', 403));
+    }
+
     res.json({
       success: true,
-      data: {
-        context: {
-          _id: req.params.id,
-          primaryConcern: 'Sample Health Concern',
-          severity: 5,
-          symptoms: ['symptom1', 'symptom2'],
-          status: 'active',
-          createdAt: new Date()
-        }
-      }
+      data: { context }
     });
 
   } catch (error) {
-    console.error('Health context error:', error);
-    res.status(500).json({
-      success: false,
-      error: 'Failed to load health context'
-    });
+    next(error);
   }
 });
 
 // @route   PUT /api/health/contexts/:id/status
 // @desc    Update health context status
 // @access  Private
-router.put('/contexts/:id/status', protect, async (req, res) => {
+router.put('/contexts/:id/status', async (req, res, next) => {
   try {
     const { status, notes } = req.body;
-    console.log('📝 Updating context status:', req.params.id, status);
-    
-    // Mock update for now
+
+    if (!['active', 'resolved', 'monitoring', 'escalated'].includes(status)) {
+      return next(new AppError('Invalid status', 400));
+    }
+
+    const context = await HealthContext.findById(req.params.id);
+
+    if (!context) {
+      return next(new AppError('Health context not found', 404));
+    }
+
+    // Verify user owns this context
+    if (context.userId.toString() !== req.user._id.toString()) {
+      return next(new AppError('Not authorized to modify this health context', 403));
+    }
+
+    // Update status
+    context.status = status;
+    if (status === 'resolved') {
+      context.resolutionNotes = notes;
+      context.resolvedAt = new Date();
+    }
+
+    await context.save();
+
+    logger.info('Health context status updated', {
+      userId: req.user._id,
+      contextId: context._id,
+      newStatus: status
+    });
+
     res.json({
       success: true,
       message: 'Health context status updated',
+      data: { context }
+    });
+
+  } catch (error) {
+    next(error);
+  }
+});
+
+// @route   GET /api/health/care-plans
+// @desc    Get user's care plans
+// @access  Private
+router.get('/care-plans', async (req, res, next) => {
+  try {
+    const { status } = req.query;
+    const userId = req.user._id;
+
+    const query = { userId, isActive: true };
+    if (status) {
+      query.status = status;
+    }
+
+    const carePlans = await CarePlan.find(query)
+      .populate('contextId', 'primaryConcern symptoms status')
+      .sort({ createdAt: -1 });
+
+    res.json({
+      success: true,
       data: {
-        context: {
-          _id: req.params.id,
-          status: status,
-          notes: notes
-        }
+        carePlans,
+        count: carePlans.length
       }
     });
 
   } catch (error) {
-    console.error('Update context status error:', error);
-    res.status(500).json({
-      success: false,
-      error: 'Failed to update health context status'
-    });
+    next(error);
   }
 });
 
 // @route   GET /api/health/care-plans/:id
 // @desc    Get specific care plan
 // @access  Private
-router.get('/care-plans/:id', protect, async (req, res) => {
+router.get('/care-plans/:id', async (req, res, next) => {
   try {
-    console.log('📋 Care plan request:', req.params.id);
-    
-    // Mock data for now
+    const carePlan = await CarePlan.findById(req.params.id)
+      .populate('contextId', 'primaryConcern symptoms status');
+
+    if (!carePlan) {
+      return next(new AppError('Care plan not found', 404));
+    }
+
+    // Verify user owns this care plan
+    if (carePlan.userId.toString() !== req.user._id.toString()) {
+      return next(new AppError('Not authorized to access this care plan', 403));
+    }
+
     res.json({
       success: true,
       data: {
-        carePlan: {
-          _id: req.params.id,
-          title: 'Sample Care Plan',
-          description: 'Sample care plan description',
-          status: 'active',
-          recommendations: [],
-          contextId: {
-            _id: 'context1',
-            primaryConcern: 'Sample Concern'
-          },
-          createdAt: new Date(),
-          updatedAt: new Date()
-        }
+        carePlan
       }
     });
 
   } catch (error) {
-    console.error('Care plan error:', error);
-    res.status(500).json({
-      success: false,
-      error: 'Failed to load care plan'
-    });
+    next(error);
   }
 });
 
 // @route   PUT /api/health/care-plans/:id/recommendations/:recId/complete
 // @desc    Mark a recommendation as completed
 // @access  Private
-router.put('/care-plans/:carePlanId/recommendations/:recId/complete', protect, async (req, res) => {
+router.put('/care-plans/:carePlanId/recommendations/:recId/complete', async (req, res, next) => {
   try {
     const { notes } = req.body;
-    console.log('✅ Completing recommendation:', req.params.recId);
-    
-    // Mock completion for now
+    const { carePlanId, recId } = req.params;
+
+    const carePlan = await CarePlan.findById(carePlanId);
+
+    if (!carePlan) {
+      return next(new AppError('Care plan not found', 404));
+    }
+
+    // Verify user owns this care plan
+    if (carePlan.userId.toString() !== req.user._id.toString()) {
+      return next(new AppError('Not authorized to access this care plan', 403));
+    }
+
+    // Find and update the recommendation
+    const recommendation = carePlan.recommendations.id(recId);
+    if (!recommendation) {
+      return next(new AppError('Recommendation not found', 404));
+    }
+
+    recommendation.completed = true;
+    recommendation.completedAt = new Date();
+    if (notes) recommendation.notes = notes;
+
+    await carePlan.save();
+
+    logger.info('Recommendation completed', {
+      userId: req.user._id,
+      carePlanId,
+      recommendationId: recId
+    });
+
     res.json({
       success: true,
       message: 'Recommendation completed successfully',
-      data: {
-        recommendation: {
-          _id: req.params.recId,
-          completed: true,
-          completedAt: new Date(),
-          notes: notes
-        }
-      }
+      data: { carePlan }
     });
 
   } catch (error) {
-    console.error('Complete recommendation error:', error);
-    res.status(500).json({
-      success: false,
-      error: 'Failed to complete recommendation'
-    });
+    next(error);
   }
 });
 

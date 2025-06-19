@@ -44,9 +44,8 @@ const userSchema = new mongoose.Schema({
       default: '09:00'
     },
     followUpFrequency: {
-      type: String,
-      enum: ['daily', 'weekly', 'monthly', 'never'],
-      default: 'daily'
+      type: Number,
+      default: 24
     },
     emailNotifications: {
       type: Boolean,
@@ -65,20 +64,7 @@ const userSchema = new mongoose.Schema({
   timestamps: true
 });
 
-// Hash password before saving
-userSchema.pre('save', async function(next) {
-  if (!this.isModified('password')) return next();
-  
-  try {
-    const salt = await bcrypt.genSalt(12);
-    this.password = await bcrypt.hash(this.password, salt);
-    next();
-  } catch (error) {
-    next(error);
-  }
-});
 
-// Compare password method
 userSchema.methods.matchPassword = async function(enteredPassword) {
   return await bcrypt.compare(enteredPassword, this.password);
 };

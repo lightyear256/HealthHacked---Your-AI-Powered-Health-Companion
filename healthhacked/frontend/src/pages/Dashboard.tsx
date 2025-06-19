@@ -12,12 +12,9 @@ import {
   MessageCircle, 
   Calendar, 
   CheckCircle2,
-  Clock,
   TrendingUp,
-  AlertCircle,
   RefreshCw
 } from 'lucide-react';
-import toast from 'react-hot-toast';
 
 interface DashboardData {
   stats: {
@@ -34,27 +31,29 @@ interface DashboardData {
 export function Dashboard() {
   const { user } = useAuthStore();
   const [dashboardData, setDashboardData] = useState<DashboardData | null>(null);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const loadingRef = useRef(false); // Prevent multiple concurrent calls
+  const hasFetched = useRef(false); // Prevent multiple calls on mount
 
   useEffect(() => {
-    loadDashboardData();
+    // Only load once on mount
+    if (!hasFetched.current) {
+      hasFetched.current = true;
+      loadDashboardData();
+    }
   }, []);
 
   const loadDashboardData = async () => {
-    // Prevent multiple concurrent calls
-    if (loadingRef.current) {
-      console.log('⏸️ Dashboard load already in progress, skipping');
+    if (loading) {
+      console.log('⏸️ Dashboard already loading, skipping...');
       return;
     }
 
     try {
       setLoading(true);
-      loadingRef.current = true;
       setError(null);
       
-      console.log('📊 Loading dashboard data...');
+      console.log('📊 Loading dashboard data (once)...');
       const response = await healthAPI.getDashboard();
       console.log('✅ Dashboard data loaded:', response);
       
@@ -69,8 +68,7 @@ export function Dashboard() {
       const errorMessage = error.response?.data?.error || error.message || 'Failed to load dashboard data';
       setError(errorMessage);
       
-      // Fallback to mock data if API fails
-      console.log('📝 Using fallback mock data');
+      // Use simple fallback data
       setDashboardData({
         stats: {
           activeHealthConcerns: 0,
@@ -84,26 +82,15 @@ export function Dashboard() {
       });
     } finally {
       setLoading(false);
-      loadingRef.current = false;
     }
   };
 
-  const handleUpdateStatus = async (contextId: string, newStatus: string) => {
-    try {
-      await healthAPI.updateContextStatus(contextId, newStatus);
-      toast.success('Status updated successfully');
-      loadDashboardData(); // Refresh data
-    } catch (error) {
-      console.error('Error updating status:', error);
-    }
+  const handleManualRefresh = () => {
+    console.log('🔄 Manual refresh triggered');
+    loadDashboardData();
   };
 
-  const handleRefresh = () => {
-    if (!loadingRef.current) {
-      loadDashboardData();
-    }
-  };
-
+  // Show loading only if no data and currently loading
   if (loading && !dashboardData) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
@@ -115,26 +102,21 @@ export function Dashboard() {
     );
   }
 
-  if (error && !dashboardData) {
-    return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="text-center">
-          <AlertCircle className="h-12 w-12 text-red-500 mx-auto mb-4" />
-          <p className="text-gray-600 mb-4">Failed to load dashboard data</p>
-          <p className="text-sm text-gray-500 mb-4">{error}</p>
-          <Button onClick={handleRefresh} className="flex items-center mx-auto">
-            <RefreshCw className="h-4 w-4 mr-2" />
-            Try Again
-          </Button>
-        </div>
-      </div>
-    );
-  }
+  // Always show dashboard with data (even if fallback)
+  const data = dashboardData || {
+    stats: {
+      activeHealthConcerns: 0,
+      activeCarePlans: 0,
+      totalRecommendations: 0,
+      completedRecommendations: 0
+    },
+    activeContexts: [],
+    activeCarePlans: [],
+    recentActivity: []
+  };
 
-  if (!dashboardData) return null;
-
-  const completionPercentage = dashboardData.stats.totalRecommendations > 0
-    ? Math.round((dashboardData.stats.completedRecommendations / dashboardData.stats.totalRecommendations) * 100)
+  const completionPercentage = data.stats.totalRecommendations > 0
+    ? Math.round((data.stats.completedRecommendations / data.stats.totalRecommendations) * 100)
     : 0;
 
   return (
@@ -152,7 +134,7 @@ export function Dashboard() {
               </p>
             </div>
             <Button 
-              onClick={handleRefresh} 
+              onClick={handleManualRefresh} 
               variant="outline" 
               size="sm"
               className="flex items-center"
@@ -166,7 +148,7 @@ export function Dashboard() {
           {error && (
             <div className="mt-4 p-3 bg-yellow-50 border border-yellow-200 rounded-md">
               <p className="text-sm text-yellow-800">
-                ⚠️ Some data may be outdated. Last error: {error}
+                ⚠️ Using cached data. Error: {error}
               </p>
             </div>
           )}
@@ -182,7 +164,7 @@ export function Dashboard() {
               <div className="ml-4">
                 <p className="text-sm font-medium text-gray-500">Active Concerns</p>
                 <p className="text-2xl font-bold text-gray-900">
-                  {dashboardData.stats.activeHealthConcerns}
+                  {data.stats.activeHealthConcerns}
                 </p>
               </div>
             </div>
@@ -196,7 +178,7 @@ export function Dashboard() {
               <div className="ml-4">
                 <p className="text-sm font-medium text-gray-500">Care Plans</p>
                 <p className="text-2xl font-bold text-gray-900">
-                  {dashboardData.stats.activeCarePlans}
+                  {data.stats.activeCarePlans}
                 </p>
               </div>
             </div>
@@ -210,7 +192,7 @@ export function Dashboard() {
               <div className="ml-4">
                 <p className="text-sm font-medium text-gray-500">Completed</p>
                 <p className="text-2xl font-bold text-gray-900">
-                  {dashboardData.stats.completedRecommendations}/{dashboardData.stats.totalRecommendations}
+                  {data.stats.completedRecommendations}/{data.stats.totalRecommendations}
                 </p>
               </div>
             </div>
@@ -272,6 +254,13 @@ export function Dashboard() {
               </p>
             </div>
           </Card>
+        </div>
+
+        {/* Debug Info */}
+        <div className="mt-8 text-xs text-gray-400 text-center">
+          Dashboard loaded: {new Date().toLocaleTimeString()} | 
+          Loading: {loading ? 'Yes' : 'No'} | 
+          Error: {error ? 'Yes' : 'No'}
         </div>
       </div>
     </div>

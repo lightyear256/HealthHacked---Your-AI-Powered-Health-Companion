@@ -1,9 +1,5 @@
-// ================================
-// File: backend/src/middleware/errorHandler.js
-// ================================
 const logger = require('../utils/logger');
 
-// Custom error class
 class AppError extends Error {
   constructor(message, statusCode) {
     super(message);
@@ -15,26 +11,17 @@ class AppError extends Error {
   }
 }
 
-// 404 handler
 const notFound = (req, res, next) => {
-  const error = new AppError(`Route ${req.originalUrl} not found`, 404);
+  const error = new AppError(`Not found - ${req.originalUrl}`, 404);
   next(error);
 };
 
-// Global error handler
 const errorHandler = (err, req, res, next) => {
   let error = { ...err };
   error.message = err.message;
 
   // Log error
-  logger.error({
-    message: err.message,
-    stack: err.stack,
-    url: req.originalUrl,
-    method: req.method,
-    ip: req.ip,
-    userAgent: req.get('User-Agent')
-  });
+  logger.error(err);
 
   // Mongoose bad ObjectId
   if (err.name === 'CastError') {
@@ -54,21 +41,9 @@ const errorHandler = (err, req, res, next) => {
     error = new AppError(message, 400);
   }
 
-  // JWT errors
-  if (err.name === 'JsonWebTokenError') {
-    const message = 'Invalid token';
-    error = new AppError(message, 401);
-  }
-
-  if (err.name === 'TokenExpiredError') {
-    const message = 'Token expired';
-    error = new AppError(message, 401);
-  }
-
   res.status(error.statusCode || 500).json({
     success: false,
-    error: error.message || 'Server Error',
-    ...(process.env.NODE_ENV === 'development' && { stack: err.stack })
+    error: error.message || 'Server Error'
   });
 };
 

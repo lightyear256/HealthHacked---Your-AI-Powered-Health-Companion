@@ -1,28 +1,40 @@
 const express = require('express');
 const cors = require('cors');
-const mongoose = require('mongoose');
+const helmet = require('helmet');
+const compression = require('compression');
+const morgan = require('morgan');
 require('dotenv').config();
+
+// Import middleware
+const { errorHandler, notFound } = require('./middleware/errorHandler');
+
+// Import routes
+const authRoutes = require('./routes/auth');
+const chatRoutes = require('./routes/chat');
+const healthRoutes = require('./routes/health');
 
 const app = express();
 
-// Connect to MongoDB
-mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/healthhacked')
-  .then(() => console.log('✅ MongoDB Connected'))
-  .catch(err => console.error('❌ MongoDB Error:', err));
-
-// Middleware
+// Security middleware
+app.use(helmet());
 app.use(cors({
-  origin: ['http://localhost:5173', 'http://localhost:5174'],
+  origin: ['http://localhost:5173', 'http://localhost:5174', 'http://localhost:5175'],
   credentials: true
 }));
+
+// Body parsing middleware
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true }));
 
+// Compression middleware
+app.use(compression());
+
 // Logging middleware
-app.use((req, res, next) => {
-  console.log(`${new Date().toISOString()} - ${req.method} ${req.path}`);
-  next();
-});
+if (process.env.NODE_ENV === 'development') {
+  app.use(morgan('dev'));
+} else {
+  app.use(morgan('combined'));
+}
 
 // Health check endpoint
 app.get('/health', (req, res) => {
@@ -30,43 +42,44 @@ app.get('/health', (req, res) => {
     status: 'OK',
     timestamp: new Date().toISOString(),
     service: 'HealthHacked API',
-    version: '1.0.0',
-    message: 'HealthHacked API is running'
+    version: '1.0.0'
   });
 });
 
-// Test endpoint
-app.get('/api/test', (req, res) => {
+// API info endpoint
+app.get('/api', (req, res) => {
   res.json({
     success: true,
-    message: 'API is working!',
-    timestamp: new Date().toISOString()
+    message: 'HealthHacked API is working!',
+    timestamp: new Date().toISOString(),
+    features: [
+      'AI-powered health conversations',
+      'Health context tracking', 
+      'Automated care plan generation',
+      'Progress monitoring',
+      'Real-time chat history'
+    ],
+    endpoints: [
+      'POST /api/auth/register',
+      'POST /api/auth/login', 
+      'GET /api/auth/me',
+      'POST /api/chat',
+      'GET /api/health/dashboard',
+      'GET /api/health/contexts',
+      'GET /api/health/care-plans'
+    ]
   });
 });
 
-// Routes
-app.use('/api/auth', require('./routes/auth'));
-app.use('/api/chat', require('./routes/chat'));
-app.use('/api/health', require('./routes/health'));
+// API routes
+app.use('/api/auth', authRoutes);
+app.use('/api/chat', chatRoutes);
+app.use('/api/health', healthRoutes);
 
 // 404 handler
-app.use('*', (req, res) => {
-  console.log('❌ 404 - Route not found:', req.originalUrl);
-  res.status(404).json({
-    success: false,
-    error: 'Route not found',
-    path: req.originalUrl
-  });
-});
+app.use(notFound);
 
-// Error handler
-app.use((err, req, res, next) => {
-  console.error('❌ Error:', err);
-  res.status(err.status || 500).json({
-    success: false,
-    error: err.message || 'Something went wrong!',
-    ...(process.env.NODE_ENV === 'development' && { stack: err.stack })
-  });
-});
+// Error handling middleware (must be last)
+app.use(errorHandler);
 
 module.exports = app;

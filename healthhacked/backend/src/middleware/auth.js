@@ -1,9 +1,5 @@
-// ================================
-// File: backend/src/middleware/auth.js
-// ================================
 const jwt = require('jsonwebtoken');
 const User = require('../models/User');
-const { AppError } = require('./errorHandler');
 const config = require('../config');
 
 // Protect routes - require authentication
@@ -17,7 +13,10 @@ const protect = async (req, res, next) => {
     }
 
     if (!token) {
-      return next(new AppError('Not authorized to access this route', 401));
+      return res.status(401).json({
+        success: false,
+        error: 'Not authorized to access this route'
+      });
     }
 
     try {
@@ -28,13 +27,19 @@ const protect = async (req, res, next) => {
       const user = await User.findById(decoded.id).select('-password');
       
       if (!user) {
-        return next(new AppError('No user found with this token', 401));
+        return res.status(401).json({
+          success: false,
+          error: 'No user found with this token'
+        });
       }
 
       req.user = user;
       next();
     } catch (error) {
-      return next(new AppError('Not authorized to access this route', 401));
+      return res.status(401).json({
+        success: false,
+        error: 'Not authorized to access this route'
+      });
     }
   } catch (error) {
     next(error);
@@ -52,3 +57,4 @@ module.exports = {
   protect,
   generateToken
 };
+

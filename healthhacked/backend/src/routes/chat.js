@@ -1,125 +1,191 @@
 const express = require('express');
-const jwt = require('jsonwebtoken');
-const User = require('../models/User');
+const { protect } = require('../middleware/auth');
+const PrimaryChatbot = require('../services/ai/primaryChatbot');
+const SecondaryChatbot = require('../services/ai/secondaryChatbot');
+const HealthContext = require('../models/HealthContext');
+const ChatHistory = require('../models/ChatHistory');
+const { AppError } = require('../middleware/errorHandler');
+const logger = require('../utils/logger');
 
 const router = express.Router();
 
-// Simple auth middleware
-const protect = async (req, res, next) => {
+// @route   POST /api/chat
+// @desc    Send message to AI chatbot
+// @access  Private
+router.post('/', protect, async (req, res, next) => {
   try {
-    const token = req.headers.authorization?.split(' ')[1];
-    if (!token) {
-      return res.status(401).json({ success: false, error: 'No token provided' });
-    }
+    const { message, sessionId } = req.body;
+    const userId = req.user._id;
 
-    const decoded = jwt.verify(token, process.env.JWT_SECRET || 'fallback-secret');
-    const user = await User.findById(decoded.id);
-    
-    if (!user) {
-      return res.status(401).json({ success: false, error: 'User not found' });
-    }
-
-    req.user = user;
-    next();
-  } catch (error) {
-    console.error('Auth error:', error);
-    res.status(401).json({ success: false, error: 'Invalid token' });
-  }
-};
-
-// Chat endpoint - DIRECT GEMINI CALL
-router.post('/', protect, async (req, res) => {
-  try {
-    const { message } = req.body;
-    
-    console.log('💬 Chat request received:', { message, userId: req.user._id });
-    
     if (!message || !message.trim()) {
-      return res.status(400).json({
-        success: false,
-        error: 'Message is required'
-      });
-    }
-    
-    console.log('🔍 Environment variables check:');
-    console.log('🔍 GOOGLE_API_KEY exists:', !!process.env.GOOGLE_API_KEY);
-    console.log('🔍 GEMINI_API_KEY exists:', !!process.env.GEMINI_API_KEY);
-    console.log('🔍 NODE_ENV:', process.env.NODE_ENV);
-    
-    // Try direct Gemini call
-    const { GoogleGenerativeAI } = require('@google/generative-ai');
-    
-    const apiKey = process.env.GOOGLE_API_KEY || process.env.GEMINI_API_KEY;
-    console.log('🔍 Using API key (first 10 chars):', apiKey?.substring(0, 10) + '...');
-    
-    if (!apiKey) {
-      throw new Error('No API key found in environment variables');
+      return next(new AppError('Message is required', 400));
     }
 
-    const genAI = new GoogleGenerativeAI(apiKey);
+    logger.info('Chat message received', {
+      userId,
+      messageLength: message.length,
+      sessionId
+    });
+
+    // Check if user has active health contexts
+    const activeContexts = await HealthContext.find({
+      userId,
+      status: 'active'
+    }).sort({ createdAt: -1 });
+
+    const hasActiveContext = activeContexts.length > 0;
     
-    // FIXED: Use correct model name
-    const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+    // Build user context
+    const userContext = {
+      userId,
+      sessionId: sessionId || `session-${Date.now()}`,
+      profile: req.user.profile,
+      hasActiveHealthConcern: hasActiveContext,
+      activeContexts
+    };
 
-    const healthPrompt = `You are a helpful health assistant. User asks: "${message}". 
+    let response;
 
-Please provide a helpful, empathetic response that:
-1. Acknowledges their concern with empathy
-2. Provides general health information (not medical diagnosis)
-3. Suggests practical steps they can take
-4. Recommends consulting healthcare professionals when appropriate
-5. Is encouraging and supportive
+    // Determine if this is a follow-up or new medical query
+    const isFollowUp = hasActiveContext && (
+      message.toLowerCase().includes('better') ||
+      message.toLowerCase().includes('worse') ||
+      message.toLowerCase().includes('same') ||
+      message.toLowerCase().includes('update') ||
+      message.toLowerCase().includes('progress') ||
+      sessionId
+    );
 
-Keep your response conversational and under 200 words.`;
+    if (isFollowUp && activeContexts.length > 0) {
+      // Use secondary chatbot for follow-ups
+      logger.info('Routing to secondary chatbot', { userId });
+      response = await SecondaryChatbot.handleFollowUp(message, userContext);
+    } else {
+      // Use primary chatbot for new medical queries
+      logger.info('Routing to primary chatbot', { userId });
+      response = await PrimaryChatbot.handleMedicalQuery(message, userContext);
+    }
 
-    console.log('🔍 Calling Gemini directly...');
-    const result = await model.generateContent(healthPrompt);
-    const response = await result.response;
-    const text = response.text();
-    
-    console.log('✅ Direct Gemini call successful!');
-    console.log('📝 AI Response length:', text.length);
-    
+    // Store chat messages
+    await storeChatMessage(userId, userContext.sessionId, {
+      role: 'user',
+      content: message,
+      timestamp: new Date()
+    });
+
+    await storeChatMessage(userId, userContext.sessionId, {
+      role: 'assistant',
+      content: response.response,
+      timestamp: new Date(),
+      metadata: {
+        contextId: response.contextId,
+        severity: response.severity,
+        intent: response.intent || 'health_query'
+      }
+    });
+
+    logger.info('Chat response generated successfully', {
+      userId,
+      sessionId: userContext.sessionId,
+      contextId: response.contextId,
+      hasContext: !!response.contextId
+    });
+
     res.json({
       success: true,
       data: {
-        response: text,
-        sessionId: 'session-' + Date.now(),
-        intent: 'health_query',
-        confidence: 0.9,
-        contextId: null, // Will add later when we implement health contexts
-        processingTime: Date.now()
+        response: response.response,
+        sessionId: userContext.sessionId,
+        contextId: response.contextId,
+        severity: response.severity,
+        potentialCauses: response.potentialCauses,
+        immediateSteps: response.immediateSteps,
+        seekHelpIf: response.seekHelpIf,
+        followUpQuestion: response.followUpQuestion,
+        intent: response.intent || 'health_query',
+        confidence: response.confidence || 0.8,
+        processingTime: response.processingTime
       }
     });
 
   } catch (error) {
-    console.error('❌ Chat error:', error);
-    
-    // Detailed error logging
-    console.error('Error details:', {
-      message: error.message,
-      name: error.name,
+    logger.error('Chat processing error', {
+      userId: req.user._id,
+      error: error.message,
       stack: error.stack
     });
-    
-    // Fallback response
-    const fallbackResponse = `I'm sorry, I'm having technical difficulties right now. For any urgent health concerns, please consult with a healthcare professional immediately.
 
-Technical error: ${error.message}
-
-I'm still learning and improving. Please try again in a moment, or feel free to ask about general health topics.`;
+    // Fallback response for errors
+    const fallbackResponse = "I'm sorry, I'm having technical difficulties right now. For any urgent health concerns, please consult with a healthcare professional immediately.";
     
     res.json({
       success: true,
       data: {
         response: fallbackResponse,
-        sessionId: 'fallback-' + Date.now(),
-        intent: 'health_query',
-        confidence: 0.5,
+        sessionId: `fallback-${Date.now()}`,
+        intent: 'fallback',
+        confidence: 0.1,
         error: error.message
       }
     });
   }
 });
+
+// @route   GET /api/chat/history/:sessionId
+// @desc    Get chat history for a session
+// @access  Private
+router.get('/history/:sessionId', protect, async (req, res, next) => {
+  try {
+    const { sessionId } = req.params;
+    const userId = req.user._id;
+
+    const chatHistory = await ChatHistory.findOne({
+      userId,
+      sessionId
+    });
+
+    if (!chatHistory) {
+      return res.json({
+        success: true,
+        data: {
+          messages: []
+        }
+      });
+    }
+
+    res.json({
+      success: true,
+      data: {
+        messages: chatHistory.messages,
+        sessionId: chatHistory.sessionId
+      }
+    });
+
+  } catch (error) {
+    next(error);
+  }
+});
+
+// Helper function to store chat messages
+async function storeChatMessage(userId, sessionId, message) {
+  try {
+    let chatHistory = await ChatHistory.findOne({ userId, sessionId });
+    
+    if (!chatHistory) {
+      chatHistory = new ChatHistory({
+        userId,
+        sessionId,
+        messages: []
+      });
+    }
+    
+    chatHistory.messages.push(message);
+    await chatHistory.save();
+    
+    return chatHistory;
+  } catch (error) {
+    logger.error('Error storing chat message:', error);
+  }
+}
 
 module.exports = router;

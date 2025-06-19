@@ -1,11 +1,7 @@
-
-// ================================
 // File: backend/src/config/index.js
-// ================================
+// CREATE THIS FILE
+
 module.exports = {
-  database: require('./database'),
-  gemini: require('./gemini'),
-  
   // Server configuration
   server: {
     port: process.env.PORT || 5000,

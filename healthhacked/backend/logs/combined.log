@@ -108,3 +108,7 @@
 {"level":"info","message":"📍 Environment: development","service":"healthhacked-api","timestamp":"2025-06-19 00:15:01"}
 {"level":"info","message":"🔗 API Base URL: http://localhost:5000/api","service":"healthhacked-api","timestamp":"2025-06-19 00:15:01"}
 {"level":"info","message":"🍃 MongoDB Connected: undefined","service":"healthhacked-api","timestamp":"2025-06-19 00:15:01"}
+{"level":"info","message":"🚀 HealthHacked server running on port 5000","service":"healthhacked-api","timestamp":"2025-06-19 00:20:24"}
+{"level":"info","message":"📍 Environment: development","service":"healthhacked-api","timestamp":"2025-06-19 00:20:24"}
+{"level":"info","message":"🔗 API Base URL: http://localhost:5000/api","service":"healthhacked-api","timestamp":"2025-06-19 00:20:24"}
+{"level":"info","message":"🍃 MongoDB Connected: undefined","service":"healthhacked-api","timestamp":"2025-06-19 00:20:24"}
