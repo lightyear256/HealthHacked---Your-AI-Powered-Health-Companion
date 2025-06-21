@@ -240,10 +240,10 @@ export function Dashboard() {
             {data.activeContexts && data.activeContexts.length > 0 ? (
               <div className="space-y-4">
                 {data.activeContexts.map((context) => (
-                  <div key={context._id} className="border rounded-lg p-4 hover:bg-gray-50 transition-colors">
+                  <div key={context._id} className="border-slate-600 rounded-lg p-4 text-white hover:border-purple-500/50 hover:bg-gray-800 transition-all duration-300 transition-colors">
                     <div className="flex items-start justify-between">
                       <div className="flex-1">
-                        <h3 className="font-medium text-gray-900">{context.primaryConcern}</h3>
+                        <h3 className="font-medium ">{context.primaryConcern}</h3>
                         <p className="text-sm text-gray-500 mt-1">
                           Severity: <span className={`font-medium ${getSeverityColor(context.severity)}`}>
                             {context.severity}/10
@@ -262,7 +262,7 @@ export function Dashboard() {
                         <p className="text-xs text-gray-500">Symptoms:</p>
                         <div className="flex flex-wrap gap-1 mt-1">
                           {context.symptoms.map((symptom, idx) => (
-                            <span key={idx} className="text-xs bg-gray-100 text-gray-600 px-2 py-1 rounded">
+                            <span key={idx} className="text-xs bg-gray-700 text-white px-2 py-1 rounded">
                               {symptom}
                             </span>
                           ))}
@@ -270,7 +270,7 @@ export function Dashboard() {
                       </div>
                     )}
                     <Link to={`/chat?context=${context._id}`}>
-                      <Button variant="ghost" size="sm" className="mt-3 w-full">
+                      <Button variant="outline" size="sm" className="mt-3 w-full">
                         Continue Conversation →
                       </Button>
                     </Link>
@@ -294,7 +294,7 @@ export function Dashboard() {
           {/* Active Care Plans */}
           <Card className="p-6">
             <div className="flex items-center justify-between mb-6">
-              <h2 className="text-xl font-semibold text-gray-900">Active Care Plans</h2>
+              <h2 className="text-xl font-semibold text-white">Active Care Plans</h2>
               <Link to="/care-plans">
                 <Button variant="outline" size="sm">View All</Button>
               </Link>
@@ -308,10 +308,10 @@ export function Dashboard() {
                   const planProgress = totalCount > 0 ? Math.round((completedCount / totalCount) * 100) : 0;
 
                   return (
-                    <div key={plan._id} className="border rounded-lg p-4 hover:bg-gray-50 transition-colors">
+                    <div key={plan._id} className="rounded-lg p-4 text-white hover:bg-gray-800 transition-colors">
                       <div className="flex items-start justify-between">
                         <div className="flex-1">
-                          <h3 className="font-medium text-gray-900">{plan.title}</h3>
+                          <h3 className="font-medium ">{plan.title}</h3>
                           {plan.contextId && (
                             <p className="text-sm text-gray-500 mt-1">
                               For: {plan.contextId.primaryConcern}
@@ -335,7 +335,7 @@ export function Dashboard() {
                         </div>
                       </div>
                       <Link to={`/care-plans/${plan._id}`}>
-                        <Button variant="ghost" size="sm" className="mt-3 w-full">
+                        <Button variant="outline" size="sm" className="mt-3 w-full">
                           View Care Plan →
                         </Button>
                       </Link>
@@ -358,14 +358,14 @@ export function Dashboard() {
         {/* Recent Activity */}
         {data.recentActivity && data.recentActivity.length > 0 && (
           <Card className="mt-8 p-6">
-            <h2 className="text-xl font-semibold text-gray-900 mb-6">Recent Activity</h2>
+            <h2 className="text-xl font-semibold text-white mb-6">Recent Activity</h2>
             <div className="space-y-3">
               {data.recentActivity.slice(0, 5).map((activity) => (
                 <div key={activity._id} className="flex items-center justify-between py-2 border-b last:border-0">
                   <div className="flex items-center">
                     <Clock className="h-4 w-4 text-gray-400 mr-3" />
                     <div>
-                      <p className="text-sm font-medium text-gray-900">{activity.primaryConcern}</p>
+                      <p className="text-sm font-medium text-white">{activity.primaryConcern}</p>
                       <p className="text-xs text-gray-500">
                         {formatDistanceToNow(new Date(activity.createdAt), { addSuffix: true })}
                       </p>
