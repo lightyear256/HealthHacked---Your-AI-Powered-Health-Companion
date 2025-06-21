@@ -1,4 +1,6 @@
 const nodemailer = require('nodemailer');
+const Bull = require('bull');
+const { createClient } = require('redis');
 const config = require('../../config');
 const logger = require('../../utils/logger');
 const User = require('../../models/User');
@@ -6,41 +8,55 @@ const Notification = require('../../models/Notification');
 
 class NotificationService {
   constructor() {
-    this.transporter = this.createEmailTransporter();
+    // Don't initialize in constructor to avoid timing issues
+    this.transporter = null;
     this.notificationQueue = null;
     this.redis = null;
-    
-    // Only initialize Redis/Bull if not disabled
-    if (process.env.DISABLE_REDIS !== 'true') {
-      this.initializeRedis();
-    } else {
-      logger.info('📧 Notification Service initialized (without Redis)');
-    }
+    this.initialized = false;
   }
 
-  initializeRedis() {
+  async initialize() {
+    if (this.initialized) return;
+    
+    this.transporter = this.createEmailTransporter();
+    await this.initializeServices();
+    this.initialized = true;
+  }
+
+  async initializeServices() {
     try {
-      const Bull = require('bull');
-      const Redis = require('redis');
-      
-      this.redis = Redis.createClient({
-        url: process.env.REDIS_URL || 'redis://localhost:6379'
-      });
-      
-      this.redis.connect().catch(err => {
-        logger.error('Redis connection failed:', err);
-      });
-      
-      // Create notification queue
-      this.notificationQueue = new Bull('notification queue', {
-        redis: {
-          host: process.env.REDIS_HOST || 'localhost',
-          port: process.env.REDIS_PORT || 6379,
-        }
-      });
-      
-      this.setupQueueProcessors();
-      logger.info('📧 Notification Service initialized with Redis');
+      // Initialize Redis with your Redis Cloud credentials
+      if (process.env.DISABLE_REDIS !== 'true') {
+        this.redis = createClient({
+          username: 'default',
+          password: process.env.REDIS_PASSWORD || 'nSiJcXdvVQqqoiZT85hKE2aO0dCrulpN',
+          socket: {
+            host: process.env.REDIS_HOST || 'redis-19765.c330.asia-south1-1.gce.redns.redis-cloud.com',
+            port: parseInt(process.env.REDIS_PORT) || 19765
+          }
+        });
+
+        this.redis.on('error', err => {
+          logger.error('Redis Client Error:', err);
+        });
+
+        await this.redis.connect();
+        logger.info('✅ Redis connected successfully');
+
+        // Initialize Bull with Redis connection
+        this.notificationQueue = new Bull('notification-queue', {
+          redis: {
+            host: process.env.REDIS_HOST || 'redis-19765.c330.asia-south1-1.gce.redns.redis-cloud.com',
+            port: parseInt(process.env.REDIS_PORT) || 19765,
+            password: process.env.REDIS_PASSWORD || 'nSiJcXdvVQqqoiZT85hKE2aO0dCrulpN'
+          }
+        });
+
+        this.setupQueueProcessors();
+        logger.info('📧 Notification Service initialized with Redis');
+      } else {
+        logger.info('📧 Notification Service initialized (without Redis)');
+      }
     } catch (error) {
       logger.error('Failed to initialize Redis/Bull:', error);
       logger.info('📧 Notification Service running without queue support');
@@ -48,15 +64,30 @@ class NotificationService {
   }
 
   createEmailTransporter() {
+    // Debug logging
+    logger.info('Creating email transporter...');
+    logger.info('Email config:', {
+      host: config.email?.host,
+      port: config.email?.port,
+      user: config.email?.user,
+      hasPass: !!config.email?.pass,
+      from: config.email?.from
+    });
+
     if (!config.email || !config.email.host || !config.email.user || !config.email.pass) {
-      logger.warn('Email configuration incomplete - email notifications disabled');
+      logger.warn('Email configuration incomplete - email notifications disabled', {
+        hasConfig: !!config.email,
+        hasHost: !!config.email?.host,
+        hasUser: !!config.email?.user,
+        hasPass: !!config.email?.pass
+      });
       return null;
     }
 
     try {
-      return nodemailer.createTransporter({
+      const transporter = nodemailer.createTransport({
         host: config.email.host,
-        port: config.email.port || 587,
+        port: parseInt(config.email.port) || 587,
         secure: config.email.port === 465,
         auth: {
           user: config.email.user,
@@ -64,8 +95,21 @@ class NotificationService {
         },
         tls: {
           rejectUnauthorized: false
+        },
+        debug: true, // Enable debug output
+        logger: true // Log to console
+      });
+
+      // Verify transporter configuration
+      transporter.verify((error, success) => {
+        if (error) {
+          logger.error('Email transporter verification failed:', error);
+        } else {
+          logger.info('✅ Email transporter ready');
         }
       });
+
+      return transporter;
     } catch (error) {
       logger.error('Failed to create email transporter:', error);
       return null;
@@ -92,6 +136,8 @@ class NotificationService {
       const { userId, carePlanId } = job.data;
       await this.processCarePlanReminder(userId, carePlanId);
     });
+
+    logger.info('✅ Queue processors set up');
   }
 
   async queueNotification(type, data, delay = 0) {
@@ -284,6 +330,21 @@ class NotificationService {
     }
   }
 
+  // Test email functionality
+  async sendTestEmail(to) {
+    const subject = '🧪 HealthHacked Test Email';
+    const html = `
+      <h2>Test Email from HealthHacked</h2>
+      <p>This is a test email to verify your email configuration is working correctly.</p>
+      <p>If you received this email, your notification system is set up properly!</p>
+      <hr>
+      <p><small>HealthHacked - Your AI Health Companion</small></p>
+    `;
+    const text = 'Test Email from HealthHacked\n\nThis is a test email to verify your email configuration is working correctly.';
+
+    return await this.sendEmail({ to, subject, html, text });
+  }
+
   createCareEmailTemplate(user, careContent) {
     const html = `
     <!DOCTYPE html>
@@ -408,7 +469,7 @@ Unsubscribe: ${config.server.apiUrl}/notifications/unsubscribe?token=${user._id}
 
   createCarePlanEmailTemplate(user, carePlan) {
     const incompleteRecommendations = carePlan.recommendations
-      .filter(rec => rec.status !== 'completed');
+      .filter(rec => !rec.completed);
     
     const completedCount = carePlan.recommendations.length - incompleteRecommendations.length;
     const completionPercentage = Math.round((completedCount / carePlan.recommendations.length) * 100);
@@ -496,89 +557,6 @@ Unsubscribe: ${config.server.apiUrl}/notifications/unsubscribe?token=${user._id}
     return { html, text };
   }
 
-  async sendEmergencyAlert(userId, urgency, context) {
-    try {
-      const user = await User.findById(userId);
-      if (!user) return;
-
-      const subject = `🚨 URGENT: Health Alert - ${urgency.level}`;
-      const html = `
-      <!DOCTYPE html>
-      <html>
-      <head>
-          <style>
-              body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
-              .container { max-width: 600px; margin: 0 auto; padding: 20px; }
-              .header { background: #e53e3e; color: white; padding: 20px; border-radius: 8px 8px 0 0; }
-              .content { background: #fff5f5; padding: 20px; border-radius: 0 0 8px 8px; border: 2px solid #e53e3e; }
-              .urgent { color: #e53e3e; font-weight: bold; }
-              .footer { text-align: center; margin-top: 20px; color: #666; font-size: 12px; }
-          </style>
-      </head>
-      <body>
-          <div class="container">
-              <div class="header">
-                  <h2>🚨 Urgent Health Alert</h2>
-              </div>
-              <div class="content">
-                  <p class="urgent">This is an automated alert based on your recent health information.</p>
-                  
-                  <p><strong>Concern:</strong> ${context.primaryConcern}</p>
-                  <p><strong>Urgency Level:</strong> ${urgency.level}</p>
-                  <p><strong>Reason:</strong> ${urgency.reason}</p>
-                  
-                  <h3>Recommended Actions:</h3>
-                  <ol>
-                      ${urgency.actions.map(action => `<li>${action}</li>`).join('')}
-                  </ol>
-                  
-                  <p class="urgent">If you are experiencing severe symptoms, please seek immediate medical attention or call emergency services.</p>
-                  
-                  <p>This alert was generated because your symptoms may require prompt medical evaluation. Please consult with a healthcare professional as soon as possible.</p>
-              </div>
-              <div class="footer">
-                  <p>HealthHacked - Your AI Health Companion</p>
-                  <p>This is an automated alert. Do not reply to this email.</p>
-              </div>
-          </div>
-      </body>
-      </html>
-      `;
-
-      const emailResult = await this.sendEmail({
-        to: user.email,
-        subject,
-        html,
-        text: `URGENT HEALTH ALERT\n\nConcern: ${context.primaryConcern}\nUrgency: ${urgency.level}\n\nPlease seek medical attention immediately.`,
-        priority: 'high'
-      });
-
-      // Log the emergency notification
-      await Notification.create({
-        userId,
-        type: 'system',
-        title: subject,
-        message: `Emergency alert: ${urgency.reason}`,
-        status: emailResult.success ? 'sent' : 'failed',
-        delivery: {
-          method: 'email',
-          sentAt: emailResult.success ? new Date() : null,
-          errorMessage: emailResult.error || null
-        },
-        metadata: {
-          priority: 'urgent',
-          category: 'emergency',
-          actionRequired: true
-        }
-      });
-
-      logger.warn('Emergency alert sent', { userId, urgency, success: emailResult.success });
-
-    } catch (error) {
-      logger.error('Error sending emergency alert:', error);
-    }
-  }
-
   // Cleanup method
   async cleanup() {
     if (this.redis) {
@@ -590,4 +568,25 @@ Unsubscribe: ${config.server.apiUrl}/notifications/unsubscribe?token=${user._id}
   }
 }
 
-module.exports = new NotificationService();
+// Create a singleton instance but don't initialize yet
+const notificationService = new NotificationService();
+
+// Initialize when actually used
+const initializeService = async () => {
+  await notificationService.initialize();
+  return notificationService;
+};
+
+// Export a proxy that initializes on first use
+module.exports = new Proxy(notificationService, {
+  get(target, prop) {
+    // If accessing a method that needs initialization
+    if (typeof target[prop] === 'function' && !target.initialized) {
+      return async (...args) => {
+        await target.initialize();
+        return target[prop](...args);
+      };
+    }
+    return target[prop];
+  }
+});

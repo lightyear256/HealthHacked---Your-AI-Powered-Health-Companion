@@ -1,6 +1,4 @@
-// ================================
-// File: frontend/src/components/chat/ChatInterface.tsx
-// ================================
+
 import React, { useState, useRef, useEffect } from 'react';
 import { useChat } from '../../hooks/useChat';
 import { Button } from '../ui/Button';
