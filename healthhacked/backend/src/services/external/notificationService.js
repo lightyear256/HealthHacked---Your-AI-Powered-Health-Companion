@@ -43,14 +43,13 @@ class NotificationService {
         await this.redis.connect();
         logger.info('✅ Redis connected successfully');
 
-        // Initialize Bull with Redis connection
         this.notificationQueue = new Bull('notification-queue', {
-          redis: {
-            host: process.env.REDIS_HOST || 'redis-19765.c330.asia-south1-1.gce.redns.redis-cloud.com',
-            port: parseInt(process.env.REDIS_PORT) || 19765,
-            password: process.env.REDIS_PASSWORD || 'nSiJcXdvVQqqoiZT85hKE2aO0dCrulpN'
-          }
-        });
+  redis: {
+    host: process.env.REDIS_HOST,
+    port: parseInt(process.env.REDIS_PORT),
+    password: process.env.REDIS_PASSWORD
+  }
+});
 
         this.setupQueueProcessors();
         logger.info('📧 Notification Service initialized with Redis');

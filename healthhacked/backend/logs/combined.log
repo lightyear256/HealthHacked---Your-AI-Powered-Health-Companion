@@ -695,3 +695,58 @@
 {"level":"info","message":"📍 Environment: development","service":"healthhacked-api","timestamp":"2025-06-21T17:00:37.806Z"}
 {"level":"info","message":"🔗 API Base URL: http://localhost:5000/api","service":"healthhacked-api","timestamp":"2025-06-21T17:00:37.807Z"}
 {"level":"info","message":"🍃 MongoDB Connected: ac-bjeavys-shard-00-01.hhokcxn.mongodb.net","service":"healthhacked-api","timestamp":"2025-06-21T17:00:38.306Z"}
+{"level":"info","message":"🤖 Gemini Service initialized","service":"healthhacked-api","timestamp":"2025-06-21T17:03:32.270Z"}
+{"level":"info","message":"🚀 HealthHacked server running on port 5000","service":"healthhacked-api","timestamp":"2025-06-21T17:03:33.310Z"}
+{"level":"info","message":"📍 Environment: development","service":"healthhacked-api","timestamp":"2025-06-21T17:03:33.311Z"}
+{"level":"info","message":"🔗 API Base URL: http://localhost:5000/api","service":"healthhacked-api","timestamp":"2025-06-21T17:03:33.312Z"}
+{"level":"info","message":"🍃 MongoDB Connected: ac-bjeavys-shard-00-02.hhokcxn.mongodb.net","service":"healthhacked-api","timestamp":"2025-06-21T17:03:33.790Z"}
+{"level":"info","message":"Loading dashboard data","service":"healthhacked-api","timestamp":"2025-06-21T17:08:07.408Z","userId":"68540fd9fbe819f427783f4a"}
+{"activeCarePlans":1,"activeContexts":5,"level":"info","message":"Dashboard data loaded successfully","service":"healthhacked-api","timestamp":"2025-06-21T17:08:07.630Z","userId":"68540fd9fbe819f427783f4a"}
+{"level":"info","message":"Loading dashboard data","service":"healthhacked-api","timestamp":"2025-06-21T17:08:07.683Z","userId":"68540fd9fbe819f427783f4a"}
+{"activeCarePlans":1,"activeContexts":5,"level":"info","message":"Dashboard data loaded successfully","service":"healthhacked-api","timestamp":"2025-06-21T17:08:07.864Z","userId":"68540fd9fbe819f427783f4a"}
+{"level":"info","message":"Loading dashboard data","service":"healthhacked-api","timestamp":"2025-06-21T17:08:40.788Z","userId":"68540fd9fbe819f427783f4a"}
+{"activeCarePlans":1,"activeContexts":5,"level":"info","message":"Dashboard data loaded successfully","service":"healthhacked-api","timestamp":"2025-06-21T17:08:40.966Z","userId":"68540fd9fbe819f427783f4a"}
+{"level":"info","message":"Loading dashboard data","service":"healthhacked-api","timestamp":"2025-06-21T17:08:41.022Z","userId":"68540fd9fbe819f427783f4a"}
+{"activeCarePlans":1,"activeContexts":5,"level":"info","message":"Dashboard data loaded successfully","service":"healthhacked-api","timestamp":"2025-06-21T17:08:41.221Z","userId":"68540fd9fbe819f427783f4a"}
+{"carePlanId":"68547d52aedbd85e0b12df62","level":"info","message":"Recommendation completed","recommendationId":"68547d52aedbd85e0b12df64","service":"healthhacked-api","timestamp":"2025-06-21T17:09:04.522Z","userId":"68540fd9fbe819f427783f4a"}
+{"carePlanId":"68547d52aedbd85e0b12df62","level":"info","message":"Recommendation completed","recommendationId":"68547d52aedbd85e0b12df65","service":"healthhacked-api","timestamp":"2025-06-21T17:09:09.543Z","userId":"68540fd9fbe819f427783f4a"}
+{"level":"info","message":"Chat message received","messageLength":50,"service":"healthhacked-api","timestamp":"2025-06-21T17:09:31.410Z","userId":"68540fd9fbe819f427783f4a"}
+{"level":"info","message":"Routing to primary chatbot","service":"healthhacked-api","timestamp":"2025-06-21T17:09:31.457Z","userId":"68540fd9fbe819f427783f4a"}
+{"level":"info","message":"Gemini API call successful","processingTime":4679,"promptLength":1175,"responseLength":1880,"service":"healthhacked-api","timestamp":"2025-06-21T17:09:36.142Z"}
+{"contextId":"6856e7509b51c143c168f258","level":"info","message":"Health context created","service":"healthhacked-api","severity":"medium","timestamp":"2025-06-21T17:09:36.207Z","userId":"68540fd9fbe819f427783f4a"}
+{"carePlanId":"6856e7509b51c143c168f25a","contextId":"6856e7509b51c143c168f258","level":"info","message":"Initial care plan created","service":"healthhacked-api","timestamp":"2025-06-21T17:09:36.280Z","userId":"68540fd9fbe819f427783f4a"}
+{"contextId":"6856e7509b51c143c168f258","hasContext":true,"level":"info","message":"Chat response generated successfully","service":"healthhacked-api","sessionId":"session-1750525771457","timestamp":"2025-06-21T17:09:36.482Z","userId":"68540fd9fbe819f427783f4a"}
+{"level":"info","message":"Loading dashboard data","service":"healthhacked-api","timestamp":"2025-06-21T17:10:41.414Z","userId":"68540fd9fbe819f427783f4a"}
+{"activeCarePlans":2,"activeContexts":5,"level":"info","message":"Dashboard data loaded successfully","service":"healthhacked-api","timestamp":"2025-06-21T17:10:41.614Z","userId":"68540fd9fbe819f427783f4a"}
+{"level":"info","message":"Loading dashboard data","service":"healthhacked-api","timestamp":"2025-06-21T17:10:41.667Z","userId":"68540fd9fbe819f427783f4a"}
+{"activeCarePlans":2,"activeContexts":5,"level":"info","message":"Dashboard data loaded successfully","service":"healthhacked-api","timestamp":"2025-06-21T17:10:41.880Z","userId":"68540fd9fbe819f427783f4a"}
+{"level":"info","message":"Loading dashboard data","service":"healthhacked-api","timestamp":"2025-06-21T17:10:53.394Z","userId":"68540fd9fbe819f427783f4a"}
+{"activeCarePlans":2,"activeContexts":5,"level":"info","message":"Dashboard data loaded successfully","service":"healthhacked-api","timestamp":"2025-06-21T17:10:53.583Z","userId":"68540fd9fbe819f427783f4a"}
+{"level":"info","message":"Loading dashboard data","service":"healthhacked-api","timestamp":"2025-06-21T17:10:53.643Z","userId":"68540fd9fbe819f427783f4a"}
+{"activeCarePlans":2,"activeContexts":5,"level":"info","message":"Dashboard data loaded successfully","service":"healthhacked-api","timestamp":"2025-06-21T17:10:53.843Z","userId":"68540fd9fbe819f427783f4a"}
+{"level":"info","message":"Loading dashboard data","service":"healthhacked-api","timestamp":"2025-06-21T17:11:10.923Z","userId":"68540fd9fbe819f427783f4a"}
+{"activeCarePlans":2,"activeContexts":5,"level":"info","message":"Dashboard data loaded successfully","service":"healthhacked-api","timestamp":"2025-06-21T17:11:11.145Z","userId":"68540fd9fbe819f427783f4a"}
+{"level":"info","message":"Loading dashboard data","service":"healthhacked-api","timestamp":"2025-06-21T17:11:11.205Z","userId":"68540fd9fbe819f427783f4a"}
+{"activeCarePlans":2,"activeContexts":5,"level":"info","message":"Dashboard data loaded successfully","service":"healthhacked-api","timestamp":"2025-06-21T17:11:11.427Z","userId":"68540fd9fbe819f427783f4a"}
+{"level":"info","message":"Loading dashboard data","service":"healthhacked-api","timestamp":"2025-06-21T17:11:21.485Z","userId":"68540fd9fbe819f427783f4a"}
+{"activeCarePlans":2,"activeContexts":5,"level":"info","message":"Dashboard data loaded successfully","service":"healthhacked-api","timestamp":"2025-06-21T17:11:21.677Z","userId":"68540fd9fbe819f427783f4a"}
+{"level":"info","message":"Loading dashboard data","service":"healthhacked-api","timestamp":"2025-06-21T17:11:21.730Z","userId":"68540fd9fbe819f427783f4a"}
+{"activeCarePlans":2,"activeContexts":5,"level":"info","message":"Dashboard data loaded successfully","service":"healthhacked-api","timestamp":"2025-06-21T17:11:21.909Z","userId":"68540fd9fbe819f427783f4a"}
+{"level":"info","message":"Loading dashboard data","service":"healthhacked-api","timestamp":"2025-06-21T17:14:37.923Z","userId":"68540fd9fbe819f427783f4a"}
+{"activeCarePlans":2,"activeContexts":5,"level":"info","message":"Dashboard data loaded successfully","service":"healthhacked-api","timestamp":"2025-06-21T17:14:38.100Z","userId":"68540fd9fbe819f427783f4a"}
+{"level":"info","message":"Loading dashboard data","service":"healthhacked-api","timestamp":"2025-06-21T17:14:38.153Z","userId":"68540fd9fbe819f427783f4a"}
+{"activeCarePlans":2,"activeContexts":5,"level":"info","message":"Dashboard data loaded successfully","service":"healthhacked-api","timestamp":"2025-06-21T17:14:38.339Z","userId":"68540fd9fbe819f427783f4a"}
+{"carePlanId":"68547d52aedbd85e0b12df62","level":"info","message":"Recommendation completed","recommendationId":"68547d52aedbd85e0b12df66","service":"healthhacked-api","timestamp":"2025-06-21T17:15:11.747Z","userId":"68540fd9fbe819f427783f4a"}
+{"carePlanId":"68547d52aedbd85e0b12df62","level":"info","message":"Recommendation completed","recommendationId":"68547d52aedbd85e0b12df67","service":"healthhacked-api","timestamp":"2025-06-21T17:15:12.571Z","userId":"68540fd9fbe819f427783f4a"}
+{"level":"info","message":"Loading dashboard data","service":"healthhacked-api","timestamp":"2025-06-21T17:15:19.464Z","userId":"68540fd9fbe819f427783f4a"}
+{"activeCarePlans":2,"activeContexts":5,"level":"info","message":"Dashboard data loaded successfully","service":"healthhacked-api","timestamp":"2025-06-21T17:15:19.683Z","userId":"68540fd9fbe819f427783f4a"}
+{"level":"info","message":"Loading dashboard data","service":"healthhacked-api","timestamp":"2025-06-21T17:15:19.744Z","userId":"68540fd9fbe819f427783f4a"}
+{"activeCarePlans":2,"activeContexts":5,"level":"info","message":"Dashboard data loaded successfully","service":"healthhacked-api","timestamp":"2025-06-21T17:15:19.944Z","userId":"68540fd9fbe819f427783f4a"}
+{"level":"info","message":"Loading dashboard data","service":"healthhacked-api","timestamp":"2025-06-21T17:16:05.932Z","userId":"68540fd9fbe819f427783f4a"}
+{"activeCarePlans":2,"activeContexts":5,"level":"info","message":"Dashboard data loaded successfully","service":"healthhacked-api","timestamp":"2025-06-21T17:16:06.120Z","userId":"68540fd9fbe819f427783f4a"}
+{"level":"info","message":"Loading dashboard data","service":"healthhacked-api","timestamp":"2025-06-21T17:16:06.173Z","userId":"68540fd9fbe819f427783f4a"}
+{"activeCarePlans":2,"activeContexts":5,"level":"info","message":"Dashboard data loaded successfully","service":"healthhacked-api","timestamp":"2025-06-21T17:16:06.396Z","userId":"68540fd9fbe819f427783f4a"}
+{"level":"info","message":"Loading dashboard data","service":"healthhacked-api","timestamp":"2025-06-21T17:21:07.009Z","userId":"68540fd9fbe819f427783f4a"}
+{"activeCarePlans":2,"activeContexts":5,"level":"info","message":"Dashboard data loaded successfully","service":"healthhacked-api","timestamp":"2025-06-21T17:21:07.220Z","userId":"68540fd9fbe819f427783f4a"}
+{"level":"info","message":"Loading dashboard data","service":"healthhacked-api","timestamp":"2025-06-21T17:21:07.280Z","userId":"68540fd9fbe819f427783f4a"}
+{"activeCarePlans":2,"activeContexts":5,"level":"info","message":"Dashboard data loaded successfully","service":"healthhacked-api","timestamp":"2025-06-21T17:21:07.467Z","userId":"68540fd9fbe819f427783f4a"}
