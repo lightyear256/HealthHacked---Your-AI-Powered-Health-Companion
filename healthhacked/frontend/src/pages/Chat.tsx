@@ -223,13 +223,13 @@ What can I help you with today?`,
       .split('\n')
       .map((line, index) => {
         if (line.startsWith('**') && line.endsWith('**')) {
-          return <div key={index} className="font-semibold mt-3 mb-1 text-gray-900">{line.slice(2, -2)}</div>;
+          return <div key={index} className="font-semibold mt-3 mb-1 text-gray-200">{line.slice(2, -2)}</div>;
         }
         if (line.startsWith('• ')) {
-          return <div key={index} className="ml-4 mb-1 text-gray-700">{line}</div>;
+          return <div key={index} className="ml-4 mb-1 text-gray-300">{line}</div>;
         }
         if (line.startsWith('🚨')) {
-          return <div key={index} className="text-red-600 font-medium mt-2 mb-1 p-2 bg-red-50 rounded border-l-4 border-red-400">{line}</div>;
+          return <div key={index} className="text-red-400 font-medium mt-2 mb-1 p-2 bg-red-900/30 rounded border-l-4 border-red-400">{line}</div>;
         }
         if (line.trim() === '') {
           return <div key={index} className="mb-2"></div>;
@@ -239,177 +239,220 @@ What can I help you with today?`,
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 to-black">
+    <style jsx>{`
+      .scrollbar-custom::-webkit-scrollbar {
+        width: 8px;
+      }
+      
+      .scrollbar-custom::-webkit-scrollbar-track {
+        background-color: #475569; /* slate-600 */
+        border-radius: 4px;
+      }
+      
+      .scrollbar-custom::-webkit-scrollbar-thumb {
+        background-color: #000000; /* black */
+        border-radius: 4px;
+        border: 1px solid #475569;
+      }
+      
+      .scrollbar-custom::-webkit-scrollbar-thumb:hover {
+        background-color: #000000; /* black */
+      }
+      
+      .scrollbar-custom::-webkit-scrollbar-corner {
+        background-color: #000000;
+      }
+      
+      /* Firefox scrollbar styling */
+      .scrollbar-custom {
+        scrollbar-width: thin;
+        scrollbar-color: #475569 #000000;
+      }
+    `}</style>
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8 max-w-6xl">
         {/* Header */}
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 flex items-center">
-            <MessageCircle className="h-8 w-8 mr-3 text-green-600" />
+          <h1 className="text-3xl font-bold text-white flex items-center">
+            <MessageCircle className="h-8 w-8 mr-3 text-purple-600" />
             AI Health Assistant
           </h1>
-          <p className="mt-2 text-gray-600">
+          <p className="mt-2 text-white">
             {contextId ? 'Continuing your health conversation' : 'Start a conversation about your health'}
           </p>
           {error && (
-            <div className="mt-2 p-3 bg-red-50 border border-red-200 rounded-md">
-              <p className="text-sm text-red-800">
+            <div className="mt-2 p-3 bg-red-900/30 border border-red-600 rounded-md">
+              <p className="text-sm text-red-400">
                 ⚠️ Connection issue: {error}
               </p>
             </div>
           )}
         </div>
 
-        {/* Chat Container */}
-        <Card className="h-[600px] flex flex-col">
-          {/* Messages */}
-          <div className="flex-1 overflow-y-auto p-6 space-y-4">
-            {messages.map((message) => (
-              <div
-                key={message.id}
-                className={`flex ${message.sender === 'user' ? 'justify-end' : 'justify-start'}`}
-              >
-                <div className={`flex max-w-xs lg:max-w-md ${message.sender === 'user' ? 'flex-row-reverse' : 'flex-row'}`}>
-                  {/* Avatar */}
-                  <div className={`flex-shrink-0 ${message.sender === 'user' ? 'ml-3' : 'mr-3'}`}>
-                    <div className={`w-8 h-8 rounded-full flex items-center justify-center ${
-                      message.sender === 'user' 
-                        ? 'bg-green-600 text-white' 
-                        : 'bg-blue-600 text-white'
+        {/* Chat Container - Now properly centered and responsive */}
+        <div className="flex justify-center">
+          <Card className="h-[700px] w-[1560px] max-w-7xl flex flex-col bg-slate-800 border-slate-700">
+            {/* Messages */}
+           <div className="flex-1 overflow-y-auto p-6 space-y-4 scrollbar-custom">
+              {messages.map((message) => (
+                <div
+                  key={message.id}
+                  className={`flex ${message.sender === 'user' ? 'justify-end' : 'justify-start'}`}
+                >
+                  <div className={`flex max-w-xs lg:max-w-md ${message.sender === 'user' ? 'flex-row-reverse' : 'flex-row'}`}>
+                    {/* Avatar */}
+                    <div className={`flex-shrink-0 ${message.sender === 'user' ? 'ml-3' : 'mr-3'}`}>
+                      <div className={`w-8 h-8 rounded-full flex items-center justify-center ${
+                        message.sender === 'user' 
+                          ? 'bg-blue-600 text-white' 
+                          : 'bg-purple-600 text-white'
+                      }`}>
+                        {message.sender === 'user' ? <User className="h-4 w-4" /> : <Bot className="h-4 w-4" />}
+                      </div>
+                    </div>
+
+                    {/* Message Content */}
+                    <div className={`px-4 py-2 rounded-lg ${
+                      message.sender === 'user'
+                        ? 'bg-slate-700 text-white'
+                        : 'bg-purple-700 border border-slate-600 text-white'
                     }`}>
-                      {message.sender === 'user' ? <User className="h-4 w-4" /> : <Bot className="h-4 w-4" />}
-                    </div>
-                  </div>
-
-                  {/* Message Content */}
-                  <div className={`px-4 py-2 rounded-lg ${
-                    message.sender === 'user'
-                      ? 'bg-green-600 text-white'
-                      : 'bg-white border border-gray-200 text-gray-900'
-                  }`}>
-                    <div className="text-sm">
-                      {message.sender === 'user' ? (
-                        <div className="whitespace-pre-line">{message.content}</div>
-                      ) : (
-                        formatMessageContent(message.content)
-                      )}
-                    </div>
-                    <div className={`text-xs mt-2 flex items-center justify-between ${
-                      message.sender === 'user' ? 'text-green-100' : 'text-gray-500'
-                    }`}>
-                      <span>
-                        {message.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-                      </span>
-                      {message.context?.contextId && (
-                        <div className="flex items-center ml-2">
-                          <CheckCircle className="h-3 w-3 text-green-500" />
-                          <span className="text-xs ml-1 text-green-600">Tracked</span>
-                        </div>
-                      )}
+                      <div className="text-sm">
+                        {message.sender === 'user' ? (
+                          <div className="whitespace-pre-line">{message.content}</div>
+                        ) : (
+                          formatMessageContent(message.content)
+                        )}
+                      </div>
+                      <div className={`text-xs mt-2 flex items-center justify-between ${
+                        message.sender === 'user' ? 'text-blue-100' : 'text-gray-400'
+                      }`}>
+                        <span>
+                          {message.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                        </span>
+                        {message.context?.contextId && (
+                          <div className="flex items-center ml-2">
+                            <CheckCircle className="h-3 w-3 text-white" />
+                            <span className="text-xs ml-1 text-white">Tracked</span>
+                          </div>
+                        )}
+                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
-            ))}
+              ))}
 
-            {/* Typing Indicator */}
-            {isTyping && (
-              <div className="flex justify-start">
-                <div className="flex mr-3">
-                  <div className="w-8 h-8 rounded-full bg-blue-600 text-white flex items-center justify-center">
-                    <Bot className="h-4 w-4" />
+              {/* Typing Indicator */}
+              {isTyping && (
+                <div className="flex justify-start">
+                  <div className="flex mr-3">
+                    <div className="w-8 h-8 rounded-full bg-purple-600 text-white flex items-center justify-center">
+                      <Bot className="h-4 w-4" />
+                    </div>
+                  </div>
+                  <div className="bg-slate-700 border border-slate-600 rounded-lg px-4 py-2">
+                    <div className="flex space-x-1">
+                      <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"></div>
+                      <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0.1s' }}></div>
+                      <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
+                    </div>
                   </div>
                 </div>
-                <div className="bg-white border border-gray-200 rounded-lg px-4 py-2">
-                  <div className="flex space-x-1">
-                    <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"></div>
-                    <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0.1s' }}></div>
-                    <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
-                  </div>
-                </div>
-              </div>
-            )}
+              )}
 
-            <div ref={messagesEndRef} />
-          </div>
+              <div ref={messagesEndRef} />
+            </div>
 
-          {/* Input */}
-          <div className="border-t border-gray-200 p-4">
-            <div className="flex space-x-4">
-              <div className="flex-1">
+            {/* Input */}
+            <div className="border-t border-slate-600 p-4">
+              <div className="relative">
                 <textarea
                   value={inputMessage}
                   onChange={(e) => setInputMessage(e.target.value)}
                   onKeyPress={handleKeyPress}
                   placeholder="Type your health question or concern..."
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent resize-none"
-                  rows={2}
+                  className="w-full px-4 py-3 pr-12 bg-slate-700 border border-slate-600 text-white placeholder-gray-400 rounded-full focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent resize-none min-h-[48px] max-h-32"
+                  rows={1}
                   disabled={isLoading}
+                  style={{
+                    paddingTop: '12px',
+                    paddingBottom: '12px',
+                    lineHeight: '1.5',
+                  }}
                 />
+                <button
+                  onClick={sendMessage}
+                  disabled={!inputMessage.trim() || isLoading}
+                  className={`absolute right-3 top-1/2 transform -translate-y-1/2 w-8 h-8 rounded-full flex items-center justify-center transition-all duration-200 ${
+                    !inputMessage.trim() || isLoading
+                      ? 'bg-slate-600 text-gray-400 cursor-not-allowed'
+                      : 'bg-purple-600 text-white hover:bg-purple-700 active:scale-95'
+                  }`}
+                >
+                  {isLoading ? (
+                    <Loader2 className="h-4 w-4 animate-spin" />
+                  ) : (
+                    <Send className="h-4 w-4" />
+                  )}
+                </button>
               </div>
-              <Button
-                onClick={sendMessage}
-                disabled={!inputMessage.trim() || isLoading}
-                className="px-6 py-2"
-              >
-                {isLoading ? (
-                  <Loader2 className="h-4 w-4 animate-spin" />
-                ) : (
-                  <Send className="h-4 w-4" />
-                )}
-              </Button>
-            </div>
-            
-            {/* Quick Actions */}
-            {messages.length === 1 && (
-              <div className="mt-4 flex flex-wrap gap-2">
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={() => setInputMessage("I've been having headaches for the past few days")}
-                  disabled={isLoading}
-                >
-                  Headache concerns
-                </Button>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={() => setInputMessage("I have lower back pain that's been bothering me")}
-                  disabled={isLoading}
-                >
-                  Back pain
-                </Button>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={() => setInputMessage("I want to check on my current care plan progress")}
-                  disabled={isLoading}
-                >
-                  Care plan update
-                </Button>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={() => setInputMessage("I have new symptoms I'm concerned about")}
-                  disabled={isLoading}
-                >
-                  New symptoms
-                </Button>
-              </div>
-            )}
+              
+              {/* Quick Actions */}
+              {messages.length === 1 && (
+                <div className="mt-4 flex flex-wrap gap-2">
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => setInputMessage("I've been having headaches for the past few days")}
+                    disabled={isLoading}
+                    className="border-slate-600 text-black hover:bg-purple-600 hover:text-white"
+                  >
+                    Headache concerns
+                  </Button>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => setInputMessage("I have lower back pain that's been bothering me")}
+                    disabled={isLoading}
+                    className="border-slate-600 text-black hover:bg-purple-600 hover:text-white"
+                  >
+                    Back pain
+                  </Button>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => setInputMessage("I want to check on my current care plan progress")}
+                    disabled={isLoading}
+                    className="border-slate-600 text-black hover:bg-purple-600 hover:text-white"
+                  >
+                    Care plan update
+                  </Button>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => setInputMessage("I have new symptoms I'm concerned about")}
+                    disabled={isLoading}
+                    className="border-slate-600 text-black hover:bg-purple-600 hover:text-white"
+                  >
+                    New symptoms
+                  </Button>
+                </div>
+              )}
 
-            {/* Connection Status */}
-            <div className="mt-2 text-xs text-gray-500 flex items-center">
-              <div className={`w-2 h-2 rounded-full mr-2 ${error ? 'bg-red-500' : 'bg-green-500'}`}></div>
-              {error ? 'Connection issues detected' : 'Connected to HealthHacked AI'}
+              {/* Connection Status */}
+              <div className="mt-2 text-xs text-gray-400 flex items-center">
+                <div className={`w-2 h-2 rounded-full mr-2 ${error ? 'bg-red-500' : 'bg-green-500'}`}></div>
+                {error ? 'Connection issues detected' : 'Connected to HealthHacked AI'}
+              </div>
             </div>
-          </div>
-        </Card>
+          </Card>
+        </div>
 
         {/* Health Disclaimer */}
-        <div className="mt-6 p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
+        <div className="mt-6 p-4 bg-yellow-900/30 border border-yellow-600 rounded-lg">
           <div className="flex">
-            <AlertCircle className="h-5 w-5 text-yellow-600 mr-2 flex-shrink-0 mt-0.5" />
-            <div className="text-sm text-yellow-800">
+            <AlertCircle className="h-5 w-5 text-yellow-400 mr-2 flex-shrink-0 mt-0.5" />
+            <div className="text-sm text-yellow-200">
               <p className="font-medium mb-1">Important Health Disclaimer</p>
               <p>
                 This AI assistant provides general health information and guidance. It is not a substitute for professional medical advice, diagnosis, or treatment. Always consult with qualified healthcare providers for serious health concerns or emergencies.
