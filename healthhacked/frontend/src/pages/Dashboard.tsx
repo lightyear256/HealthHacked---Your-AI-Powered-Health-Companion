@@ -84,7 +84,7 @@ export function Dashboard() {
   // Show error state
   if (error && !dashboardData) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="min-h-screen flex items-center justify-center ">
         <div className="text-center">
           <AlertCircle className="h-12 w-12 text-red-500 mx-auto mb-4" />
           <p className="text-gray-600 mb-4">Failed to load dashboard</p>
@@ -132,13 +132,13 @@ export function Dashboard() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 to-black">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Welcome Header */}
         <div className="mb-8">
           <div className="flex items-center justify-between">
             <div>
-              <h1 className="text-3xl font-bold text-gray-900">
+              <h1 className="text-3xl font-bold text-white">
                 Welcome back, {user?.profile.name}!
               </h1>
               <p className="mt-2 text-gray-600">
@@ -168,56 +168,56 @@ export function Dashboard() {
 
         {/* Stats Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-          <Card className="p-6">
+          <Card className="p-6 text-white">
             <div className="flex items-center">
               <div className="flex-shrink-0">
                 <Heart className="h-8 w-8 text-red-500" />
               </div>
               <div className="ml-4">
-                <p className="text-sm font-medium text-gray-500">Active Concerns</p>
-                <p className="text-2xl font-bold text-gray-900">
+                <p className="text-sm font-medium">Active Concerns</p>
+                <p className="text-2xl font-bold ">
                   {data.stats.activeHealthConcerns}
                 </p>
               </div>
             </div>
           </Card>
 
-          <Card className="p-6">
+          <Card className="p-6 text-white">
             <div className="flex items-center">
               <div className="flex-shrink-0">
                 <Calendar className="h-8 w-8 text-blue-500" />
               </div>
               <div className="ml-4">
-                <p className="text-sm font-medium text-gray-500">Care Plans</p>
-                <p className="text-2xl font-bold text-gray-900">
+                <p className="text-sm font-medium ">Care Plans</p>
+                <p className="text-2xl font-bold ">
                   {data.stats.activeCarePlans}
                 </p>
               </div>
             </div>
           </Card>
 
-          <Card className="p-6">
+          <Card className="p-6 text-white">
             <div className="flex items-center">
               <div className="flex-shrink-0">
                 <CheckCircle2 className="h-8 w-8 text-green-500" />
               </div>
               <div className="ml-4">
-                <p className="text-sm font-medium text-gray-500">Completed</p>
-                <p className="text-2xl font-bold text-gray-900">
+                <p className="text-sm font-medium ">Completed</p>
+                <p className="text-2xl font-bold ">
                   {data.stats.completedRecommendations}/{data.stats.totalRecommendations}
                 </p>
               </div>
             </div>
           </Card>
 
-          <Card className="p-6">
+          <Card className="p-6 text-white">
             <div className="flex items-center">
               <div className="flex-shrink-0">
                 <TrendingUp className="h-8 w-8 text-purple-500" />
               </div>
               <div className="ml-4">
-                <p className="text-sm font-medium text-gray-500">Progress</p>
-                <p className="text-2xl font-bold text-gray-900">{completionPercentage}%</p>
+                <p className="text-sm font-medium ">Progress</p>
+                <p className="text-2xl font-bold ">{completionPercentage}%</p>
               </div>
             </div>
           </Card>
@@ -226,11 +226,11 @@ export function Dashboard() {
         {/* Main Content */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           {/* Active Health Contexts */}
-          <Card className="p-6">
+          <Card className="p-6 text-white">
             <div className="flex items-center justify-between mb-6">
-              <h2 className="text-xl font-semibold text-gray-900">Active Health Concerns</h2>
+              <h2 className="text-xl font-semibold ">Active Health Concerns</h2>
               <Link to="/chat">
-                <Button variant="outline" size="sm">
+                <Button variant="ghost" size="sm">
                   <MessageCircle className="h-4 w-4 mr-2" />
                   Chat with AI
                 </Button>
