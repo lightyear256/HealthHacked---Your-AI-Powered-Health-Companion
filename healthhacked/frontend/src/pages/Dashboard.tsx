@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import { motion, AnimatePresence } from 'framer-motion';
 import { useAuthStore } from '../hooks/useAuth';
 import { healthAPI } from '../services/api';
 import { Button } from '../components/ui/Button';
@@ -28,6 +29,69 @@ interface DashboardData {
   activeCarePlans: any[];
   recentActivity: any[];
 }
+
+// Animation variants
+const pageVariants = {
+  initial: { opacity: 0, y: 20 },
+  animate: { opacity: 1, y: 0 },
+  exit: { opacity: 0, y: -20 }
+};
+
+const containerVariants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.1
+    }
+  }
+};
+
+const itemVariants = {
+  hidden: { opacity: 0, y: 20 },
+  visible: { 
+    opacity: 1, 
+    y: 0,
+    transition: {
+      duration: 0.5,
+      ease: "easeOut"
+    }
+  }
+};
+
+const cardVariants = {
+  hidden: { opacity: 0, scale: 0.9 },
+  visible: { 
+    opacity: 1, 
+    scale: 1,
+    transition: {
+      duration: 0.4,
+      ease: "easeOut"
+    }
+  },
+  hover: { 
+    scale: 1.05,
+    transition: {
+      duration: 0.2,
+      ease: "easeInOut"
+    }
+  }
+};
+
+const slideVariants = {
+  left: {
+    hidden: { opacity: 0, x: -50 },
+    visible: { opacity: 1, x: 0 }
+  },
+  right: {
+    hidden: { opacity: 0, x: 50 },
+    visible: { opacity: 1, x: 0 }
+  },
+  up: {
+    hidden: { opacity: 0, y: 30 },
+    visible: { opacity: 1, y: 0 }
+  }
+};
 
 export function Dashboard() {
   const { user } = useAuthStore();
@@ -72,29 +136,76 @@ export function Dashboard() {
   // Show loading state
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-green-600 mx-auto"></div>
-          <p className="mt-4 text-gray-600">Loading your health dashboard...</p>
-        </div>
-      </div>
+      <motion.div 
+        className="min-h-screen bg-gray-50 flex items-center justify-center"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+      >
+        <motion.div 
+          className="text-center"
+          initial={{ scale: 0.9 }}
+          animate={{ scale: 1 }}
+          transition={{ duration: 0.3 }}
+        >
+          <motion.div 
+            className="animate-spin rounded-full h-12 w-12 border-b-2 border-green-600 mx-auto"
+            animate={{ rotate: 360 }}
+            transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
+          />
+          <motion.p 
+            className="mt-4 text-gray-600"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.2 }}
+          >
+            Loading your health dashboard...
+          </motion.p>
+        </motion.div>
+      </motion.div>
     );
   }
 
   // Show error state
   if (error && !dashboardData) {
     return (
-      <div className="min-h-screen flex items-center justify-center ">
-        <div className="text-center">
-          <AlertCircle className="h-12 w-12 text-red-500 mx-auto mb-4" />
+      <motion.div 
+        className="min-h-screen flex items-center justify-center"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+      >
+        <motion.div 
+          className="text-center"
+          variants={itemVariants}
+          initial="hidden"
+          animate="visible"
+        >
+          <motion.div
+            animate={{ 
+              y: [0, -10, 0],
+              rotate: [0, 5, -5, 0]
+            }}
+            transition={{ 
+              duration: 2,
+              repeat: Infinity,
+              ease: "easeInOut"
+            }}
+          >
+            <AlertCircle className="h-12 w-12 text-red-500 mx-auto mb-4" />
+          </motion.div>
           <p className="text-gray-600 mb-4">Failed to load dashboard</p>
           <p className="text-sm text-gray-500 mb-4">{error}</p>
-          <Button onClick={handleManualRefresh} className="flex items-center mx-auto">
-            <RefreshCw className="h-4 w-4 mr-2" />
-            Try Again
-          </Button>
-        </div>
-      </div>
+          <motion.div
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+          >
+            <Button onClick={handleManualRefresh} className="flex items-center mx-auto">
+              <RefreshCw className="h-4 w-4 mr-2" />
+              Try Again
+            </Button>
+          </motion.div>
+        </motion.div>
+      </motion.div>
     );
   }
 
@@ -132,254 +243,462 @@ export function Dashboard() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 to-black">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <motion.div 
+      className="min-h-screen bg-gradient-to-br from-slate-900 to-black"
+      variants={pageVariants}
+      initial="initial"
+      animate="animate"
+      exit="exit"
+      transition={{ duration: 0.5 }}
+    >
+      <motion.div 
+        className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8"
+        variants={containerVariants}
+        initial="hidden"
+        animate="visible"
+      >
         {/* Welcome Header */}
-        <div className="mb-8">
+        <motion.div className="mb-8" variants={itemVariants}>
           <div className="flex items-center justify-between">
             <div>
-              <h1 className="text-3xl font-bold text-white">
+              <motion.h1 
+                className="text-3xl font-bold text-white"
+                variants={slideVariants.left}
+                initial="hidden"
+                animate="visible"
+                transition={{ duration: 0.6, delay: 0.2 }}
+              >
                 Welcome back, {user?.profile.name}!
-              </h1>
-              <p className="mt-2 text-gray-600">
+              </motion.h1>
+              <motion.p 
+                className="mt-2 text-gray-600"
+                variants={slideVariants.left}
+                initial="hidden"
+                animate="visible"
+                transition={{ duration: 0.6, delay: 0.3 }}
+              >
                 Here's your health overview for today
-              </p>
+              </motion.p>
             </div>
-            <Button 
-              onClick={handleManualRefresh} 
-              variant="outline" 
-              size="sm"
-              className="flex items-center"
-              disabled={loading}
+            <motion.div
+              variants={slideVariants.right}
+              initial="hidden"
+              animate="visible"
+              transition={{ duration: 0.6, delay: 0.4 }}
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
             >
-              <RefreshCw className={`h-4 w-4 mr-2 ${loading ? 'animate-spin' : ''}`} />
-              Refresh
-            </Button>
+              <Button 
+                onClick={handleManualRefresh} 
+                variant="outline" 
+                size="sm"
+                className="flex items-center"
+                disabled={loading}
+              >
+                <motion.div
+                  animate={loading ? { rotate: 360 } : {}}
+                  transition={loading ? { duration: 1, repeat: Infinity, ease: "linear" } : {}}
+                >
+                  <RefreshCw className="h-4 w-4 mr-2" />
+                </motion.div>
+                Refresh
+              </Button>
+            </motion.div>
           </div>
           
-          {error && (
-            <div className="mt-4 p-3 bg-yellow-50 border border-yellow-200 rounded-md">
-              <p className="text-sm text-yellow-800">
-                ⚠️ Some data may be outdated: {error}
-              </p>
-            </div>
-          )}
-        </div>
+          <AnimatePresence>
+            {error && (
+              <motion.div 
+                className="mt-4 p-3 bg-yellow-50 border border-yellow-200 rounded-md"
+                initial={{ opacity: 0, height: 0 }}
+                animate={{ opacity: 1, height: "auto" }}
+                exit={{ opacity: 0, height: 0 }}
+                transition={{ duration: 0.3 }}
+              >
+                <p className="text-sm text-yellow-800">
+                  ⚠️ Some data may be outdated: {error}
+                </p>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </motion.div>
 
         {/* Stats Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-          <Card className="p-6 text-white">
-            <div className="flex items-center">
-              <div className="flex-shrink-0">
-                <Heart className="h-8 w-8 text-red-500" />
-              </div>
-              <div className="ml-4">
-                <p className="text-sm font-medium">Active Concerns</p>
-                <p className="text-2xl font-bold ">
-                  {data.stats.activeHealthConcerns}
-                </p>
-              </div>
-            </div>
-          </Card>
-
-          <Card className="p-6 text-white">
-            <div className="flex items-center">
-              <div className="flex-shrink-0">
-                <Calendar className="h-8 w-8 text-blue-500" />
-              </div>
-              <div className="ml-4">
-                <p className="text-sm font-medium ">Care Plans</p>
-                <p className="text-2xl font-bold ">
-                  {data.stats.activeCarePlans}
-                </p>
-              </div>
-            </div>
-          </Card>
-
-          <Card className="p-6 text-white">
-            <div className="flex items-center">
-              <div className="flex-shrink-0">
-                <CheckCircle2 className="h-8 w-8 text-green-500" />
-              </div>
-              <div className="ml-4">
-                <p className="text-sm font-medium ">Completed</p>
-                <p className="text-2xl font-bold ">
-                  {data.stats.completedRecommendations}/{data.stats.totalRecommendations}
-                </p>
-              </div>
-            </div>
-          </Card>
-
-          <Card className="p-6 text-white">
-            <div className="flex items-center">
-              <div className="flex-shrink-0">
-                <TrendingUp className="h-8 w-8 text-purple-500" />
-              </div>
-              <div className="ml-4">
-                <p className="text-sm font-medium ">Progress</p>
-                <p className="text-2xl font-bold ">{completionPercentage}%</p>
-              </div>
-            </div>
-          </Card>
-        </div>
+        <motion.div 
+          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8"
+          variants={containerVariants}
+          initial="hidden"
+          animate="visible"
+        >
+          {[
+            { icon: Heart, label: "Active Concerns", value: data.stats.activeHealthConcerns, color: "red" },
+            { icon: Calendar, label: "Care Plans", value: data.stats.activeCarePlans, color: "blue" },
+            { icon: CheckCircle2, label: "Completed", value: `${data.stats.completedRecommendations}/${data.stats.totalRecommendations}`, color: "green" },
+            { icon: TrendingUp, label: "Progress", value: `${completionPercentage}%`, color: "purple" }
+          ].map((stat, index) => (
+            <motion.div
+              key={stat.label}
+              variants={cardVariants}
+              whileHover="hover"
+              className="cursor-pointer"
+            >
+              <Card className={`p-6 text-white hover:shadow-lg hover:shadow-${stat.color}-500/20 transition-shadow duration-300`}>
+                <div className="flex items-center">
+                  <div className="flex-shrink-0">
+                    <motion.div
+                      whileHover={{ 
+                        scale: 1.1,
+                        rotate: [0, -5, 5, 0]
+                      }}
+                      transition={{ duration: 0.3 }}
+                    >
+                      <stat.icon className={`h-8 w-8 text-${stat.color}-500`} />
+                    </motion.div>
+                  </div>
+                  <div className="ml-4">
+                    <p className="text-sm font-medium">{stat.label}</p>
+                    <motion.p 
+                      className="text-2xl font-bold"
+                      whileHover={{ scale: 1.1 }}
+                      transition={{ duration: 0.2 }}
+                    >
+                      {stat.value}
+                    </motion.p>
+                  </div>
+                </div>
+              </Card>
+            </motion.div>
+          ))}
+        </motion.div>
 
         {/* Main Content */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        <motion.div 
+          className="grid grid-cols-1 lg:grid-cols-2 gap-8"
+          variants={containerVariants}
+          initial="hidden"
+          animate="visible"
+        >
           {/* Active Health Contexts */}
-          <Card className="p-6 text-white">
-            <div className="flex items-center justify-between mb-6">
-              <h2 className="text-xl font-semibold ">Active Health Concerns</h2>
-              <Link to="/chat">
-                <Button variant="ghost" size="sm">
-                  <MessageCircle className="h-4 w-4 mr-2" />
-                  Chat with AI
-                </Button>
-              </Link>
-            </div>
-
-            {data.activeContexts && data.activeContexts.length > 0 ? (
-              <div className="space-y-4">
-                {data.activeContexts.map((context) => (
-                  <div key={context._id} className="border-slate-600 rounded-lg p-4 text-white hover:border-purple-500/50 hover:bg-gray-800 transition-all duration-300 transition-colors">
-                    <div className="flex items-start justify-between">
-                      <div className="flex-1">
-                        <h3 className="font-medium ">{context.primaryConcern}</h3>
-                        <p className="text-sm text-gray-500 mt-1">
-                          Severity: <span className={`font-medium ${getSeverityColor(context.severity)}`}>
-                            {context.severity}/10
-                          </span>
-                        </p>
-                        <p className="text-xs text-gray-400 mt-2">
-                          Started {formatDistanceToNow(new Date(context.createdAt), { addSuffix: true })}
-                        </p>
-                      </div>
-                      <span className={`px-2 py-1 text-xs font-medium rounded-full ${getStatusBadge(context.status)}`}>
-                        {context.status}
-                      </span>
-                    </div>
-                    {context.symptoms && context.symptoms.length > 0 && (
-                      <div className="mt-3">
-                        <p className="text-xs text-gray-500">Symptoms:</p>
-                        <div className="flex flex-wrap gap-1 mt-1">
-                          {context.symptoms.map((symptom, idx) => (
-                            <span key={idx} className="text-xs bg-gray-700 text-white px-2 py-1 rounded">
-                              {symptom}
-                            </span>
-                          ))}
-                        </div>
-                      </div>
-                    )}
-                    <Link to={`/chat?context=${context._id}`}>
-                      <Button variant="outline" size="sm" className="mt-3 w-full">
-                        Continue Conversation →
-                      </Button>
-                    </Link>
-                  </div>
-                ))}
-              </div>
-            ) : (
-              <div className="text-center py-8">
-                <Heart className="h-12 w-12 text-gray-300 mx-auto mb-4" />
-                <p className="text-gray-500">No active health concerns</p>
-                <p className="text-sm text-gray-400 mb-4">
-                  Start a conversation with our AI to track your health
-                </p>
+          <motion.div variants={slideVariants.left} initial="hidden" animate="visible" transition={{ duration: 0.6, delay: 0.5 }}>
+            <Card className="p-6 text-white hover:shadow-lg hover:shadow-purple-500/20 transition-shadow duration-300">
+              <div className="flex items-center justify-between mb-6">
+                <h2 className="text-xl font-semibold">Active Health Concerns</h2>
                 <Link to="/chat">
-                  <Button>Start Health Chat</Button>
+                  <motion.div
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                  >
+                    <Button variant="ghost" size="sm">
+                      <motion.div
+                        whileHover={{ y: -2 }}
+                        transition={{ duration: 0.2 }}
+                      >
+                        <MessageCircle className="h-4 w-4 mr-2" />
+                      </motion.div>
+                      Chat with AI
+                    </Button>
+                  </motion.div>
                 </Link>
               </div>
-            )}
-          </Card>
 
-          {/* Active Care Plans */}
-          <Card className="p-6">
-            <div className="flex items-center justify-between mb-6">
-              <h2 className="text-xl font-semibold text-white">Active Care Plans</h2>
-              <Link to="/care-plans">
-                <Button variant="outline" size="sm">View All</Button>
-              </Link>
-            </div>
-
-            {data.activeCarePlans && data.activeCarePlans.length > 0 ? (
-              <div className="space-y-4">
-                {data.activeCarePlans.map((plan) => {
-                  const completedCount = plan.recommendations?.filter(r => r.completed).length || 0;
-                  const totalCount = plan.recommendations?.length || 0;
-                  const planProgress = totalCount > 0 ? Math.round((completedCount / totalCount) * 100) : 0;
-
-                  return (
-                    <div key={plan._id} className="rounded-lg p-4 text-white hover:bg-gray-800 transition-colors">
-                      <div className="flex items-start justify-between">
-                        <div className="flex-1">
-                          <h3 className="font-medium ">{plan.title}</h3>
-                          {plan.contextId && (
+              <AnimatePresence>
+                {data.activeContexts && data.activeContexts.length > 0 ? (
+                  <motion.div className="space-y-4">
+                    {data.activeContexts.map((context, index) => (
+                      <motion.div 
+                        key={context._id}
+                        initial={{ opacity: 0, x: -20 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        exit={{ opacity: 0, x: 20 }}
+                        transition={{ duration: 0.3, delay: index * 0.1 }}
+                        whileHover={{ 
+                          scale: 1.02,
+                          backgroundColor: "rgba(75, 85, 99, 0.5)"
+                        }}
+                        className="border-slate-600 rounded-lg p-4 text-white hover:border-purple-500/50 transition-all duration-300"
+                      >
+                        <div className="flex items-start justify-between">
+                          <div className="flex-1">
+                            <h3 className="font-medium">{context.primaryConcern}</h3>
                             <p className="text-sm text-gray-500 mt-1">
-                              For: {plan.contextId.primaryConcern}
+                              Severity: <span className={`font-medium ${getSeverityColor(context.severity)}`}>
+                                {context.severity}/10
+                              </span>
                             </p>
-                          )}
-                          <div className="mt-3">
-                            <div className="flex items-center justify-between text-sm">
-                              <span className="text-gray-500">Progress</span>
-                              <span className="font-medium text-gray-900">{planProgress}%</span>
-                            </div>
-                            <div className="mt-1 w-full bg-gray-200 rounded-full h-2">
-                              <div 
-                                className="bg-green-600 h-2 rounded-full transition-all duration-300"
-                                style={{ width: `${planProgress}%` }}
-                              />
-                            </div>
-                            <p className="text-xs text-gray-500 mt-2">
-                              {completedCount} of {totalCount} tasks completed
+                            <p className="text-xs text-gray-400 mt-2">
+                              Started {formatDistanceToNow(new Date(context.createdAt), { addSuffix: true })}
                             </p>
                           </div>
+                          <motion.span 
+                            className={`px-2 py-1 text-xs font-medium rounded-full ${getStatusBadge(context.status)}`}
+                            animate={{ 
+                              scale: [1, 1.05, 1],
+                              opacity: [1, 0.8, 1]
+                            }}
+                            transition={{ 
+                              duration: 2,
+                              repeat: Infinity,
+                              ease: "easeInOut"
+                            }}
+                          >
+                            {context.status}
+                          </motion.span>
                         </div>
-                      </div>
-                      <Link to={`/care-plans/${plan._id}`}>
-                        <Button variant="outline" size="sm" className="mt-3 w-full">
-                          View Care Plan →
-                        </Button>
-                      </Link>
-                    </div>
-                  );
-                })}
+                        {context.symptoms && context.symptoms.length > 0 && (
+                          <div className="mt-3">
+                            <p className="text-xs text-gray-500">Symptoms:</p>
+                            <motion.div 
+                              className="flex flex-wrap gap-1 mt-1"
+                              variants={containerVariants}
+                              initial="hidden"
+                              animate="visible"
+                            >
+                              {context.symptoms.map((symptom, idx) => (
+                                <motion.span 
+                                  key={idx}
+                                  variants={itemVariants}
+                                  whileHover={{ scale: 1.1 }}
+                                  className="text-xs bg-gray-700 text-white px-2 py-1 rounded hover:bg-gray-600 transition-colors duration-200"
+                                >
+                                  {symptom}
+                                </motion.span>
+                              ))}
+                            </motion.div>
+                          </div>
+                        )}
+                        <Link to={`/chat?context=${context._id}`}>
+                          <motion.div
+                            whileHover={{ scale: 1.02 }}
+                            whileTap={{ scale: 0.98 }}
+                          >
+                            <Button variant="primary" size="sm" className="mt-3 w-full">
+                              Continue Conversation →
+                            </Button>
+                          </motion.div>
+                        </Link>
+                      </motion.div>
+                    ))}
+                  </motion.div>
+                ) : (
+                  <motion.div 
+                    className="text-center py-8"
+                    initial={{ opacity: 0, scale: 0.9 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={{ duration: 0.5 }}
+                  >
+                    <motion.div
+                      animate={{ 
+                        scale: [1, 1.1, 1],
+                        opacity: [0.5, 1, 0.5]
+                      }}
+                      transition={{ 
+                        duration: 2,
+                        repeat: Infinity,
+                        ease: "easeInOut"
+                      }}
+                    >
+                      <Heart className="h-12 w-12 text-gray-300 mx-auto mb-4" />
+                    </motion.div>
+                    <p className="text-gray-500">No active health concerns</p>
+                    <p className="text-sm text-gray-400 mb-4">
+                      Start a conversation with our AI to track your health
+                    </p>
+                    <Link to="/chat">
+                      <motion.div
+                        whileHover={{ scale: 1.05 }}
+                        whileTap={{ scale: 0.95 }}
+                      >
+                        <Button>Start Health Chat</Button>
+                      </motion.div>
+                    </Link>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </Card>
+          </motion.div>
+
+          {/* Active Care Plans */}
+          <motion.div variants={slideVariants.right} initial="hidden" animate="visible" transition={{ duration: 0.6, delay: 0.6 }}>
+            <Card className="p-6 hover:shadow-lg hover:shadow-purple-500/20 transition-shadow duration-300">
+              <div className="flex items-center justify-between mb-6">
+                <h2 className="text-xl font-semibold text-white">Active Care Plans</h2>
+                <Link to="/care-plans">
+                  <motion.div
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                  >
+                    <Button variant="outline" size="sm">View All</Button>
+                  </motion.div>
+                </Link>
               </div>
-            ) : (
-              <div className="text-center py-8">
-                <Calendar className="h-12 w-12 text-gray-300 mx-auto mb-4" />
-                <p className="text-gray-500">No active care plans</p>
-                <p className="text-sm text-gray-400 mt-1">
-                  Care plans are created automatically when you chat with our AI
-                </p>
-              </div>
-            )}
-          </Card>
-        </div>
+
+              <AnimatePresence>
+                {data.activeCarePlans && data.activeCarePlans.length > 0 ? (
+                  <motion.div className="space-y-4">
+                    {data.activeCarePlans.map((plan, index) => {
+                      const completedCount = plan.recommendations?.filter(r => r.completed).length || 0;
+                      const totalCount = plan.recommendations?.length || 0;
+                      const planProgress = totalCount > 0 ? Math.round((completedCount / totalCount) * 100) : 0;
+
+                      return (
+                        <motion.div 
+                          key={plan._id}
+                          initial={{ opacity: 0, x: 20 }}
+                          animate={{ opacity: 1, x: 0 }}
+                          exit={{ opacity: 0, x: -20 }}
+                          transition={{ duration: 0.3, delay: index * 0.1 }}
+                          whileHover={{ 
+                            scale: 1.02,
+                            backgroundColor: "rgba(75, 85, 99, 0.5)"
+                          }}
+                          className="rounded-lg p-4 text-white hover:bg-gray-800 transition-colors"
+                        >
+                          <div className="flex items-start justify-between">
+                            <div className="flex-1">
+                              <h3 className="font-medium">{plan.title}</h3>
+                              {plan.contextId && (
+                                <p className="text-sm text-gray-500 mt-1">
+                                  For: {plan.contextId.primaryConcern}
+                                </p>
+                              )}
+                              <div className="mt-3">
+                                <div className="flex items-center justify-between text-sm">
+                                  <span className="text-gray-500">Progress</span>
+                                  <motion.span 
+                                    className="font-medium text-white"
+                                    whileHover={{ scale: 1.1 }}
+                                  >
+                                    {planProgress}%
+                                  </motion.span>
+                                </div>
+                                <div className="mt-1 w-full bg-gray-200 rounded-full h-2 overflow-hidden">
+                                  <motion.div 
+                                    className="[background:linear-gradient(269deg,rgba(122,41,204,1)_0%,rgba(105,96,204,1)_50%,rgba(204,204,255,1)_100%)] h-2 rounded-full"
+                                    initial={{ width: 0 }}
+                                    animate={{ width: `${planProgress}%` }}
+                                    transition={{ 
+                                      duration: 1,
+                                      ease: "easeOut",
+                                      delay: 0.5
+                                    }}
+                                  />
+                                </div>
+                                <p className="text-xs text-gray-500 mt-2">
+                                  {completedCount} of {totalCount} tasks completed
+                                </p>
+                              </div>
+                            </div>
+                          </div>
+                          <Link to={`/care-plans/${plan._id}`}>
+                            <motion.div
+                              whileHover={{ scale: 1.02 }}
+                              whileTap={{ scale: 0.98 }}
+                            >
+                              <Button variant="primary" size="sm" className="mt-3 w-full">
+                                View Care Plan →
+                              </Button>
+                            </motion.div>
+                          </Link>
+                        </motion.div>
+                      );
+                    })}
+                  </motion.div>
+                ) : (
+                  <motion.div 
+                    className="text-center py-8"
+                    initial={{ opacity: 0, scale: 0.9 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={{ duration: 0.5 }}
+                  >
+                    <motion.div
+                      animate={{ 
+                        scale: [1, 1.1, 1],
+                        opacity: [0.5, 1, 0.5]
+                      }}
+                      transition={{ 
+                        duration: 2,
+                        repeat: Infinity,
+                        ease: "easeInOut"
+                      }}
+                    >
+                      <Calendar className="h-12 w-12 text-gray-300 mx-auto mb-4" />
+                    </motion.div>
+                    <p className="text-gray-500">No active care plans</p>
+                    <p className="text-sm text-gray-400 mt-1">
+                      Care plans are created automatically when you chat with our AI
+                    </p>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </Card>
+          </motion.div>
+        </motion.div>
 
         {/* Recent Activity */}
-        {data.recentActivity && data.recentActivity.length > 0 && (
-          <Card className="mt-8 p-6">
-            <h2 className="text-xl font-semibold text-white mb-6">Recent Activity</h2>
-            <div className="space-y-3">
-              {data.recentActivity.slice(0, 5).map((activity) => (
-                <div key={activity._id} className="flex items-center justify-between py-2 border-b last:border-0">
-                  <div className="flex items-center">
-                    <Clock className="h-4 w-4 text-gray-400 mr-3" />
-                    <div>
-                      <p className="text-sm font-medium text-white">{activity.primaryConcern}</p>
-                      <p className="text-xs text-gray-500">
-                        {formatDistanceToNow(new Date(activity.createdAt), { addSuffix: true })}
-                      </p>
-                    </div>
-                  </div>
-                  <span className={`px-2 py-1 text-xs font-medium rounded-full ${getStatusBadge(activity.status)}`}>
-                    {activity.status}
-                  </span>
-                </div>
-              ))}
-            </div>
-          </Card>
-        )}
-      </div>
-    </div>
+        <AnimatePresence>
+          {data.recentActivity && data.recentActivity.length > 0 && (
+            <motion.div
+              variants={slideVariants.up}
+              initial="hidden"
+              animate="visible"
+              exit="hidden"
+              transition={{ duration: 0.6, delay: 0.7 }}
+            >
+              <Card className="mt-8 p-6 hover:shadow-lg hover:shadow-purple-500/20 transition-shadow duration-300">
+                <h2 className="text-xl font-semibold text-white mb-6">Recent Activity</h2>
+                <motion.div 
+                  className="space-y-3"
+                  variants={containerVariants}
+                  initial="hidden"
+                  animate="visible"
+                >
+                  {data.recentActivity.slice(0, 5).map((activity, index) => (
+                    <motion.div 
+                      key={activity._id}
+                      variants={itemVariants}
+                      whileHover={{ 
+                        backgroundColor: "rgba(75, 85, 99, 0.25)",
+                        x: 5
+                      }}
+                      className="flex items-center justify-between py-2 border-b last:border-0 transition-all duration-200 rounded px-2"
+                    >
+                      <div className="flex items-center">
+                        <motion.div
+                          animate={{ 
+                            scale: [1, 1.2, 1],
+                            opacity: [0.5, 1, 0.5]
+                          }}
+                          transition={{ 
+                            duration: 2,
+                            repeat: Infinity,
+                            ease: "easeInOut",
+                            delay: index * 0.2
+                          }}
+                        >
+                          <Clock className="h-4 w-4 text-gray-400 mr-3" />
+                        </motion.div>
+                        <div>
+                          <p className="text-sm font-medium text-white">{activity.primaryConcern}</p>
+                          <p className="text-xs text-gray-500">
+                            {formatDistanceToNow(new Date(activity.createdAt), { addSuffix: true })}
+                          </p>
+                        </div>
+                      </div>
+                      <motion.span 
+                        className={`px-2 py-1 text-xs font-medium rounded-full ${getStatusBadge(activity.status)}`}
+                        whileHover={{ scale: 1.05 }}
+                        transition={{ duration: 0.2 }}
+                      >
+                        {activity.status}
+                      </motion.span>
+                    </motion.div>
+                  ))}
+                </motion.div>
+              </Card>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </motion.div>
+    </motion.div>
   );
 }
