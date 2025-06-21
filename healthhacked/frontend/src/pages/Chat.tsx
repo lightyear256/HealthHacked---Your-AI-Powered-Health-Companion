@@ -365,7 +365,7 @@ What can I help you with today?`,
 
             {/* Input */}
             <div className="border-t border-slate-600 p-4">
-              <div className="relative">
+              <div className="flex justify-end items-center relative">
                 <textarea
                   value={inputMessage}
                   onChange={(e) => setInputMessage(e.target.value)}
@@ -378,12 +378,13 @@ What can I help you with today?`,
                     paddingTop: '12px',
                     paddingBottom: '12px',
                     lineHeight: '1.5',
+                    
                   }}
                 />
                 <button
                   onClick={sendMessage}
                   disabled={!inputMessage.trim() || isLoading}
-                  className={`absolute right-3 top-1/2 transform -translate-y-1/2 w-8 h-8 rounded-full flex items-center justify-center transition-all duration-200 ${
+                  className={`absolute mr-2 w-9 h-9 rounded-full flex items-center justify-center transition-all duration-200 ${
                     !inputMessage.trim() || isLoading
                       ? 'bg-slate-600 text-gray-400 cursor-not-allowed'
                       : 'bg-purple-600 text-white hover:bg-purple-700 active:scale-95'
