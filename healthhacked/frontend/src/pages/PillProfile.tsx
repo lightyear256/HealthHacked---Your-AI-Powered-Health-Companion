@@ -99,15 +99,15 @@ export function PillProfile() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 to-black">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Header */}
         <div className="mb-8">
           <div className="flex items-center mb-4">
-            <Pill className="h-8 w-8 text-blue-600 mr-3" />
-            <h1 className="text-3xl font-bold text-gray-900">Pill Profile</h1>
+            <Pill className="h-8 w-8 text-purple-600 mr-3" />
+            <h1 className="text-3xl font-bold text-white">Pill Profile</h1>
           </div>
-          <p className="text-gray-600">
+          <p className="text-white">
             Search for any medicine to get detailed information about uses, side effects, and more.
           </p>
         </div>
@@ -123,7 +123,7 @@ export function PillProfile() {
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
                     placeholder="Enter medicine name (e.g., Paracetamol, Crocin, Dolo)"
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-400 focus:border-transparent"
                     disabled={loading}
                   />
                   {searchTerm && (
@@ -183,7 +183,7 @@ export function PillProfile() {
                     setSearchTerm(medicine);
                     searchDrug(medicine);
                   }}
-                  className="px-3 py-1 text-sm bg-gray-100 hover:bg-gray-200 rounded-full text-gray-700 transition-colors"
+                  className="px-3 py-1 text-sm bg-gray-100 hover:bg-purple-600 hover:text-white rounded-full text-black transition-colors"
                 >
                   {medicine}
                 </button>
@@ -194,12 +194,12 @@ export function PillProfile() {
 
         {/* Error Message */}
         {error && (
-          <Card className="p-6 mb-8 border-yellow-200 bg-yellow-50">
+          <Card className="p-6 mb-8 bg-yellow-900/30 border border-yellow-600  rounded-lg">
             <div className="flex items-start">
-              <AlertCircle className="h-5 w-5 text-yellow-600 mt-0.5 mr-3 flex-shrink-0" />
+              <AlertCircle className="h-5 w-5 text-yellow-400 mt-0.5 mr-3 flex-shrink-0" />
               <div>
-                <p className="text-yellow-800">{error}</p>
-                <p className="text-sm text-yellow-600 mt-1">
+                <p className="text-yellow-200">{error}</p>
+                <p className="text-sm text-yellow-200 mt-1">
                   Tip: Try searching with different spellings or brand names
                 </p>
               </div>
