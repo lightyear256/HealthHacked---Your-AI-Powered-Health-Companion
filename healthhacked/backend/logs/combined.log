@@ -750,3 +750,8 @@
 {"activeCarePlans":2,"activeContexts":5,"level":"info","message":"Dashboard data loaded successfully","service":"healthhacked-api","timestamp":"2025-06-21T17:21:07.220Z","userId":"68540fd9fbe819f427783f4a"}
 {"level":"info","message":"Loading dashboard data","service":"healthhacked-api","timestamp":"2025-06-21T17:21:07.280Z","userId":"68540fd9fbe819f427783f4a"}
 {"activeCarePlans":2,"activeContexts":5,"level":"info","message":"Dashboard data loaded successfully","service":"healthhacked-api","timestamp":"2025-06-21T17:21:07.467Z","userId":"68540fd9fbe819f427783f4a"}
+{"level":"info","message":"🤖 Gemini Service initialized","service":"healthhacked-api","timestamp":"2025-06-22T17:29:12.674Z"}
+{"level":"info","message":"🚀 HealthHacked server running on port 5000","service":"healthhacked-api","timestamp":"2025-06-22T17:29:13.286Z"}
+{"level":"info","message":"📍 Environment: development","service":"healthhacked-api","timestamp":"2025-06-22T17:29:13.287Z"}
+{"level":"info","message":"🔗 API Base URL: http://localhost:5000/api","service":"healthhacked-api","timestamp":"2025-06-22T17:29:13.287Z"}
+{"level":"info","message":"🍃 MongoDB Connected: ac-bjeavys-shard-00-01.hhokcxn.mongodb.net","service":"healthhacked-api","timestamp":"2025-06-22T17:29:13.761Z"}

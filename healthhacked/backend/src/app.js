@@ -3,6 +3,7 @@ const cors = require('cors');
 const helmet = require('helmet');
 const compression = require('compression');
 const morgan = require('morgan');
+
 require('dotenv').config();
 
 // Import middleware
@@ -12,7 +13,7 @@ const { errorHandler, notFound } = require('./middleware/errorHandler');
 const authRoutes = require('./routes/auth');
 const chatRoutes = require('./routes/chat');
 const healthRoutes = require('./routes/health');
-
+const drugsRoutes = require('./routes/drugs');
 const app = express();
 
 // Security middleware
@@ -75,6 +76,8 @@ app.get('/api', (req, res) => {
 app.use('/api/auth', authRoutes);
 app.use('/api/chat', chatRoutes);
 app.use('/api/health', healthRoutes);
+app.use('/api/drugs', drugsRoutes);
+
 
 // 404 handler
 app.use(notFound);
