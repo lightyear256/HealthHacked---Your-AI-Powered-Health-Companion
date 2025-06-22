@@ -3,8 +3,10 @@ import { useAuthStore } from '../../hooks/useAuth';
 import { Button } from '../ui/Button';
 import { Heart, User, LogOut, Menu, X, Pill } from 'lucide-react';
 import { useState } from 'react';
+import { useScrollToSection } from '../../hooks/useScrollToSection';
 
 export function Header() {
+  const { scrollToSection } = useScrollToSection();
   const { user, isAuthenticated, logout } = useAuthStore();
   const navigate = useNavigate();
   const location = useLocation();
@@ -20,6 +22,36 @@ export function Header() {
     return location.pathname === path;
   };
 
+  const handleFeaturesClick = () => {
+    // If we're already on the home page, just scroll to the section
+    if (location.pathname === '/') {
+      scrollToSection('features');
+    } else {
+      // Navigate to home page first, then scroll to features section
+      navigate('/');
+      // Use setTimeout to ensure the page has loaded before scrolling
+      setTimeout(() => {
+        scrollToSection('features');
+      }, 100);
+    }
+    setMobileMenuOpen(false);
+  };
+
+  const handleAboutClick = () => {
+    // If we're already on the home page, just scroll to the section
+    if (location.pathname === '/') {
+      scrollToSection('about');
+    } else {
+      // Navigate to home page first, then scroll to about section
+      navigate('/');
+      // Use setTimeout to ensure the page has loaded before scrolling
+      setTimeout(() => {
+        scrollToSection('about');
+      }, 100);
+    }
+    setMobileMenuOpen(false);
+  };
+
   const NavLink = ({ to, children, onClick }: { to: string; children: React.ReactNode; onClick?: () => void }) => (
     <Link 
       to={to} 
@@ -32,6 +64,34 @@ export function Header() {
     >
       {children}
     </Link>
+  );
+
+  // Special component for Features navigation
+  const FeaturesNavLink = ({ children, onClick }: { children: React.ReactNode; onClick?: () => void }) => (
+    <button 
+      onClick={onClick}
+      className={`px-3 py-2 rounded-md text-sm font-medium transition-colors ${
+        location.pathname === '/' && location.hash === '#features'
+          ? 'bg-purple-100 text-purple-800'
+          : 'text-white hover:text-black hover:bg-white'
+      }`}
+    >
+      {children}
+    </button>
+  );
+
+  // Special component for About navigation
+  const AboutNavLink = ({ children, onClick }: { children: React.ReactNode; onClick?: () => void }) => (
+    <button 
+      onClick={onClick}
+      className={`px-3 py-2 rounded-md text-sm font-medium transition-colors ${
+        location.pathname === '/' && location.hash === '#about'
+          ? 'bg-purple-100 text-purple-800'
+          : 'text-white hover:text-black hover:bg-white'
+      }`}
+    >
+      {children}
+    </button>
   );
 
   return (
@@ -56,8 +116,8 @@ export function Header() {
               </>
             ) : (
               <>
-                <NavLink to="/about">About</NavLink>
-                <NavLink to="/features">Features</NavLink>
+                <AboutNavLink onClick={handleAboutClick}>About</AboutNavLink>
+                <FeaturesNavLink onClick={handleFeaturesClick}>Features</FeaturesNavLink>
               </>
             )}
             
@@ -145,12 +205,18 @@ export function Header() {
                 </>
               ) : (
                 <>
-                  <NavLink to="/about" onClick={() => setMobileMenuOpen(false)}>
+                  <button
+                    onClick={handleAboutClick}
+                    className="w-full text-left px-3 py-2 rounded-md text-sm font-medium text-white hover:text-black hover:bg-white transition-colors"
+                  >
                     About
-                  </NavLink>
-                  <NavLink to="/features" onClick={() => setMobileMenuOpen(false)}>
+                  </button>
+                  <button
+                    onClick={handleFeaturesClick}
+                    className="w-full text-left px-3 py-2 rounded-md text-sm font-medium text-white hover:text-black hover:bg-white transition-colors"
+                  >
                     Features
-                  </NavLink>
+                  </button>
                   <div className="px-3 py-2 space-y-2">
                     <Link to="/login" onClick={() => setMobileMenuOpen(false)}>
                       <Button variant="ghost" size="sm" className="w-full justify-start">
