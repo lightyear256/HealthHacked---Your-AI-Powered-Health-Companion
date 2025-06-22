@@ -1,6 +1,3 @@
-// File: frontend/src/services/api.ts
-// REPLACE THE EXISTING FILE COMPLETELY
-
 import axios from 'axios';
 import toast from 'react-hot-toast';
 
@@ -12,7 +9,7 @@ const api = axios.create({
   headers: {
     'Content-Type': 'application/json',
   },
-  timeout: 10000, // 10 second timeout
+  timeout: 10000,
 });
 
 // Add auth token to requests
@@ -29,9 +26,8 @@ api.interceptors.response.use(
   (response) => response,
   (error) => {
     console.error('API Error:', error);
-    
+
     if (error.response?.status === 401) {
-      // Unauthorized - clear auth and redirect to login
       localStorage.removeItem('token');
       localStorage.removeItem('user');
       window.location.href = '/login';
@@ -46,7 +42,7 @@ api.interceptors.response.use(
       const message = error.response?.data?.error || error.message || 'An error occurred';
       toast.error(message);
     }
-    
+
     return Promise.reject(error);
   }
 );
@@ -62,7 +58,7 @@ export const authAPI = {
       throw error;
     }
   },
-  
+
   register: async (userData: { name: string; email: string; password: string }) => {
     try {
       const response = await api.post('/auth/register', userData);
@@ -72,7 +68,7 @@ export const authAPI = {
       throw error;
     }
   },
-  
+
   me: async () => {
     try {
       const response = await api.get('/auth/me');
@@ -82,7 +78,7 @@ export const authAPI = {
       throw error;
     }
   },
-  
+
   updateProfile: async (profileData: any) => {
     try {
       const response = await api.put('/auth/profile', profileData);
@@ -107,6 +103,31 @@ export const chatAPI = {
   }
 };
 
+// Drug Information APIs
+export const drugAPI = {
+  searchDrug: async (searchTerm: string) => {
+    const response = await api.get('/drugs/search', {
+      params: { q: searchTerm }
+    });
+    return response.data;
+  },
+
+  getDrugInfo: async (drugName: string) => {
+    const response = await api.get(`/drugs/${encodeURIComponent(drugName)}`);
+    return response.data;
+  },
+
+  checkInteractions: async (drugs: string[]) => {
+    const response = await api.post('/drugs/interactions', { drugs });
+    return response.data;
+  },
+
+  getCommonIndianMedicines: async () => {
+    const response = await api.get('/drugs/common/india');
+    return response.data;
+  }
+};
+
 // Health API
 export const healthAPI = {
   getDashboard: async () => {
@@ -118,7 +139,7 @@ export const healthAPI = {
       throw error;
     }
   },
-  
+
   getHealthContexts: async (status?: string) => {
     try {
       const params = status ? { status } : {};
@@ -129,7 +150,7 @@ export const healthAPI = {
       throw error;
     }
   },
-  
+
   getHealthContext: async (id: string) => {
     try {
       const response = await api.get(`/health/contexts/${id}`);
@@ -139,7 +160,7 @@ export const healthAPI = {
       throw error;
     }
   },
-  
+
   updateContextStatus: async (id: string, status: string, notes?: string) => {
     try {
       const response = await api.put(`/health/contexts/${id}/status`, { status, notes });
@@ -149,7 +170,7 @@ export const healthAPI = {
       throw error;
     }
   },
-  
+
   getCarePlans: async (status?: string) => {
     try {
       const params = status ? { status } : {};
@@ -160,7 +181,7 @@ export const healthAPI = {
       throw error;
     }
   },
-  
+
   getCarePlan: async (id: string) => {
     try {
       const response = await api.get(`/health/care-plans/${id}`);
@@ -170,7 +191,7 @@ export const healthAPI = {
       throw error;
     }
   },
-  
+
   completeRecommendation: async (carePlanId: string, recommendationId: string, notes?: string) => {
     try {
       const response = await api.put(
@@ -183,7 +204,7 @@ export const healthAPI = {
       throw error;
     }
   },
-  
+
   addRecommendation: async (carePlanId: string, recommendation: any) => {
     try {
       const response = await api.post(`/health/care-plans/${carePlanId}/recommendations`, recommendation);
@@ -193,7 +214,7 @@ export const healthAPI = {
       throw error;
     }
   },
-  
+
   generateRecommendations: async (contextId: string) => {
     try {
       const response = await api.post('/health/recommendations/generate', { contextId });
@@ -202,7 +223,13 @@ export const healthAPI = {
       console.error('Generate recommendations error:', error);
       throw error;
     }
-  }
+  },
+
+  // Drug-related methods 
+  searchDrug: drugAPI.searchDrug,
+  getDrugInfo: drugAPI.getDrugInfo,
+  checkInteractions: drugAPI.checkInteractions,
+  getCommonIndianMedicines: drugAPI.getCommonIndianMedicines,
 };
 
 // Test API connection

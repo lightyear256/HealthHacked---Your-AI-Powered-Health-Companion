@@ -1,7 +1,7 @@
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useAuthStore } from '../../hooks/useAuth';
 import { Button } from '../ui/Button';
-import { Heart, User, LogOut, Menu, X } from 'lucide-react';
+import { Heart, User, LogOut, Menu, X, Pill } from 'lucide-react';
 import { useState } from 'react';
 
 export function Header() {
@@ -46,11 +46,13 @@ export function Header() {
 
           {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center space-x-1">
+            
             {isAuthenticated ? (
               <>
                 <NavLink to="/dashboard">Dashboard</NavLink>
                 <NavLink to="/chat">Chat</NavLink>
                 <NavLink to="/care-plans">Care Plans</NavLink>
+                <NavLink to="/pill-profile">Pill Profile</NavLink>
               </>
             ) : (
               <>
@@ -58,6 +60,7 @@ export function Header() {
                 <NavLink to="/features">Features</NavLink>
               </>
             )}
+            
           </nav>
 
           {/* Desktop User Actions */}
@@ -108,6 +111,9 @@ export function Header() {
         {mobileMenuOpen && (
           <div className="md:hidden border-t border-gray-200 py-4">
             <div className="space-y-2">
+              <NavLink to="/pill-profile" onClick={() => setMobileMenuOpen(false)}>
+                Pill Profile
+              </NavLink>
               {isAuthenticated ? (
                 <>
                   <div className="px-3 py-2 border-b border-gray-200 mb-2">
