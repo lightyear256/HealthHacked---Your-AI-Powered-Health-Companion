@@ -333,7 +333,7 @@ export function Home() {
                 </li>
                 <li>
                   <Link
-                    to="/contact"
+                    to="mailto:healthhacked1@gmail.com"
                     className="text-purple-200 hover:text-purple-400 text-sm"
                   >
                     Contact
@@ -343,7 +343,7 @@ export function Home() {
             </div>
 
             {/* Support */}
-            <div>
+            {/* <div>
               <h4 className="text-white font-semibold mb-4">Support</h4>
               <ul className="space-y-2">
                 <li>
@@ -379,7 +379,7 @@ export function Home() {
                   </Link>
                 </li>
               </ul>
-            </div>
+            </div> */}
 
             {/* Connect */}
             <div>
@@ -388,7 +388,7 @@ export function Home() {
                 Stay updated with our latest news and health tips
               </p>
               <div className="flex space-x-4">
-                <a
+                {/* <a
                   href="#"
                   className="text-purple-200 hover:text-purple-400 transition-colors"
                 >
@@ -405,9 +405,9 @@ export function Home() {
                   className="text-purple-200 hover:text-purple-400 transition-colors"
                 >
                   <Linkedin className="h-5 w-5" />
-                </a>
+                </a> */}
                 <a
-                  href="mailto:contact@healthhacked.com"
+                  href="mailto:healthhacked1@gmail.com"
                   className="text-purple-200 hover:text-purple-400 transition-colors"
                 >
                   <Mail className="h-5 w-5" />
