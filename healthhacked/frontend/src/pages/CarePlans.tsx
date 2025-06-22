@@ -181,9 +181,9 @@ export function CarePlans() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="min-h-screen bg-gradient-to-br from-slate-900 to-black text-white flex items-center justify-center">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-green-600 mx-auto"></div>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-600 mx-auto"></div>
           <p className="mt-4 text-gray-600">Loading care plans...</p>
         </div>
       </div>
@@ -213,7 +213,7 @@ export function CarePlans() {
     const completionPercentage = totalCount > 0 ? Math.round((completedCount / totalCount) * 100) : 0;
 
     return (
-      <div className="min-h-screen bg-gray-50">
+      <div className="min-h-screen bg-gradient-to-br from-slate-900 to-black text-white">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           {/* Header */}
           <div className="mb-8">
@@ -224,7 +224,7 @@ export function CarePlans() {
             
             <div className="flex items-start justify-between">
               <div>
-                <h1 className="text-3xl font-bold text-gray-900">{selectedPlan.title}</h1>
+                <h1 className="text-3xl font-bold ">{selectedPlan.title}</h1>
                 <p className="mt-2 text-gray-600">{selectedPlan.description}</p>
                 <p className="mt-1 text-sm text-gray-500">
                   For: <span className="font-medium">{selectedPlan.contextId.primaryConcern}</span>
@@ -256,8 +256,8 @@ export function CarePlans() {
           {/* Progress Overview */}
           <Card className="p-6 mb-8">
             <div className="flex items-center justify-between mb-4">
-              <h2 className="text-xl font-semibold text-gray-900">Progress Overview</h2>
-              <div className="flex items-center text-green-600">
+              <h2 className="text-xl font-semibold ">Progress Overview</h2>
+              <div className="flex items-center text-purple-600">
                 <TrendingUp className="h-5 w-5 mr-2" />
                 <span className="text-2xl font-bold">{completionPercentage}%</span>
               </div>
@@ -272,7 +272,7 @@ export function CarePlans() {
             
             <div className="grid grid-cols-3 gap-4 text-center">
               <div>
-                <p className="text-2xl font-bold text-gray-900">{totalCount}</p>
+                <p className="text-2xl font-bold text-purple-600">{totalCount}</p>
                 <p className="text-sm text-gray-500">Total Tasks</p>
               </div>
               <div>
@@ -288,15 +288,15 @@ export function CarePlans() {
 
           {/* Recommendations */}
           <Card className="p-6">
-            <h2 className="text-xl font-semibold text-gray-900 mb-6">Recommendations</h2>
+            <h2 className="text-xl font-semibold text-white mb-6">Recommendations</h2>
             
             <div className="space-y-4">
               {selectedPlan.recommendations.map((recommendation) => (
                 <div 
                   key={recommendation._id} 
-                  className={`border rounded-lg p-4 transition-all ${
+                  className={` rounded-lg p-4 transition-all ${
                     recommendation.completed 
-                      ? 'bg-green-50 border-green-200' 
+                      ? 'bg-gray-800 border-green-200  ' 
                       : 'bg-white border-gray-200 hover:shadow-md'
                   }`}
                 >
@@ -320,10 +320,10 @@ export function CarePlans() {
                     <div className="flex-1">
                       <div className="flex items-start justify-between">
                         <div>
-                          <h3 className={`font-medium ${recommendation.completed ? 'text-green-800 line-through' : 'text-gray-900'}`}>
+                          <h3 className={`font-medium ${recommendation.completed ? 'text-white line-through' : 'text-gray-900'}`}>
                             {recommendation.title}
                           </h3>
-                          <p className={`text-sm mt-1 ${recommendation.completed ? 'text-green-600' : 'text-gray-600'}`}>
+                          <p className={`text-sm mt-1 ${recommendation.completed ? 'text-white' : 'text-gray-600'}`}>
                             {recommendation.description}
                           </p>
                         </div>
@@ -342,7 +342,7 @@ export function CarePlans() {
                       
                       {recommendation.dueDate && (
                         <p className={`text-xs mt-2 ${
-                          recommendation.completed ? 'text-green-600' :
+                          recommendation.completed ? 'text-white' :
                           isOverdue(recommendation.dueDate) ? 'text-red-600 font-medium' :
                           'text-gray-500'
                         }`}>
@@ -374,13 +374,13 @@ export function CarePlans() {
 
   // Care Plans List View
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 to-black text-white">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Header */}
         <div className="mb-8">
           <div className="flex items-center justify-between">
             <div>
-              <h1 className="text-3xl font-bold text-gray-900">Your Care Plans</h1>
+              <h1 className="text-3xl font-bold">Your Care Plans</h1>
               <p className="mt-2 text-gray-600">
                 Manage your personalized health care plans and track your progress
               </p>
@@ -421,11 +421,11 @@ export function CarePlans() {
               const completionPercentage = totalCount > 0 ? Math.round((completedCount / totalCount) * 100) : 0;
 
               return (
-                <Card key={plan._id} className="p-6 hover:shadow-lg transition-shadow">
+                <Card key={plan._id} className="p-6 hover:shadow-lg transition-shadow hover:shadow-purple-500/20">
                   <div className="flex items-start justify-between mb-4">
                     <div className="flex-1">
-                      <h3 className="text-xl font-semibold text-gray-900 mb-2">{plan.title}</h3>
-                      <p className="text-gray-600 text-sm mb-2">{plan.description}</p>
+                      <h3 className="text-xl font-semibold mb-2">{plan.title}</h3>
+                      <p className=" text-sm mb-2">{plan.description}</p>
                       <p className="text-sm text-gray-500">
                         For: <span className="font-medium">{plan.contextId.primaryConcern}</span>
                       </p>
@@ -438,12 +438,12 @@ export function CarePlans() {
                   {/* Progress */}
                   <div className="mb-4">
                     <div className="flex items-center justify-between mb-2">
-                      <span className="text-sm font-medium text-gray-700">Progress</span>
-                      <span className="text-sm font-medium text-green-600">{completionPercentage}%</span>
+                      <span className="text-sm font-medium text-gray-500">Progress</span>
+                      <span className="text-sm font-medium">{completionPercentage}%</span>
                     </div>
                     <div className="w-full bg-gray-200 rounded-full h-2">
                       <div 
-                        className="bg-green-600 h-2 rounded-full transition-all duration-300"
+                        className="[background:linear-gradient(269deg,rgba(122,41,204,1)_0%,rgba(105,96,204,1)_50%,rgba(204,204,255,1)_100%)] h-2 rounded-full transition-all duration-300"
                         style={{ width: `${completionPercentage}%` }}
                       />
                     </div>
@@ -455,12 +455,12 @@ export function CarePlans() {
                   {/* Actions */}
                   <div className="flex space-x-3">
                     <Link to={`/care-plans/${plan._id}`} className="flex-1">
-                      <Button variant="outline" className="w-full">
+                      <Button variant="primary" className="w-full">
                         View Details
                       </Button>
                     </Link>
                     <Link to={`/chat?context=${plan.contextId._id}`}>
-                      <Button variant="outline">
+                      <Button variant="primary">
                         Continue Chat
                       </Button>
                     </Link>
