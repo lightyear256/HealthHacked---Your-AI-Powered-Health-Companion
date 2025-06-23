@@ -1,8 +1,8 @@
 
 import React, { useState, useRef, useEffect } from 'react';
-import { useChat } from '../../hooks/useChat';
-import { Button } from '../ui/Button';
-import { Card } from '../ui/Card';
+import { useChat } from '../hooks/useChat';
+import { Button } from '../components/ui/Button';
+import { Card } from '../components/ui/Card';
 import { Send, Bot, User, AlertTriangle } from 'lucide-react';
 import { clsx } from 'clsx';
 

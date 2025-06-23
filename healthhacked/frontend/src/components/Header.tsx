@@ -1,9 +1,9 @@
 import { Link, useNavigate, useLocation } from 'react-router-dom';
-import { useAuthStore } from '../../hooks/useAuth';
-import { Button } from '../ui/Button';
+import { useAuthStore } from '../hooks/useAuth';
+import { Button } from '../components/ui/Button';
 import { Heart, User, LogOut, Menu, X, Pill } from 'lucide-react';
 import { useState } from 'react';
-import { useScrollToSection } from '../../hooks/useScrollToSection';
+import { useScrollToSection } from '../hooks/useScrollToSection';
 
 export function Header() {
   const { scrollToSection } = useScrollToSection();

@@ -151,7 +151,7 @@ import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { Toaster } from 'react-hot-toast';
 import { useAuthStore } from './hooks/useAuth';
-import { Header } from './components/layout/Header';
+import { Header } from './components/Header';
 
 // Pages
 import { Home } from './pages/Home';
