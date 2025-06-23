@@ -138,7 +138,7 @@ export function Login() {
       </div> */}
       
       {/* Left Column */}
-      <div className="flex-1 flex flex-col justify-center py-12 px-4 sm:px-6 lg:px-20 xl:px-24">
+      <div className="flex-1 flex flex-col justify-center py-12 px-4 sm:px-6 lg:px-20 xl:px-24 mt-10">
         <div className="mx-auto w-full max-w-sm lg:w-96">
           <div>
             <div className="flex justify-center">
