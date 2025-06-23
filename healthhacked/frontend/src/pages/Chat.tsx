@@ -272,7 +272,7 @@ What can I help you with today?`,
     `}</style>
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8 max-w-6xl">
         {/* Header */}
-        <div className="mb-8">
+        <div className="mb-8 mt-20">
           <h1 className="text-3xl font-bold text-white flex items-center">
             <MessageCircle className="h-8 w-8 mr-3 text-purple-600" />
             AI Health Assistant

@@ -107,7 +107,7 @@ export function Register() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 to-black flex flex-col justify-center py-12 sm:px-6 lg:px-8">
-      <div className="sm:mx-auto sm:w-full sm:max-w-md">
+      <div className="sm:mx-auto sm:w-full sm:max-w-md mt-10">
         <div className="flex justify-center">
           <Heart className="h-12 w-12 text-purple-600" />
         </div>

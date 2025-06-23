@@ -102,7 +102,7 @@ export function PillProfile() {
     <div className="min-h-screen bg-gradient-to-br from-slate-900 to-black">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Header */}
-        <div className="mb-8">
+        <div className="mb-8 mt-20">
           <div className="flex items-center mb-4">
             <Pill className="h-8 w-8 text-purple-600 mr-3" />
             <h1 className="text-3xl font-bold text-white">Pill Profile</h1>

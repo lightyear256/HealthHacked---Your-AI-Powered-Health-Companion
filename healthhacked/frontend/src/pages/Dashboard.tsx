@@ -258,7 +258,7 @@ export function Dashboard() {
         animate="visible"
       >
         {/* Welcome Header */}
-        <motion.div className="mb-8" variants={itemVariants}>
+        <motion.div className="mb-8 mt-20" variants={itemVariants}>
           <div className="flex items-center justify-between">
             <div>
               <motion.h1 

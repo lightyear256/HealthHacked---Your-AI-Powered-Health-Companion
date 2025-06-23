@@ -17,68 +17,275 @@ import {
   Instagram,
   Linkedin,
   Mail,
+  Activity,
+  Stethoscope,
+  Pill,
+  Plus,
+  Eye,
+  Zap,
 } from "lucide-react";
+
+import { BubbleCursor } from "@/components/ui/BubbleCursor";
 
 import {
   getDuplicatedTestimonials,
   type Testimonial,
 } from "../data/testimonial";
+import { Header } from "@/components/Header";
+
+
 
 export function Home() {
   const { isAuthenticated } = useAuthStore();
   const duplicatedTestimonials = getDuplicatedTestimonials();
 
+  // Floating health icons configuration
+  const floatingIcons = [
+    { Icon: Heart, delay: '0s', x: '10%', y: '20%', size: 24 },
+    { Icon: Activity, delay: '1s', x: '80%', y: '15%', size: 20 },
+    { Icon: Shield, delay: '2s', x: '15%', y: '70%', size: 22 },
+    { Icon: Stethoscope, delay: '0.5s', x: '85%', y: '60%', size: 26 },
+    { Icon: Pill, delay: '1.5s', x: '5%', y: '45%', size: 18 },
+    { Icon: Plus, delay: '2.5s', x: '90%', y: '35%', size: 20 },
+    { Icon: Brain, delay: '3s', x: '25%', y: '25%', size: 22 },
+    { Icon: Eye, delay: '0.8s', x: '75%', y: '75%', size: 24 },
+    { Icon: Zap, delay: '1.8s', x: '30%', y: '80%', size: 20 },
+    { Icon: Activity, delay: '2.2s', x: '60%', y: '10%', size: 18 },
+  ];
+
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 to-black">
-      {/* Hero Section */}
-      <section id="about" className="relative overflow-hidden py-20 sm:py-32">
-        <div className="mx-auto max-w-7xl px-6 lg:px-8">
-          <div className="mx-auto max-w-2xl text-center">
-            <h1 className="text-4xl font-bold tracking-tight text-white sm:text-6xl">
+    <> 
+    {/* <div className="min-h-screen bg-gradient-to-br from-slate-900 to-black"> */}
+      
+      {/* Hero Section with Animated Background */}
+      <section 
+        id="about" 
+        className="relative overflow-hidden py-20 sm:py-32 absolute top-0"
+        style={{
+          background: 'linear-gradient(4deg,rgba(15, 23, 42, 1) 0%, rgba(49, 46, 129, 1) 73%, rgba(107, 33, 168, 1) 100%)',
+          minHeight: '100vh'
+        }}
+      >
+         {/* <Header /> */}
+       
+        {/* Animated Background Elements */}
+        <div className="absolute inset-0">
+          {/* Large Gradient Orbs */}
+          <motion.div 
+            className="absolute top-20 left-10 w-96 h-96 bg-purple-500/20 rounded-full blur-3xl"
+            animate={{
+              scale: [1, 1.2, 1],
+              opacity: [0.3, 0.5, 0.3],
+            }}
+            transition={{
+              duration: 6,
+              repeat: Infinity,
+              ease: "easeInOut"
+            }}
+          />
+          <motion.div 
+            className="absolute bottom-20 right-10 w-80 h-80 bg-blue-500/15 rounded-full blur-3xl"
+            animate={{
+              scale: [1.2, 1, 1.2],
+              opacity: [0.2, 0.4, 0.2],
+            }}
+            transition={{
+              duration: 8,
+              repeat: Infinity,
+              ease: "easeInOut",
+              delay: 2
+            }}
+          />
+          <motion.div 
+            className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-purple-400/10 rounded-full blur-3xl"
+            animate={{
+              scale: [1, 1.1, 1],
+              opacity: [0.1, 0.3, 0.1],
+            }}
+            transition={{
+              duration: 10,
+              repeat: Infinity,
+              ease: "easeInOut",
+              delay: 1
+            }}
+          />
+
+          {/* Floating Health Icons */}
+          {floatingIcons.map((item, index) => {
+            const { Icon, delay, x, y, size } = item;
+            return (
+              <motion.div
+                key={index}
+                className="absolute text-white/20"
+                style={{
+                  left: x,
+                  top: y,
+                }}
+                animate={{
+                  y: [0, -20, 0],
+                  rotate: [0, 10, 0],
+                  scale: [1, 1.1, 1],
+                }}
+                transition={{
+                  duration: 3 + (index % 3),
+                  repeat: Infinity,
+                  ease: "easeInOut",
+                  delay: parseFloat(delay.replace('s', '')),
+                }}
+              >
+                <Icon 
+                  size={size} 
+                  className="drop-shadow-lg"
+                />
+              </motion.div>
+            );
+          })}
+
+          {/* Floating Particles */}
+          <div className="absolute inset-0">
+            {[...Array(15)].map((_, i) => (
+              <motion.div
+                key={i}
+                className="absolute w-2 h-2 bg-white/10 rounded-full"
+                style={{
+                  left: `${Math.random() * 100}%`,
+                  top: `${Math.random() * 100}%`,
+                }}
+                animate={{
+                  y: [0, -100, 0],
+                  opacity: [0, 1, 0],
+                  scale: [0, 1, 0],
+                }}
+                transition={{
+                  duration: 4 + Math.random() * 2,
+                  repeat: Infinity,
+                  ease: "easeInOut",
+                  delay: Math.random() * 2,
+                }}
+              />
+            ))}
+          </div>
+
+          {/* Subtle Grid Pattern */}
+          <div 
+            className="absolute inset-0 opacity-5"
+            style={{
+              backgroundImage: `
+                linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px)
+              `,
+              backgroundSize: '50px 50px'
+            }}
+          />
+        </div>
+
+        {/* Hero Content */}
+        <div className="relative z-10 mx-auto max-w-7xl px-6 lg:px-8">
+          <motion.div 
+            className="mx-auto max-w-2xl text-center"
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 1, ease: "easeOut" }}
+          >
+            <motion.h1 
+              className="text-4xl font-bold tracking-tight text-white sm:text-6xl drop-shadow-lg mt-20"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 1, delay: 0.2 }}
+            >
               Your AI-Powered
-              <span className="text-purple-400"> Health </span>
+              <motion.span 
+                className="text-purple-400" 
+                animate={{ 
+                  textShadow: [
+                    "0 0 10px rgba(168, 85, 247, 0.5)",
+                    "0 0 20px rgba(168, 85, 247, 0.8)",
+                    "0 0 10px rgba(168, 85, 247, 0.5)"
+                  ]
+                }}
+                transition={{ 
+                  duration: 3, 
+                  repeat: Infinity, 
+                  ease: "easeInOut" 
+                }}
+              >  Health </motion.span>
               Companion
-            </h1>
-            <p className="mt-6 text-lg leading-8 text-purple-200">
+            </motion.h1>
+            <motion.p 
+              className="mt-6 text-lg leading-8 text-purple-200 drop-shadow"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 1, delay: 0.4 }}
+            >
               Get personalized health guidance, symptom analysis, and continuous
               care from our advanced AI assistant. Available 24/7 to support
               your wellness journey.
-            </p>
-            <div className="mt-10 flex items-center justify-center gap-x-6">
+            </motion.p>
+            <motion.div 
+              className="mt-10 flex items-center justify-center gap-x-6"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 1, delay: 0.6 }}
+            >
               {isAuthenticated ? (
                 <Link to="/chat">
-                  <Button
-                    size="lg"
-                    className="flex items-center space-x-2 bg-purple-600 hover:bg-purple-700 text-white border-none"
+                  <motion.div
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                    transition={{ type: "spring", stiffness: 300, damping: 20 }}
                   >
-                    <MessageCircle className="h-5 w-5" />
-                    <span>Start Chatting</span>
-                    <ChevronRight className="h-4 w-4" />
-                  </Button>
+                    <Button
+                      size="lg"
+                      className="flex items-center space-x-2 bg-purple-600 hover:bg-purple-700 text-white border-none shadow-2xl hover:shadow-purple-500/25"
+                    >
+                      <MessageCircle className="h-5 w-5" />
+                      <span>Start Chatting</span>
+                      <ChevronRight className="h-4 w-4" />
+                    </Button>
+                  </motion.div>
                 </Link>
               ) : (
                 <>
                   <Link to="/register">
-                    <Button
-                      size="lg"
-                      className="flex items-center space-x-2 bg-purple-600 hover:bg-purple-700 text-white border-none"
+                    <motion.div
+                      whileHover={{ scale: 1.05 }}
+                      whileTap={{ scale: 0.95 }}
+                      transition={{ type: "spring", stiffness: 300, damping: 20 }}
                     >
-                      <Heart className="h-5 w-5" />
-                      <span>Get Started Free</span>
-                    </Button>
+                      <Button
+                        size="lg"
+                        className="flex items-center space-x-2 bg-purple-600 hover:bg-purple-700 text-white border-none shadow-2xl hover:shadow-purple-500/25"
+                      >
+                        <motion.div
+                          animate={{ scale: [1, 1.2, 1] }}
+                          transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+                        >
+                          <Heart className="h-5 w-5" />
+                        </motion.div>
+                        <span>Get Started Free</span>
+                      </Button>
+                    </motion.div>
                   </Link>
-                  <Link
-                    to="/demo"
-                    className="flex items-center border-none bg-transparent text-white hover:bg-transparent hover:text-purple-400 hover:underline"
+                  <motion.div
+                    whileHover={{ scale: 1.05, x: 5 }}
+                    transition={{ type: "spring", stiffness: 300, damping: 20 }}
                   >
-                    Watch Demo
-                    <ChevronRight className="h-4 w-4 ml-2" />
-                  </Link>
+                    <Link
+                      to="/demo"
+                      className="flex items-center border-none bg-transparent text-white hover:bg-transparent hover:text-purple-400 hover:underline"
+                    >
+                      Watch Demo
+                      <ChevronRight className="h-4 w-4 ml-2" />
+                    </Link>
+                  </motion.div>
                 </>
               )}
-            </div>
-          </div>
+            </motion.div>
+          </motion.div>
         </div>
+
+        {/* Bottom Fade */}
+        <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-black/20 to-transparent"></div>
       </section>
 
       {/* Features Section - Enhanced with Framer Motion */}
@@ -247,36 +454,6 @@ export function Home() {
         </div>
       </section>
 
-      {/* CTA Section */}
-      {/* <section className="bg-gradient-to-br from-slate-900 to-black py-24">
-        <div className="mx-auto max-w-7xl px-6 lg:px-8">
-          <div className="mx-auto max-w-2xl text-center">
-            <h2 className="text-3xl font-bold tracking-tight text-white sm:text-4xl">
-              Ready to Start Your Health Journey?
-            </h2>
-            <p className="mx-auto mt-6 max-w-xl text-lg leading-8 text-purple-200">
-              Join thousands of users who trust HealthHacked for their health guidance. 
-              Get started today and experience personalized AI health support.
-            </p>
-            <div className="mt-10 flex items-center justify-center gap-x-6">
-              {!isAuthenticated && (
-                <>
-                  <Link to="/register">
-                    <Button variant="secondary" size="lg" className="bg-purple-600 hover:bg-purple-700 text-white border-none">
-                      Get Started Free
-                    </Button>
-                  </Link>
-                  <Link to="/learn-more" className="text-sm font-semibold leading-6 text-white hover:text-purple-400 hover:underline flex items-center">
-                    Learn more 
-                    <ChevronRight className="h-4 w-4 ml-2" />
-                  </Link>
-                </>
-              )}
-            </div>
-          </div>
-        </div>
-      </section> */}
-
       <footer className="bg-slate-900 border-t border-slate-800">
         <div className="mx-auto max-w-7xl px-6 lg:px-8 py-12">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
@@ -342,45 +519,6 @@ export function Home() {
               </ul>
             </div>
 
-            {/* Support */}
-            {/* <div>
-              <h4 className="text-white font-semibold mb-4">Support</h4>
-              <ul className="space-y-2">
-                <li>
-                  <Link
-                    to="/help"
-                    className="text-purple-200 hover:text-purple-400 text-sm"
-                  >
-                    Help Center
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    to="/privacy"
-                    className="text-purple-200 hover:text-purple-400 text-sm"
-                  >
-                    Privacy Policy
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    to="/terms"
-                    className="text-purple-200 hover:text-purple-400 text-sm"
-                  >
-                    Terms of Service
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    to="/faq"
-                    className="text-purple-200 hover:text-purple-400 text-sm"
-                  >
-                    FAQ
-                  </Link>
-                </li>
-              </ul>
-            </div> */}
-
             {/* Connect */}
             <div>
               <h4 className="text-white font-semibold mb-4">Connect With Us</h4>
@@ -388,24 +526,6 @@ export function Home() {
                 Stay updated with our latest news and health tips
               </p>
               <div className="flex space-x-4">
-                {/* <a
-                  href="#"
-                  className="text-purple-200 hover:text-purple-400 transition-colors"
-                >
-                  <Twitter className="h-5 w-5" />
-                </a>
-                <a
-                  href="#"
-                  className="text-purple-200 hover:text-purple-400 transition-colors"
-                >
-                  <Instagram className="h-5 w-5" />
-                </a>
-                <a
-                  href="#"
-                  className="text-purple-200 hover:text-purple-400 transition-colors"
-                >
-                  <Linkedin className="h-5 w-5" />
-                </a> */}
                 <a
                   href="mailto:healthhacked1@gmail.com"
                   className="text-purple-200 hover:text-purple-400 transition-colors"
@@ -444,7 +564,9 @@ export function Home() {
           </div>
         </div>
       </footer>
-    </div>
+      <BubbleCursor />
+    {/* </div> */}
+    </>
   );
 }
 
