@@ -214,6 +214,16 @@ export const healthAPI = {
       throw error;
     }
   },
+  deleteHealthContext: async (contextId: string) => {
+    const response = await api.delete(`/health/contexts/${contextId}`);
+    return response.data;
+  },
+
+  // Delete care plan
+  deleteCarePlan: async (carePlanId: string) => {
+    const response = await api.delete(`/health/care-plans/${carePlanId}`);
+    return response.data;
+  },
 
   generateRecommendations: async (contextId: string) => {
     try {

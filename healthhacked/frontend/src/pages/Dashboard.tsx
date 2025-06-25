@@ -13,7 +13,8 @@ import {
   TrendingUp,
   RefreshCw,
   Clock,
-  AlertCircle
+  AlertCircle,
+  Trash2
 } from 'lucide-react';
 import { formatDistanceToNow } from 'date-fns';
 import toast from 'react-hot-toast';
@@ -98,6 +99,7 @@ export function Dashboard() {
   const [dashboardData, setDashboardData] = useState<DashboardData | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [deletingItem, setDeletingItem] = useState<string | null>(null);
 
   useEffect(() => {
     loadDashboardData();
@@ -125,6 +127,54 @@ export function Dashboard() {
       toast.error('Failed to load dashboard data');
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleDeleteHealthContext = async (contextId: string, contextName: string) => {
+    if (!window.confirm(`Are you sure you want to delete "${contextName}"? This will also remove any associated care plans.`)) {
+      return;
+    }
+
+    try {
+      setDeletingItem(contextId);
+      const response = await healthAPI.deleteHealthContext(contextId);
+      
+      if (response.success) {
+        toast.success('Health concern deleted successfully');
+        loadDashboardData(); // Refresh dashboard
+      } else {
+        throw new Error(response.message || 'Failed to delete health concern');
+      }
+    } catch (error: any) {
+      console.error('❌ Delete health context error:', error);
+      const errorMessage = error.response?.data?.error || error.message || 'Failed to delete health concern';
+      toast.error(errorMessage);
+    } finally {
+      setDeletingItem(null);
+    }
+  };
+
+  const handleDeleteCarePlan = async (carePlanId: string, planTitle: string) => {
+    if (!window.confirm(`Are you sure you want to delete the care plan "${planTitle}"?`)) {
+      return;
+    }
+
+    try {
+      setDeletingItem(carePlanId);
+      const response = await healthAPI.deleteCarePlan(carePlanId);
+      
+      if (response.success) {
+        toast.success('Care plan deleted successfully');
+        loadDashboardData(); // Refresh dashboard
+      } else {
+        throw new Error(response.message || 'Failed to delete care plan');
+      }
+    } catch (error: any) {
+      console.error('❌ Delete care plan error:', error);
+      const errorMessage = error.response?.data?.error || error.message || 'Failed to delete care plan';
+      toast.error(errorMessage);
+    } finally {
+      setDeletingItem(null);
     }
   };
 
@@ -429,20 +479,34 @@ export function Dashboard() {
                               Started {formatDistanceToNow(new Date(context.createdAt), { addSuffix: true })}
                             </p>
                           </div>
-                          <motion.span 
-                            className={`px-2 py-1 text-xs font-medium rounded-full ${getStatusBadge(context.status)}`}
-                            animate={{ 
-                              scale: [1, 1.05, 1],
-                              opacity: [1, 0.8, 1]
-                            }}
-                            transition={{ 
-                              duration: 2,
-                              repeat: Infinity,
-                              ease: "easeInOut"
-                            }}
-                          >
-                            {context.status}
-                          </motion.span>
+                          <div className="flex items-center space-x-2">
+                            <motion.span 
+                              className={`px-2 py-1 text-xs font-medium rounded-full ${getStatusBadge(context.status)}`}
+                              animate={{ 
+                                scale: [1, 1.05, 1],
+                                opacity: [1, 0.8, 1]
+                              }}
+                              transition={{ 
+                                duration: 2,
+                                repeat: Infinity,
+                                ease: "easeInOut"
+                              }}
+                            >
+                              {context.status}
+                            </motion.span>
+                            <button
+                              onClick={() => handleDeleteHealthContext(context._id, context.primaryConcern)}
+                              disabled={deletingItem === context._id}
+                              className="p-1 text-gray-400 hover:text-red-400 hover:bg-red-500/10 rounded transition-all duration-200"
+                              title="Delete health concern"
+                            >
+                              {deletingItem === context._id ? (
+                                <div className="w-4 h-4 border-2 border-red-400 border-t-transparent rounded-full animate-spin" />
+                              ) : (
+                                <Trash2 className="h-4 w-4" />
+                              )}
+                            </button>
+                          </div>
                         </div>
                         {context.symptoms && context.symptoms.length > 0 && (
                           <div className="mt-3">
@@ -551,7 +615,7 @@ export function Dashboard() {
                             scale: 1.02,
                             backgroundColor: "rgba(75, 85, 99, 0.5)"
                           }}
-                          className="rounded-lg p-4 text-white hover:bg-gray-800 transition-colors"
+                          className="rounded-lg p-4 text-white hover:bg-gray-800 transition-colors relative"
                         >
                           <div className="flex items-start justify-between">
                             <div className="flex-1">
@@ -588,6 +652,18 @@ export function Dashboard() {
                                 </p>
                               </div>
                             </div>
+                            <button
+                              onClick={() => handleDeleteCarePlan(plan._id, plan.title)}
+                              disabled={deletingItem === plan._id}
+                              className="ml-3 p-1 text-gray-400 hover:text-red-400 hover:bg-red-500/10 rounded transition-all duration-200"
+                              title="Delete care plan"
+                            >
+                              {deletingItem === plan._id ? (
+                                <div className="w-4 h-4 border-2 border-red-400 border-t-transparent rounded-full animate-spin" />
+                              ) : (
+                                <Trash2 className="h-4 w-4" />
+                              )}
+                            </button>
                           </div>
                           <Link to={`/care-plans/${plan._id}`}>
                             <motion.div

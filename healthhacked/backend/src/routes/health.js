@@ -281,4 +281,90 @@ router.put('/care-plans/:carePlanId/recommendations/:recId/complete', async (req
   }
 });
 
+// @route   DELETE /api/health/contexts/:id
+// @desc    Delete a health context
+// @access  Private
+router.delete('/contexts/:id', async (req, res, next) => {
+  try {
+    const context = await HealthContext.findById(req.params.id);
+
+    if (!context) {
+      return next(new AppError('Health context not found', 404));
+    }
+
+    // Verify user owns this context
+    if (context.userId.toString() !== req.user._id.toString()) {
+      return next(new AppError('Not authorized to delete this health context', 403));
+    }
+
+    // Also delete associated care plans
+    await CarePlan.updateMany(
+      { contextId: req.params.id },
+      { isActive: false, deletedAt: new Date() }
+    );
+
+    // Delete the health context
+    await HealthContext.findByIdAndDelete(req.params.id);
+
+    logger.info('Health context deleted', {
+      userId: req.user._id,
+      contextId: req.params.id
+    });
+
+    res.json({
+      success: true,
+      message: 'Health context and associated care plans deleted successfully'
+    });
+
+  } catch (error) {
+    logger.error('Delete health context error', { 
+      userId: req.user._id, 
+      contextId: req.params.id, 
+      error: error.message 
+    });
+    next(error);
+  }
+});
+
+// @route   DELETE /api/health/care-plans/:id
+// @desc    Delete a care plan
+// @access  Private
+router.delete('/care-plans/:id', async (req, res, next) => {
+  try {
+    const carePlan = await CarePlan.findById(req.params.id);
+
+    if (!carePlan) {
+      return next(new AppError('Care plan not found', 404));
+    }
+
+    // Verify user owns this care plan
+    if (carePlan.userId.toString() !== req.user._id.toString()) {
+      return next(new AppError('Not authorized to delete this care plan', 403));
+    }
+
+    // Soft delete - mark as inactive instead of hard delete
+    carePlan.isActive = false;
+    carePlan.deletedAt = new Date();
+    await carePlan.save();
+
+    logger.info('Care plan deleted', {
+      userId: req.user._id,
+      carePlanId: req.params.id
+    });
+
+    res.json({
+      success: true,
+      message: 'Care plan deleted successfully'
+    });
+
+  } catch (error) {
+    logger.error('Delete care plan error', { 
+      userId: req.user._id, 
+      carePlanId: req.params.id, 
+      error: error.message 
+    });
+    next(error);
+  }
+});
+
 module.exports = router;
