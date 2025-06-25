@@ -5,10 +5,11 @@ import { useAuthStore } from '../hooks/useAuth';
 import { healthAPI } from '../services/api';
 import { Button } from '../components/ui/Button';
 import { Card } from '../components/ui/Card';
-import { 
-  Heart, 
-  MessageCircle, 
-  Calendar, 
+
+import {
+  Heart,
+  MessageCircle,
+  Calendar,
   CheckCircle2,
   TrendingUp,
   RefreshCw,
@@ -18,7 +19,7 @@ import {
 } from 'lucide-react';
 import { formatDistanceToNow } from 'date-fns';
 import toast from 'react-hot-toast';
-
+import { SleepDashboard } from '../components/sleep/SleepDashboard';
 interface DashboardData {
   stats: {
     activeHealthConcerns: number;
@@ -50,8 +51,8 @@ const containerVariants = {
 
 const itemVariants = {
   hidden: { opacity: 0, y: 20 },
-  visible: { 
-    opacity: 1, 
+  visible: {
+    opacity: 1,
     y: 0,
     transition: {
       duration: 0.5,
@@ -62,15 +63,15 @@ const itemVariants = {
 
 const cardVariants = {
   hidden: { opacity: 0, scale: 0.9 },
-  visible: { 
-    opacity: 1, 
+  visible: {
+    opacity: 1,
     scale: 1,
     transition: {
       duration: 0.4,
       ease: "easeOut"
     }
   },
-  hover: { 
+  hover: {
     scale: 1.05,
     transition: {
       duration: 0.2,
@@ -109,11 +110,11 @@ export function Dashboard() {
     try {
       setLoading(true);
       setError(null);
-      
+
       console.log('📊 Loading dashboard data...');
       const response = await healthAPI.getDashboard();
       console.log('✅ Dashboard data loaded:', response);
-      
+
       if (response.success) {
         setDashboardData(response.data);
       } else {
@@ -121,7 +122,7 @@ export function Dashboard() {
       }
     } catch (error: any) {
       console.error('❌ Dashboard load error:', error);
-      
+
       const errorMessage = error.response?.data?.error || error.message || 'Failed to load dashboard data';
       setError(errorMessage);
       toast.error('Failed to load dashboard data');
@@ -138,7 +139,7 @@ export function Dashboard() {
     try {
       setDeletingItem(contextId);
       const response = await healthAPI.deleteHealthContext(contextId);
-      
+
       if (response.success) {
         toast.success('Health concern deleted successfully');
         loadDashboardData(); // Refresh dashboard
@@ -162,7 +163,7 @@ export function Dashboard() {
     try {
       setDeletingItem(carePlanId);
       const response = await healthAPI.deleteCarePlan(carePlanId);
-      
+
       if (response.success) {
         toast.success('Care plan deleted successfully');
         loadDashboardData(); // Refresh dashboard
@@ -186,24 +187,24 @@ export function Dashboard() {
   // Show loading state
   if (loading) {
     return (
-      <motion.div 
+      <motion.div
         className="min-h-screen bg-gray-50 flex items-center justify-center"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
       >
-        <motion.div 
+        <motion.div
           className="text-center"
           initial={{ scale: 0.9 }}
           animate={{ scale: 1 }}
           transition={{ duration: 0.3 }}
         >
-          <motion.div 
+          <motion.div
             className="animate-spin rounded-full h-12 w-12 border-b-2 border-green-600 mx-auto"
             animate={{ rotate: 360 }}
             transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
           />
-          <motion.p 
+          <motion.p
             className="mt-4 text-gray-600"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -219,23 +220,23 @@ export function Dashboard() {
   // Show error state
   if (error && !dashboardData) {
     return (
-      <motion.div 
+      <motion.div
         className="min-h-screen flex items-center justify-center"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
       >
-        <motion.div 
+        <motion.div
           className="text-center"
           variants={itemVariants}
           initial="hidden"
           animate="visible"
         >
           <motion.div
-            animate={{ 
+            animate={{
               y: [0, -10, 0],
               rotate: [0, 5, -5, 0]
             }}
-            transition={{ 
+            transition={{
               duration: 2,
               repeat: Infinity,
               ease: "easeInOut"
@@ -293,7 +294,7 @@ export function Dashboard() {
   };
 
   return (
-    <motion.div 
+    <motion.div
       className="min-h-screen bg-gradient-to-br from-slate-900 to-black"
       variants={pageVariants}
       initial="initial"
@@ -301,7 +302,7 @@ export function Dashboard() {
       exit="exit"
       transition={{ duration: 0.5 }}
     >
-      <motion.div 
+      <motion.div
         className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8"
         variants={containerVariants}
         initial="hidden"
@@ -311,7 +312,7 @@ export function Dashboard() {
         <motion.div className="mb-8 mt-20" variants={itemVariants}>
           <div className="flex items-center justify-between">
             <div>
-              <motion.h1 
+              <motion.h1
                 className="text-3xl font-bold text-white"
                 variants={slideVariants.left}
                 initial="hidden"
@@ -320,7 +321,7 @@ export function Dashboard() {
               >
                 Welcome back, {user?.profile.name}!
               </motion.h1>
-              <motion.p 
+              <motion.p
                 className="mt-2 text-gray-600"
                 variants={slideVariants.left}
                 initial="hidden"
@@ -338,9 +339,9 @@ export function Dashboard() {
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
             >
-              <Button 
-                onClick={handleManualRefresh} 
-                variant="outline" 
+              <Button
+                onClick={handleManualRefresh}
+                variant="outline"
                 size="sm"
                 className="flex items-center"
                 disabled={loading}
@@ -355,10 +356,10 @@ export function Dashboard() {
               </Button>
             </motion.div>
           </div>
-          
+
           <AnimatePresence>
             {error && (
-              <motion.div 
+              <motion.div
                 className="mt-4 p-3 bg-yellow-50 border border-yellow-200 rounded-md"
                 initial={{ opacity: 0, height: 0 }}
                 animate={{ opacity: 1, height: "auto" }}
@@ -374,7 +375,7 @@ export function Dashboard() {
         </motion.div>
 
         {/* Stats Grid */}
-        <motion.div 
+        <motion.div
           className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8"
           variants={containerVariants}
           initial="hidden"
@@ -396,7 +397,7 @@ export function Dashboard() {
                 <div className="flex items-center">
                   <div className="flex-shrink-0">
                     <motion.div
-                      whileHover={{ 
+                      whileHover={{
                         scale: 1.1,
                         rotate: [0, -5, 5, 0]
                       }}
@@ -407,7 +408,7 @@ export function Dashboard() {
                   </div>
                   <div className="ml-4">
                     <p className="text-sm font-medium">{stat.label}</p>
-                    <motion.p 
+                    <motion.p
                       className="text-2xl font-bold"
                       whileHover={{ scale: 1.1 }}
                       transition={{ duration: 0.2 }}
@@ -422,7 +423,7 @@ export function Dashboard() {
         </motion.div>
 
         {/* Main Content */}
-        <motion.div 
+        <motion.div
           className="grid grid-cols-1 lg:grid-cols-2 gap-8"
           variants={containerVariants}
           initial="hidden"
@@ -455,13 +456,13 @@ export function Dashboard() {
                 {data.activeContexts && data.activeContexts.length > 0 ? (
                   <motion.div className="space-y-4">
                     {data.activeContexts.map((context, index) => (
-                      <motion.div 
+                      <motion.div
                         key={context._id}
                         initial={{ opacity: 0, x: -20 }}
                         animate={{ opacity: 1, x: 0 }}
                         exit={{ opacity: 0, x: 20 }}
                         transition={{ duration: 0.3, delay: index * 0.1 }}
-                        whileHover={{ 
+                        whileHover={{
                           scale: 1.02,
                           backgroundColor: "rgba(75, 85, 99, 0.5)"
                         }}
@@ -480,13 +481,13 @@ export function Dashboard() {
                             </p>
                           </div>
                           <div className="flex items-center space-x-2">
-                            <motion.span 
+                            <motion.span
                               className={`px-2 py-1 text-xs font-medium rounded-full ${getStatusBadge(context.status)}`}
-                              animate={{ 
+                              animate={{
                                 scale: [1, 1.05, 1],
                                 opacity: [1, 0.8, 1]
                               }}
-                              transition={{ 
+                              transition={{
                                 duration: 2,
                                 repeat: Infinity,
                                 ease: "easeInOut"
@@ -511,14 +512,14 @@ export function Dashboard() {
                         {context.symptoms && context.symptoms.length > 0 && (
                           <div className="mt-3">
                             <p className="text-xs text-gray-500">Symptoms:</p>
-                            <motion.div 
+                            <motion.div
                               className="flex flex-wrap gap-1 mt-1"
                               variants={containerVariants}
                               initial="hidden"
                               animate="visible"
                             >
                               {context.symptoms.map((symptom, idx) => (
-                                <motion.span 
+                                <motion.span
                                   key={idx}
                                   variants={itemVariants}
                                   whileHover={{ scale: 1.1 }}
@@ -544,18 +545,18 @@ export function Dashboard() {
                     ))}
                   </motion.div>
                 ) : (
-                  <motion.div 
+                  <motion.div
                     className="text-center py-8"
                     initial={{ opacity: 0, scale: 0.9 }}
                     animate={{ opacity: 1, scale: 1 }}
                     transition={{ duration: 0.5 }}
                   >
                     <motion.div
-                      animate={{ 
+                      animate={{
                         scale: [1, 1.1, 1],
                         opacity: [0.5, 1, 0.5]
                       }}
-                      transition={{ 
+                      transition={{
                         duration: 2,
                         repeat: Infinity,
                         ease: "easeInOut"
@@ -605,13 +606,13 @@ export function Dashboard() {
                       const planProgress = totalCount > 0 ? Math.round((completedCount / totalCount) * 100) : 0;
 
                       return (
-                        <motion.div 
+                        <motion.div
                           key={plan._id}
                           initial={{ opacity: 0, x: 20 }}
                           animate={{ opacity: 1, x: 0 }}
                           exit={{ opacity: 0, x: -20 }}
                           transition={{ duration: 0.3, delay: index * 0.1 }}
-                          whileHover={{ 
+                          whileHover={{
                             scale: 1.02,
                             backgroundColor: "rgba(75, 85, 99, 0.5)"
                           }}
@@ -628,7 +629,7 @@ export function Dashboard() {
                               <div className="mt-3">
                                 <div className="flex items-center justify-between text-sm">
                                   <span className="text-gray-500">Progress</span>
-                                  <motion.span 
+                                  <motion.span
                                     className="font-medium text-white"
                                     whileHover={{ scale: 1.1 }}
                                   >
@@ -636,11 +637,11 @@ export function Dashboard() {
                                   </motion.span>
                                 </div>
                                 <div className="mt-1 w-full bg-gray-200 rounded-full h-2 overflow-hidden">
-                                  <motion.div 
+                                  <motion.div
                                     className="[background:linear-gradient(269deg,rgba(122,41,204,1)_0%,rgba(105,96,204,1)_50%,rgba(204,204,255,1)_100%)] h-2 rounded-full"
                                     initial={{ width: 0 }}
                                     animate={{ width: `${planProgress}%` }}
-                                    transition={{ 
+                                    transition={{
                                       duration: 1,
                                       ease: "easeOut",
                                       delay: 0.5
@@ -680,18 +681,18 @@ export function Dashboard() {
                     })}
                   </motion.div>
                 ) : (
-                  <motion.div 
+                  <motion.div
                     className="text-center py-8"
                     initial={{ opacity: 0, scale: 0.9 }}
                     animate={{ opacity: 1, scale: 1 }}
                     transition={{ duration: 0.5 }}
                   >
                     <motion.div
-                      animate={{ 
+                      animate={{
                         scale: [1, 1.1, 1],
                         opacity: [0.5, 1, 0.5]
                       }}
-                      transition={{ 
+                      transition={{
                         duration: 2,
                         repeat: Infinity,
                         ease: "easeInOut"
@@ -709,7 +710,9 @@ export function Dashboard() {
             </Card>
           </motion.div>
         </motion.div>
-
+        <motion.div variants={slideVariants.left} initial="hidden" animate="visible" transition={{ duration: 0.6, delay: 0.8 }}>
+          <SleepDashboard />
+        </motion.div>
         {/* Recent Activity */}
         <AnimatePresence>
           {data.recentActivity && data.recentActivity.length > 0 && (
@@ -722,17 +725,17 @@ export function Dashboard() {
             >
               <Card className="mt-8 p-6 hover:shadow-lg hover:shadow-purple-500/20 transition-shadow duration-300">
                 <h2 className="text-xl font-semibold text-white mb-6">Recent Activity</h2>
-                <motion.div 
+                <motion.div
                   className="space-y-3"
                   variants={containerVariants}
                   initial="hidden"
                   animate="visible"
                 >
                   {data.recentActivity.slice(0, 5).map((activity, index) => (
-                    <motion.div 
+                    <motion.div
                       key={activity._id}
                       variants={itemVariants}
-                      whileHover={{ 
+                      whileHover={{
                         backgroundColor: "rgba(75, 85, 99, 0.25)",
                         x: 5
                       }}
@@ -740,11 +743,11 @@ export function Dashboard() {
                     >
                       <div className="flex items-center">
                         <motion.div
-                          animate={{ 
+                          animate={{
                             scale: [1, 1.2, 1],
                             opacity: [0.5, 1, 0.5]
                           }}
-                          transition={{ 
+                          transition={{
                             duration: 2,
                             repeat: Infinity,
                             ease: "easeInOut",
@@ -760,7 +763,7 @@ export function Dashboard() {
                           </p>
                         </div>
                       </div>
-                      <motion.span 
+                      <motion.span
                         className={`px-2 py-1 text-xs font-medium rounded-full ${getStatusBadge(activity.status)}`}
                         whileHover={{ scale: 1.05 }}
                         transition={{ duration: 0.2 }}
@@ -776,5 +779,6 @@ export function Dashboard() {
         </AnimatePresence>
       </motion.div>
     </motion.div>
+
   );
 }

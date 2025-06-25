@@ -14,6 +14,8 @@ const authRoutes = require('./routes/auth');
 const chatRoutes = require('./routes/chat');
 const healthRoutes = require('./routes/health');
 const drugsRoutes = require('./routes/drugs');
+ 
+
 const app = express();
 
 // Security middleware
@@ -77,7 +79,7 @@ app.use('/api/auth', authRoutes);
 app.use('/api/chat', chatRoutes);
 app.use('/api/health', healthRoutes);
 app.use('/api/drugs', drugsRoutes);
-
+app.use('/api/sleep', require('./routes/sleep'));
 
 // 404 handler
 app.use(notFound);
