@@ -270,15 +270,15 @@ export function MealPlans() {
   );
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 to-black">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Header */}
-        <div className="text-center mb-8">
+        <div className="text-center mb-8 mt-20">
           <div className="flex justify-center items-center mb-4">
             <ChefHat className="h-12 w-12 text-purple-600 mr-3" />
-            <h1 className="text-4xl font-bold text-gray-900">Healthy Meal Plans</h1>
+            <h1 className="text-4xl font-bold text-white">Healthy Meal Plans</h1>
           </div>
-          <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+          <p className="text-lg text-white max-w-2xl mx-auto">
             Discover nutritious recipes and create personalized meal plans to support your health goals
           </p>
         </div>
@@ -311,7 +311,7 @@ export function MealPlans() {
               <select
                 value={filters.mealType}
                 onChange={(e) => handleFilterChange('mealType', e.target.value)}
-                className="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
+                className="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500 cursor-pointer"
               >
                 <option value="">All Meal Types</option>
                 <option value="breakfast">Breakfast</option>
@@ -323,7 +323,7 @@ export function MealPlans() {
               <select
                 value={filters.cuisineType}
                 onChange={(e) => handleFilterChange('cuisineType', e.target.value)}
-                className="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
+                className="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500 cursor-pointer"
               >
                 <option value="">All Cuisines</option>
                 <option value="american">American</option>
@@ -337,7 +337,7 @@ export function MealPlans() {
               <select
                 value={filters.dietLabel}
                 onChange={(e) => handleFilterChange('dietLabel', e.target.value)}
-                className="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
+                className="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500 cursor-pointer"
               >
                 <option value="">All Diets</option>
                 <option value="balanced">Balanced</option>
@@ -351,7 +351,7 @@ export function MealPlans() {
               <select
                 value={filters.maxTime}
                 onChange={(e) => handleFilterChange('maxTime', e.target.value)}
-                className="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
+                className="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500 cursor-pointer"
               >
                 <option value="">Any Time</option>
                 <option value="30">Under 30 min</option>
@@ -540,7 +540,7 @@ export function MealPlans() {
         {recipes.length === 0 && !loading && (
           <Card className="text-center py-12">
             <ChefHat className="h-16 w-16 text-purple-600 mx-auto mb-4" />
-            <h3 className="text-xl font-semibold mb-2">Ready to find healthy recipes?</h3>
+            <h3 className="text-xl font-semibold mb-2 text-white">Ready to find healthy recipes?</h3>
             <p className="text-gray-600 mb-6">
               Search for recipes based on ingredients, cuisine, or dietary preferences
             </p>
