@@ -12,6 +12,7 @@ import {
   LayoutDashboard,
   MessageCircle,
   ClipboardList,
+  Moon,
 } from "lucide-react";
 import { useState } from "react";
 
@@ -43,11 +44,10 @@ export function Header() {
     <Link
       to={to}
       onClick={onClick}
-      className={`px-3 py-2 rounded-md text-sm font-medium transition-colors ${
-        isActivePath(to)
+      className={`px-3 py-2 rounded-md text-sm font-medium transition-colors ${isActivePath(to)
           ? "bg-purple-100 text-purple-800"
           : "text-white hover:text-purple-300 hover:bg-white/10"
-      }`}
+        }`}
     >
       {children}
     </Link>
@@ -104,6 +104,13 @@ export function Header() {
                   <div className="flex items-center space-x-2">
                     <Pill className="h-4 w-4" />
                     <span>Pill Profile</span>
+                  </div>
+                </NavLink>
+                
+                <NavLink to="/sleep">
+                  <div className="flex items-center space-x-2">
+                    <Moon className="h-4 w-4" />
+                    <span>Sleep Intelligence</span>
                   </div>
                 </NavLink>
               </>

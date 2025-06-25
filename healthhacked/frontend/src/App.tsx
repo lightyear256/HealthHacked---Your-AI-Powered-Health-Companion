@@ -15,26 +15,27 @@ import { Chat } from './pages/Chat';
 import { CarePlans } from './pages/CarePlans';
 import { MealPlans } from './pages/MealPlans';
 import { PillProfile } from './pages/PillProfile';
+import { SleepDashboard } from './components/sleep/SleepDashboard';
 
 // Protected Route Component
 function ProtectedRoute({ children }: { children: React.ReactNode }) {
   const { isAuthenticated } = useAuthStore();
-  
+
   if (!isAuthenticated) {
     return <Navigate to="/login" replace />;
   }
-  
+
   return <>{children}</>;
 }
 
 // Public Route Component (redirect if authenticated)
 function PublicRoute({ children }: { children: React.ReactNode }) {
   const { isAuthenticated } = useAuthStore();
-  
+
   if (isAuthenticated) {
     return <Navigate to="/dashboard" replace />;
   }
-  
+
   return <>{children}</>;
 }
 
@@ -43,59 +44,50 @@ function App() {
     <Router>
       <div className="min-h-screen bg-gray-50">
         <Header />
-        
+
         <Routes>
           {/* Public Routes */}
           <Route path="/" element={<Home />} />
-          
-          <Route 
-            path="/login" 
+
+          <Route
+            path="/login"
             element={
               <PublicRoute>
                 <Login />
               </PublicRoute>
-            } 
+            }
           />
-          
-          <Route 
-            path="/register" 
+
+          <Route
+            path="/register"
             element={
               <PublicRoute>
                 <Register />
               </PublicRoute>
-            } 
+            }
           />
 
           {/* Protected Routes */}
-          <Route 
-            path="/dashboard" 
+          <Route
+            path="/dashboard"
             element={
               <ProtectedRoute>
                 <Dashboard />
               </ProtectedRoute>
-            } 
+            }
           />
-          
-          <Route 
-            path="/chat" 
+
+          <Route
+            path="/chat"
             element={
               <ProtectedRoute>
                 <Chat />
               </ProtectedRoute>
-            } 
+            }
           />
-          
-          <Route 
-            path="/care-plans" 
-            element={
-              <ProtectedRoute>
-                <CarePlans />
-              </ProtectedRoute>
-            } 
-          />
-          
-          <Route 
-            path="/care-plans/:id" 
+
+          <Route
+            path="/care-plans"
             element={
               <ProtectedRoute>
                 <CarePlans />
@@ -103,31 +95,45 @@ function App() {
             }
           />
 
-          <Route 
-            path="/meal-plans" 
+          <Route
+            path="/care-plans/:id"
+            element={
+              <ProtectedRoute>
+                <CarePlans />
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/meal-plans"
             element={
               <ProtectedRoute>
                 <MealPlans />
               </ProtectedRoute>
-            } 
+            }
           />
-          
+
+          <Route path="/sleep" 
+           element={ <ProtectedRoute>
+                <SleepDashboard />
+              </ProtectedRoute>} />
+
           {/* Pill Profile Route - WITHOUT ID */}
-          <Route 
-            path="/pill-profile" 
+          <Route
+            path="/pill-profile"
             element={
               <ProtectedRoute>
                 <PillProfile />
               </ProtectedRoute>
-            } 
+            }
           />
 
           {/* Redirect unknown routes */}
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
-        
+
         {/* Toast Notifications */}
-        <Toaster 
+        <Toaster
           position="top-right"
           toastOptions={{
             duration: 4000,
@@ -154,6 +160,7 @@ function App() {
         />
       </div>
     </Router>
+
   );
 }
 
