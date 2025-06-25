@@ -188,7 +188,7 @@ export function Dashboard() {
   if (loading) {
     return (
       <motion.div
-        className="min-h-screen bg-gray-50 flex items-center justify-center"
+        className="min-h-screen bg-gradient-to-br from-slate-900 to-black flex items-center justify-center"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
@@ -200,7 +200,7 @@ export function Dashboard() {
           transition={{ duration: 0.3 }}
         >
           <motion.div
-            className="animate-spin rounded-full h-12 w-12 border-b-2 border-green-600 mx-auto"
+            className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-600 mx-auto"
             animate={{ rotate: 360 }}
             transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
           />

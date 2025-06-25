@@ -1,6 +1,7 @@
+
 import React from "react";
 import { Link } from "react-router-dom";
-import { motion } from "framer-motion";
+import { motion, useAnimationControls } from 'framer-motion';
 import { useAuthStore } from "../hooks/useAuth";
 import { Button } from "../components/ui/Button";
 import { Card } from "../components/ui/Card";
@@ -33,8 +34,6 @@ import {
 } from "../data/testimonial";
 import { Header } from "@/components/Header";
 
-
-
 export function Home() {
   const { isAuthenticated } = useAuthStore();
   const duplicatedTestimonials = getDuplicatedTestimonials();
@@ -53,10 +52,52 @@ export function Home() {
     { Icon: Activity, delay: '2.2s', x: '60%', y: '10%', size: 18 },
   ];
 
+  // Text animation variants
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.1,
+        delayChildren: 0.3,
+      },
+    },
+  };
+
+  const letterVariants = {
+    hidden: { opacity: 0, y: 50, rotateX: -90 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      rotateX: 0,
+      transition: {
+        type: "spring",
+        damping: 12,
+        stiffness: 200,
+      },
+    },
+  };
+
+  const magneticVariants = {
+    hover: {
+      scale: 1.1,
+      rotate: [0, -5, 5, 0],
+      transition: {
+        rotate: {
+          repeat: Infinity,
+          duration: 0.5,
+        },
+        scale: {
+          type: "spring",
+          stiffness: 400,
+          damping: 10,
+        },
+      },
+    },
+  };
+
   return (
     <> 
-    {/* <div className="min-h-screen bg-gradient-to-br from-slate-900 to-black"> */}
-      
       {/* Hero Section with Animated Background */}
       <section 
         id="about" 
@@ -66,19 +107,19 @@ export function Home() {
           minHeight: '100vh'
         }}
       >
-         {/* <Header /> */}
-       
         {/* Animated Background Elements */}
         <div className="absolute inset-0">
-          {/* Large Gradient Orbs */}
+          {/* Enhanced Gradient Orbs with Breathing Effect */}
           <motion.div 
             className="absolute top-20 left-10 w-96 h-96 bg-purple-500/20 rounded-full blur-3xl"
             animate={{
-              scale: [1, 1.2, 1],
-              opacity: [0.3, 0.5, 0.3],
+              scale: [1, 1.3, 1.1, 1.2, 1],
+              opacity: [0.3, 0.6, 0.4, 0.5, 0.3],
+              x: [0, 30, -20, 10, 0],
+              y: [0, -20, 15, -10, 0],
             }}
             transition={{
-              duration: 6,
+              duration: 8,
               repeat: Infinity,
               ease: "easeInOut"
             }}
@@ -86,11 +127,13 @@ export function Home() {
           <motion.div 
             className="absolute bottom-20 right-10 w-80 h-80 bg-blue-500/15 rounded-full blur-3xl"
             animate={{
-              scale: [1.2, 1, 1.2],
-              opacity: [0.2, 0.4, 0.2],
+              scale: [1.2, 1, 1.3, 1.1, 1.2],
+              opacity: [0.2, 0.5, 0.3, 0.4, 0.2],
+              x: [0, -25, 20, -15, 0],
+              y: [0, 15, -25, 10, 0],
             }}
             transition={{
-              duration: 8,
+              duration: 10,
               repeat: Infinity,
               ease: "easeInOut",
               delay: 2
@@ -99,35 +142,42 @@ export function Home() {
           <motion.div 
             className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-purple-400/10 rounded-full blur-3xl"
             animate={{
-              scale: [1, 1.1, 1],
-              opacity: [0.1, 0.3, 0.1],
+              scale: [1, 1.2, 0.9, 1.1, 1],
+              opacity: [0.1, 0.4, 0.2, 0.3, 0.1],
+              rotate: [0, 180, 360],
             }}
             transition={{
-              duration: 10,
+              duration: 15,
               repeat: Infinity,
               ease: "easeInOut",
               delay: 1
             }}
           />
 
-          {/* Floating Health Icons */}
+          {/* Enhanced Floating Health Icons with Magnetic Effect */}
           {floatingIcons.map((item, index) => {
             const { Icon, delay, x, y, size } = item;
             return (
               <motion.div
                 key={index}
-                className="absolute text-white/20"
+                className="absolute text-white/20 cursor-pointer"
                 style={{
                   left: x,
                   top: y,
                 }}
                 animate={{
-                  y: [0, -20, 0],
-                  rotate: [0, 10, 0],
-                  scale: [1, 1.1, 1],
+                  y: [0, -30, 15, -20, 0],
+                  rotate: [0, 15, -10, 8, 0],
+                  scale: [1, 1.2, 0.9, 1.1, 1],
+                }}
+                whileHover={{
+                  scale: 1.5,
+                  rotate: 360,
+                  color: "rgba(168, 85, 247, 0.8)",
+                  transition: { duration: 0.3 }
                 }}
                 transition={{
-                  duration: 3 + (index % 3),
+                  duration: 4 + (index % 4),
                   repeat: Infinity,
                   ease: "easeInOut",
                   delay: parseFloat(delay.replace('s', '')),
@@ -135,40 +185,52 @@ export function Home() {
               >
                 <Icon 
                   size={size} 
-                  className="drop-shadow-lg"
+                  className="drop-shadow-lg filter"
                 />
               </motion.div>
             );
           })}
 
-          {/* Floating Particles */}
+          {/* Enhanced Floating Particles with Trails */}
           <div className="absolute inset-0">
-            {[...Array(15)].map((_, i) => (
+            {[...Array(20)].map((_, i) => (
               <motion.div
                 key={i}
-                className="absolute w-2 h-2 bg-white/10 rounded-full"
+                className="absolute rounded-full"
                 style={{
                   left: `${Math.random() * 100}%`,
                   top: `${Math.random() * 100}%`,
+                  width: `${2 + Math.random() * 4}px`,
+                  height: `${2 + Math.random() * 4}px`,
+                  background: `radial-gradient(circle, rgba(168, 85, 247, ${0.3 + Math.random() * 0.7}) 0%, transparent 70%)`,
                 }}
                 animate={{
-                  y: [0, -100, 0],
-                  opacity: [0, 1, 0],
-                  scale: [0, 1, 0],
+                  y: [0, -150 - Math.random() * 100, 0],
+                  x: [0, (Math.random() - 0.5) * 100, 0],
+                  opacity: [0, 1, 0.5, 1, 0],
+                  scale: [0, 1.5, 1, 1.2, 0],
                 }}
                 transition={{
-                  duration: 4 + Math.random() * 2,
+                  duration: 5 + Math.random() * 3,
                   repeat: Infinity,
                   ease: "easeInOut",
-                  delay: Math.random() * 2,
+                  delay: Math.random() * 3,
                 }}
               />
             ))}
           </div>
 
-          {/* Subtle Grid Pattern */}
-          <div 
+          {/* Animated Grid Pattern */}
+          <motion.div 
             className="absolute inset-0 opacity-5"
+            animate={{
+              backgroundPosition: ["0px 0px", "50px 50px", "0px 0px"],
+            }}
+            transition={{
+              duration: 20,
+              repeat: Infinity,
+              ease: "linear",
+            }}
             style={{
               backgroundImage: `
                 linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px),
@@ -179,7 +241,7 @@ export function Home() {
           />
         </div>
 
-        {/* Hero Content */}
+        {/* Hero Content with Enhanced Animations */}
         <div className="relative z-10 mx-auto max-w-7xl px-6 lg:px-8">
           <motion.div 
             className="mx-auto max-w-2xl text-center"
@@ -187,40 +249,72 @@ export function Home() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1, ease: "easeOut" }}
           >
-            <motion.h1 
+            <motion.div
+              variants={containerVariants}
+              initial="hidden"
+              animate="visible"
               className="text-4xl font-bold tracking-tight text-white sm:text-6xl drop-shadow-lg mt-20"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 1, delay: 0.2 }}
             >
-              Your AI-Powered
+              {"Your AI-Powered".split("").map((char, index) => (
+                <motion.span
+                  key={index}
+                  variants={letterVariants}
+                  style={{ display: 'inline-block' }}
+                >
+                  {char === " " ? "\u00A0" : char}
+                </motion.span>
+              ))}
+              <br />
               <motion.span 
                 className="text-purple-400" 
                 animate={{ 
                   textShadow: [
                     "0 0 10px rgba(168, 85, 247, 0.5)",
+                    "0 0 30px rgba(168, 85, 247, 1)",
                     "0 0 20px rgba(168, 85, 247, 0.8)",
+                    "0 0 30px rgba(168, 85, 247, 1)",
                     "0 0 10px rgba(168, 85, 247, 0.5)"
                   ]
                 }}
                 transition={{ 
-                  duration: 3, 
+                  duration: 4, 
                   repeat: Infinity, 
                   ease: "easeInOut" 
                 }}
-              >  Health </motion.span>
-              Companion
-            </motion.h1>
+                whileHover={{
+                  scale: 1.1,
+                  rotate: [0, -2, 2, 0],
+                  transition: { duration: 0.5 }
+                }}
+              >
+                {" Health "}
+              </motion.span>
+              {"Companion".split("").map((char, index) => (
+                <motion.span
+                  key={index + 100}
+                  variants={letterVariants}
+                  style={{ display: 'inline-block' }}
+                >
+                  {char}
+                </motion.span>
+              ))}
+            </motion.div>
+            
             <motion.p 
               className="mt-6 text-lg leading-8 text-purple-200 drop-shadow"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 1, delay: 0.4 }}
+              whileHover={{ 
+                scale: 1.02,
+                transition: { duration: 0.2 }
+              }}
             >
               Get personalized health guidance, symptom analysis, and continuous
               care from our advanced AI assistant. Available 24/7 to support
               your wellness journey.
             </motion.p>
+            
             <motion.div 
               className="mt-10 flex items-center justify-center gap-x-6"
               initial={{ opacity: 0, y: 20 }}
@@ -230,17 +324,30 @@ export function Home() {
               {isAuthenticated ? (
                 <Link to="/chat">
                   <motion.div
-                    whileHover={{ scale: 1.05 }}
+                    whileHover={{ 
+                      scale: 1.1,
+                      boxShadow: "0 20px 40px rgba(168, 85, 247, 0.4)"
+                    }}
                     whileTap={{ scale: 0.95 }}
-                    transition={{ type: "spring", stiffness: 300, damping: 20 }}
+                    transition={{ type: "spring", stiffness: 400, damping: 20 }}
                   >
                     <Button
                       size="lg"
                       className="flex items-center space-x-2 bg-purple-600 hover:bg-purple-700 text-white border-none shadow-2xl hover:shadow-purple-500/25"
                     >
-                      <MessageCircle className="h-5 w-5" />
+                      <motion.div
+                        animate={{ rotate: [0, 360] }}
+                        transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
+                      >
+                        <MessageCircle className="h-5 w-5" />
+                      </motion.div>
                       <span>Start Chatting</span>
-                      <ChevronRight className="h-4 w-4" />
+                      <motion.div
+                        animate={{ x: [0, 5, 0] }}
+                        transition={{ duration: 1.5, repeat: Infinity }}
+                      >
+                        <ChevronRight className="h-4 w-4" />
+                      </motion.div>
                     </Button>
                   </motion.div>
                 </Link>
@@ -248,16 +355,22 @@ export function Home() {
                 <>
                   <Link to="/register">
                     <motion.div
-                      whileHover={{ scale: 1.05 }}
+                      whileHover={{ 
+                        scale: 1.1,
+                        boxShadow: "0 20px 40px rgba(168, 85, 247, 0.4)"
+                      }}
                       whileTap={{ scale: 0.95 }}
-                      transition={{ type: "spring", stiffness: 300, damping: 20 }}
+                      transition={{ type: "spring", stiffness: 400, damping: 20 }}
                     >
                       <Button
                         size="lg"
                         className="flex items-center space-x-2 bg-purple-600 hover:bg-purple-700 text-white border-none shadow-2xl hover:shadow-purple-500/25"
                       >
                         <motion.div
-                          animate={{ scale: [1, 1.2, 1] }}
+                          animate={{ 
+                            scale: [1, 1.3, 1],
+                            rotate: [0, 10, -10, 0]
+                          }}
                           transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
                         >
                           <Heart className="h-5 w-5" />
@@ -267,15 +380,24 @@ export function Home() {
                     </motion.div>
                   </Link>
                   <motion.div
-                    whileHover={{ scale: 1.05, x: 5 }}
-                    transition={{ type: "spring", stiffness: 300, damping: 20 }}
+                    whileHover={{ 
+                      scale: 1.05, 
+                      x: 10,
+                      textShadow: "0 0 10px rgba(168, 85, 247, 0.8)"
+                    }}
+                    transition={{ type: "spring", stiffness: 400, damping: 20 }}
                   >
                     <Link
                       to="/demo"
                       className="flex items-center border-none bg-transparent text-white hover:bg-transparent hover:text-purple-400 hover:underline"
                     >
                       Watch Demo
-                      <ChevronRight className="h-4 w-4 ml-2" />
+                      <motion.div
+                        animate={{ x: [0, 8, 0] }}
+                        transition={{ duration: 1.5, repeat: Infinity }}
+                      >
+                        <ChevronRight className="h-4 w-4 ml-2" />
+                      </motion.div>
                     </Link>
                   </motion.div>
                 </>
@@ -284,11 +406,24 @@ export function Home() {
           </motion.div>
         </div>
 
-        {/* Bottom Fade */}
-        <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-black/20 to-transparent"></div>
+        {/* Enhanced Bottom Fade */}
+        <motion.div 
+          className="absolute bottom-0 left-0 right-0 h-32"
+          style={{
+            background: "linear-gradient(to top, rgba(0,0,0,0.4), transparent)"
+          }}
+          animate={{
+            opacity: [0.2, 0.4, 0.2],
+          }}
+          transition={{
+            duration: 3,
+            repeat: Infinity,
+            ease: "easeInOut"
+          }}
+        />
       </section>
 
-      {/* Features Section - Enhanced with Framer Motion */}
+      {/* Features Section - Enhanced with More Animations */}
       <section
         id="features"
         className="py-24 bg-gradient-to-br from-slate-900 to-black"
@@ -303,7 +438,11 @@ export function Home() {
           >
             <motion.h2
               className="text-3xl font-bold tracking-tight text-white sm:text-4xl bg-gradient-to-r from-white to-purple-200 bg-clip-text text-transparent"
-              whileHover={{ scale: 1.02 }}
+              whileHover={{ 
+                scale: 1.05,
+                backgroundImage: "linear-gradient(45deg, #ffffff, #a855f7, #3b82f6, #ffffff)",
+                transition: { duration: 0.3 }
+              }}
               transition={{ type: "spring", stiffness: 300, damping: 20 }}
             >
               Comprehensive Health Support
@@ -372,14 +511,20 @@ export function Home() {
       {/* How It Works Section */}
       <section className="py-24 bg-gradient-to-br from-slate-900 to-black">
         <div className="mx-auto max-w-7xl px-6 lg:px-8">
-          <div className="mx-auto max-w-2xl text-center">
+          <motion.div 
+            className="mx-auto max-w-2xl text-center"
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8 }}
+          >
             <h2 className="text-3xl font-bold tracking-tight text-white sm:text-4xl">
               How HealthHacked Works
             </h2>
             <p className="mt-4 text-lg text-purple-200">
               Simple steps to get personalized health guidance
             </p>
-          </div>
+          </motion.div>
 
           <div className="mx-auto mt-16 max-w-5xl">
             <div className="grid grid-cols-1 gap-12 lg:grid-cols-3">
@@ -406,16 +551,22 @@ export function Home() {
       {/* Testimonials Carousel Section */}
       <section className="py-24 bg-gradient-to-br from-slate-900 to-black overflow-hidden">
         <div className="mx-auto max-w-7xl px-6 lg:px-8">
-          <div className="mx-auto max-w-2xl text-center mb-16">
+          <motion.div 
+            className="mx-auto max-w-2xl text-center mb-16"
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8 }}
+          >
             <h2 className="text-3xl font-bold tracking-tight text-white sm:text-4xl">
               Trusted by Thousands
             </h2>
             <p className="mt-4 text-lg text-purple-200">
               See what our users say about their HealthHacked experience
             </p>
-          </div>
+          </motion.div>
 
-          {/* Carousel Container */}
+          {/* Enhanced Carousel Container */}
           <div className="relative">
             <motion.div
               className="flex gap-8"
@@ -425,16 +576,21 @@ export function Home() {
               transition={{
                 repeat: Infinity,
                 repeatType: "loop",
-                duration: 30,
+                duration: 40,
                 ease: "linear",
               }}
               style={{ width: "200%" }}
+              whileHover={{ animationPlayState: "paused" }}
             >
               {duplicatedTestimonials.map((testimonial, index) => (
                 <motion.div
                   key={index}
                   className="flex-shrink-0 w-96"
-                  whileHover={{ scale: 1.05 }}
+                  whileHover={{ 
+                    scale: 1.05,
+                    y: -10,
+                    transition: { duration: 0.3 }
+                  }}
                   transition={{ type: "spring", stiffness: 300, damping: 20 }}
                 >
                   <TestimonialCard
@@ -447,9 +603,9 @@ export function Home() {
               ))}
             </motion.div>
 
-            {/* Gradient overlays for smooth fade effect */}
-            <div className="absolute left-0 top-0  h-full bg-gradient-to-r from-slate-900 to-transparent pointer-events-none z-10" />
-            <div className="absolute right-0 top-0  h-full bg-gradient-to-l from-slate-900 to-transparent pointer-events-none z-10" />
+            {/* Enhanced Gradient overlays */}
+            <div className="absolute -left-10 top-0 w-40 h-72 bg-gradient-to-r from-slate-900 to-transparent pointer-events-none z-10" />
+            <div className="absolute -right-10 top-0 w-40 h-72 bg-gradient-to-l from-slate-900 to-transparent pointer-events-none z-10" />
           </div>
         </div>
       </section>
@@ -459,9 +615,16 @@ export function Home() {
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
             {/* Logo and Description */}
             <div className="md:col-span-1">
-              <h3 className="text-xl font-bold text-white mb-4">
+              <motion.h3 
+                className="text-xl font-bold text-white mb-4"
+                whileHover={{ 
+                  scale: 1.05,
+                  color: "#a855f7",
+                  transition: { duration: 0.2 }
+                }}
+              >
                 HealthHacked
-              </h3>
+              </motion.h3>
               <p className="text-purple-200 text-sm leading-relaxed">
                 Your AI-powered health companion providing personalized guidance
                 and support for your wellness journey.
@@ -473,48 +636,52 @@ export function Home() {
               <h4 className="text-white font-semibold mb-4">Quick Links</h4>
               <ul className="space-y-2">
                 <li>
-                  <Link
-                    to="/#about"
-                    className="text-purple-200 hover:text-purple-400 text-sm"
-                    onClick={(e) => {
-                      // If we're already on the home page, scroll to features
-                      if (window.location.pathname === "/") {
-                        e.preventDefault();
-                        document.getElementById("about")?.scrollIntoView({
-                          behavior: "smooth",
-                          block: "start",
-                        });
-                      }
-                    }}
-                  >
-                    About Us
-                  </Link>
+                  <motion.div whileHover={{ x: 5 }}>
+                    <Link
+                      to="/#about"
+                      className="text-purple-200 hover:text-purple-400 text-sm"
+                      onClick={(e) => {
+                        if (window.location.pathname === "/") {
+                          e.preventDefault();
+                          document.getElementById("about")?.scrollIntoView({
+                            behavior: "smooth",
+                            block: "start",
+                          });
+                        }
+                      }}
+                    >
+                      About Us
+                    </Link>
+                  </motion.div>
                 </li>
                 <li>
-                  <Link
-                    to="/#features"
-                    className="text-purple-200 hover:text-purple-400 text-sm"
-                    onClick={(e) => {
-                      // If we're already on the home page, scroll to features
-                      if (window.location.pathname === "/") {
-                        e.preventDefault();
-                        document.getElementById("features")?.scrollIntoView({
-                          behavior: "smooth",
-                          block: "start",
-                        });
-                      }
-                    }}
-                  >
-                    Features
-                  </Link>
+                  <motion.div whileHover={{ x: 5 }}>
+                    <Link
+                      to="/#features"
+                      className="text-purple-200 hover:text-purple-400 text-sm"
+                      onClick={(e) => {
+                        if (window.location.pathname === "/") {
+                          e.preventDefault();
+                          document.getElementById("features")?.scrollIntoView({
+                            behavior: "smooth",
+                            block: "start",
+                          });
+                        }
+                      }}
+                    >
+                      Features
+                    </Link>
+                  </motion.div>
                 </li>
                 <li>
-                  <Link
-                    to="mailto:healthhacked1@gmail.com"
-                    className="text-purple-200 hover:text-purple-400 text-sm"
-                  >
-                    Contact
-                  </Link>
+                  <motion.div whileHover={{ x: 5 }}>
+                    <Link
+                      to="mailto:healthhacked1@gmail.com"
+                      className="text-purple-200 hover:text-purple-400 text-sm"
+                    >
+                      Contact
+                    </Link>
+                  </motion.div>
                 </li>
               </ul>
             </div>
@@ -526,12 +693,18 @@ export function Home() {
                 Stay updated with our latest news and health tips
               </p>
               <div className="flex space-x-4">
-                <a
+                <motion.a
                   href="mailto:healthhacked1@gmail.com"
                   className="text-purple-200 hover:text-purple-400 transition-colors"
+                  whileHover={{ 
+                    scale: 1.2,
+                    rotate: 15,
+                    color: "#a855f7"
+                  }}
+                  whileTap={{ scale: 0.9 }}
                 >
                   <Mail className="h-5 w-5" />
-                </a>
+                </motion.a>
               </div>
             </div>
           </div>
@@ -542,30 +715,35 @@ export function Home() {
               © 2025 HealthHacked. All rights reserved.
             </p>
             <div className="flex space-x-6 mt-4 md:mt-0">
-              <Link
-                to="/privacy"
-                className="text-purple-200 hover:text-purple-400 text-sm"
-              >
-                Privacy
-              </Link>
-              <Link
-                to="/terms"
-                className="text-purple-200 hover:text-purple-400 text-sm"
-              >
-                Terms
-              </Link>
-              <Link
-                to="/cookies"
-                className="text-purple-200 hover:text-purple-400 text-sm"
-              >
-                Cookies
-              </Link>
+              <motion.div whileHover={{ y: -2 }}>
+                <Link
+                  to="/privacy"
+                  className="text-purple-200 hover:text-purple-400 text-sm"
+                >
+                  Privacy
+                </Link>
+              </motion.div>
+              <motion.div whileHover={{ y: -2 }}>
+                <Link
+                  to="/terms"
+                  className="text-purple-200 hover:text-purple-400 text-sm"
+                >
+                  Terms
+                </Link>
+              </motion.div>
+              <motion.div whileHover={{ y: -2 }}>
+                <Link
+                  to="/cookies"
+                  className="text-purple-200 hover:text-purple-400 text-sm"
+                >
+                  Cookies
+                </Link>
+              </motion.div>
             </div>
           </div>
         </div>
       </footer>
       <BubbleCursor />
-    {/* </div> */}
     </>
   );
 }
@@ -578,75 +756,180 @@ interface FeatureCardProps {
 }
 
 function FeatureCard({ icon, title, description, index }: FeatureCardProps) {
+  const controls = useAnimationControls();
+
   return (
     <motion.div
-      initial={{ opacity: 0, y: 50 }}
-      whileInView={{ opacity: 1, y: 0 }}
+      initial={{ opacity: 0, y: 100, rotateX: -15 }}
+      whileInView={{ opacity: 1, y: 0, rotateX: 0 }}
       viewport={{ once: true, margin: "-50px" }}
       transition={{
-        duration: 0.6,
-        delay: index * 0.1,
-        ease: "easeOut",
+        duration: 0.8,
+        delay: index * 0.15,
+        ease: [0.25, 0.46, 0.45, 0.94],
       }}
       whileHover={{
-        scale: 1.05,
-        y: -10,
-        transition: { duration: 0.3, ease: "easeOut" },
+        scale: 1.08,
+        y: -15,
+        rotateY: 5,
+        transition: { 
+          duration: 0.4, 
+          ease: "easeOut",
+          type: "spring",
+          stiffness: 300
+        },
       }}
-      className="relative group"
+      onHoverStart={() => {
+        controls.start({
+          rotate: [0, -2, 2, -1, 1, 0],
+          transition: { duration: 0.6, ease: "easeInOut" }
+        });
+      }}
+      className="relative group perspective-1000"
     >
-      <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-slate-800/50 to-slate-900/50 p-8 backdrop-blur-sm border border-slate-700/50 hover:border-purple-500/50 transition-all duration-300">
-        {/* Glow effect on hover */}
+      <motion.div 
+        animate={controls}
+        className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-slate-800/60 to-slate-900/80 p-8 backdrop-blur-md border border-slate-700/50 hover:border-purple-400/70 transition-all duration-500 shadow-2xl hover:shadow-purple-500/25"
+      >
+        {/* Enhanced glow effect */}
         <motion.div
-          className="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+          className="absolute inset-0 rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"
           style={{
             background:
-              "radial-gradient(circle at center, rgba(147, 51, 234, 0.1) 0%, transparent 70%)",
+              "radial-gradient(circle at center, rgba(147, 51, 234, 0.2) 0%, rgba(79, 70, 229, 0.1) 50%, transparent 80%)",
           }}
         />
 
-        {/* Icon container with animation */}
+        {/* Floating particles effect */}
         <motion.div
-          whileHover={{ rotate: 5, scale: 1.1 }}
-          transition={{ type: "spring", stiffness: 300, damping: 20 }}
-          className="mb-6 inline-flex items-center justify-center rounded-lg bg-slate-800/80 p-3"
+          className="absolute inset-0 opacity-0 group-hover:opacity-100"
+          transition={{ duration: 0.3 }}
         >
-          {icon}
+          {[...Array(6)].map((_, i) => (
+            <motion.div
+              key={i}
+              className="absolute w-1 h-1 bg-purple-400 rounded-full"
+              style={{
+                left: `${20 + i * 15}%`,
+                top: `${30 + (i % 2) * 40}%`,
+              }}
+              animate={{
+                y: [-10, -30, -10],
+                opacity: [0, 1, 0],
+                scale: [0.5, 1, 0.5],
+              }}
+              transition={{
+                duration: 2,
+                repeat: Infinity,
+                delay: i * 0.2,
+                ease: "easeInOut",
+              }}
+            />
+          ))}
+        </motion.div>
+
+        {/* Icon container with enhanced animation */}
+        <motion.div
+          whileHover={{ 
+            rotate: [0, -10, 10, -5, 5, 0], 
+            scale: 1.2,
+            y: -5,
+          }}
+          transition={{ 
+            rotate: { duration: 0.6 },
+            scale: { type: "spring", stiffness: 400, damping: 15 },
+            y: { type: "spring", stiffness: 400, damping: 15 }
+          }}
+          className="mb-6 inline-flex items-center justify-center rounded-xl bg-gradient-to-br from-slate-800/90 to-slate-700/90 p-4 shadow-lg relative overflow-hidden"
+        >
+          {/* Icon background pulse */}
+          <motion.div
+            className="absolute inset-0 bg-gradient-to-r from-purple-500/20 to-indigo-500/20 rounded-xl"
+            animate={{
+              scale: [1, 1.1, 1],
+              opacity: [0.5, 0.8, 0.5],
+            }}
+            transition={{
+              duration: 2,
+              repeat: Infinity,
+              ease: "easeInOut",
+            }}
+          />
+          <div className="relative z-10">
+            {icon}
+          </div>
         </motion.div>
 
         <motion.h3
-          className="text-xl font-semibold text-white mb-4"
-          whileHover={{ x: 5 }}
-          transition={{ type: "spring", stiffness: 300, damping: 20 }}
+          className="text-xl font-bold text-white mb-4 relative"
+          whileHover={{ 
+            x: 8,
+            color: "#c084fc",
+          }}
+          transition={{ 
+            type: "spring", 
+            stiffness: 400, 
+            damping: 20,
+            color: { duration: 0.3 }
+          }}
         >
           {title}
+          {/* Text underline animation */}
+          <motion.div
+            className="absolute bottom-0 left-0 h-0.5 bg-gradient-to-r from-purple-400 to-indigo-400"
+            initial={{ width: 0 }}
+            whileHover={{ width: "100%" }}
+            transition={{ duration: 0.3, ease: "easeOut" }}
+          />
         </motion.h3>
 
         <motion.p
-          className="text-slate-300 leading-relaxed"
-          whileHover={{ x: 5 }}
+          className="text-slate-300 leading-relaxed relative"
+          whileHover={{ 
+            x: 8,
+            color: "#e2e8f0",
+          }}
           transition={{
             type: "spring",
-            stiffness: 300,
+            stiffness: 400,
             damping: 20,
             delay: 0.05,
+            color: { duration: 0.3 }
           }}
         >
           {description}
         </motion.p>
 
-        {/* Subtle shine effect */}
+        {/* Enhanced shine effect */}
         <motion.div
-          className="absolute top-0 left-0 w-full h-full rounded-2xl opacity-0 group-hover:opacity-100"
+          className="absolute top-0 left-0 w-full h-full rounded-3xl opacity-0 group-hover:opacity-100 pointer-events-none"
           style={{
             background:
-              "linear-gradient(135deg, transparent 40%, rgba(255, 255, 255, 0.05) 50%, transparent 60%)",
+              "linear-gradient(135deg, transparent 30%, rgba(255, 255, 255, 0.1) 50%, rgba(147, 51, 234, 0.1) 70%, transparent 90%)",
           }}
-          initial={{ x: "-100%" }}
-          whileHover={{ x: "100%" }}
-          transition={{ duration: 0.6, ease: "easeInOut" }}
+          initial={{ x: "-100%", rotate: -15 }}
+          whileHover={{ x: "100%", rotate: -15 }}
+          transition={{ duration: 0.8, ease: "easeInOut" }}
         />
-      </div>
+
+        {/* Border animation */}
+        <motion.div
+          className="absolute inset-0 rounded-3xl border-2 border-transparent opacity-0 group-hover:opacity-100"
+          style={{
+            background: "linear-gradient(45deg, #8b5cf6, #3b82f6, #8b5cf6) border-box",
+            mask: "linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0)",
+            maskComposite: "exclude",
+          }}
+          animate={{
+            backgroundPosition: ["0% 50%", "100% 50%", "0% 50%"],
+          }}
+          transition={{
+            duration: 3,
+            repeat: Infinity,
+            ease: "linear",
+          }}
+        />
+      </motion.div>
     </motion.div>
   );
 }
@@ -659,13 +942,99 @@ interface StepCardProps {
 
 function StepCard({ step, title, description }: StepCardProps) {
   return (
-    <div className="text-center">
-      <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-gradient-to-r from-purple-600 to-indigo-600 text-white text-xl font-bold mb-6 shadow-lg shadow-purple-500/25">
-        {step}
-      </div>
-      <h3 className="text-xl font-semibold text-white mb-4">{title}</h3>
-      <p className="text-purple-200">{description}</p>
-    </div>
+    <motion.div 
+      className="text-center relative"
+      initial={{ opacity: 0, scale: 0.8, y: 50 }}
+      whileInView={{ opacity: 1, scale: 1, y: 0 }}
+      viewport={{ once: true }}
+      transition={{ 
+        duration: 0.6, 
+        ease: [0.25, 0.46, 0.45, 0.94],
+        type: "spring",
+        stiffness: 100
+      }}
+      whileHover={{ scale: 1.05, y: -5 }}
+    >
+      {/* Step number with enhanced animations */}
+      <motion.div 
+        className="mx-auto flex h-20 w-20 items-center justify-center rounded-full bg-gradient-to-r from-purple-600 via-purple-500 to-indigo-600 text-white text-2xl font-bold mb-6 shadow-2xl shadow-purple-500/40 relative overflow-hidden"
+        whileHover={{ 
+          scale: 1.15,
+          rotate: [0, -5, 5, 0],
+          boxShadow: "0 25px 50px -12px rgba(147, 51, 234, 0.6)"
+        }}
+        transition={{ 
+          scale: { type: "spring", stiffness: 400, damping: 15 },
+          rotate: { duration: 0.5 },
+          boxShadow: { duration: 0.3 }
+        }}
+      >
+        {/* Animated background */}
+        <motion.div
+          className="absolute inset-0 bg-gradient-to-r from-purple-400 to-indigo-400 rounded-full"
+          animate={{
+            rotate: [0, 360],
+            scale: [1, 1.1, 1],
+          }}
+          transition={{
+            rotate: { duration: 8, repeat: Infinity, ease: "linear" },
+            scale: { duration: 2, repeat: Infinity, ease: "easeInOut" }
+          }}
+        />
+        
+        {/* Pulse effect */}
+        <motion.div
+          className="absolute inset-0 bg-white/20 rounded-full"
+          animate={{
+            scale: [1, 1.2, 1],
+            opacity: [0.3, 0.6, 0.3],
+          }}
+          transition={{
+            duration: 2,
+            repeat: Infinity,
+            ease: "easeInOut",
+          }}
+        />
+        
+        <span className="relative z-10">{step}</span>
+      </motion.div>
+
+      <motion.h3 
+        className="text-xl font-semibold text-white mb-4"
+        whileHover={{ 
+          scale: 1.05,
+          color: "#c084fc",
+        }}
+        transition={{ duration: 0.3 }}
+      >
+        {title}
+      </motion.h3>
+      
+      <motion.p 
+        className="text-purple-200"
+        whileHover={{ 
+          color: "#e2e8f0",
+          y: -2,
+        }}
+        transition={{ duration: 0.3 }}
+      >
+        {description}
+      </motion.p>
+
+      {/* Decorative elements */}
+      <motion.div
+        className="absolute -top-2 -right-2 w-4 h-4 bg-purple-400/30 rounded-full"
+        animate={{
+          scale: [1, 1.5, 1],
+          opacity: [0.3, 0.7, 0.3],
+        }}
+        transition={{
+          duration: 3,
+          repeat: Infinity,
+          ease: "easeInOut",
+        }}
+      />
+    </motion.div>
   );
 }
 
@@ -683,17 +1052,161 @@ function TestimonialCard({
   rating,
 }: TestimonialCardProps) {
   return (
-    <Card className="bg-gradient-to-br from-slate-800/50 to-slate-900/50 border-slate-700/50 backdrop-blur-sm p-8 h-full">
-      <div className="flex mb-6">
-        {[...Array(rating)].map((_, i) => (
-          <Star key={i} className="h-5 w-5 text-amber-400 fill-current" />
-        ))}
-      </div>
-      <p className="text-purple-200 mb-6 italic leading-relaxed">"{quote}"</p>
-      <div className="mt-auto">
-        <p className="font-semibold text-white">{author}</p>
-        <p className="text-sm text-purple-300">{role}</p>
-      </div>
-    </Card>
+    <motion.div
+      initial={{ opacity: 0, y: 50, rotateX: -10 }}
+      whileInView={{ opacity: 1, y: 0, rotateX: 0 }}
+      viewport={{ once: true }}
+      transition={{ 
+        duration: 0.7, 
+        ease: [0.25, 0.46, 0.45, 0.94] 
+      }}
+      whileHover={{ 
+        scale: 1.03, 
+        y: -8,
+        rotateY: 2,
+        transition: { duration: 0.3, ease: "easeOut" }
+      }}
+      className="h-full"
+    >
+      <Card className="bg-gradient-to-br from-slate-800/60 to-slate-900/80 border-slate-700/50 backdrop-blur-md p-8 h-full rounded-2xl relative overflow-hidden shadow-2xl hover:shadow-purple-500/20 transition-all duration-500 group">
+        {/* Animated background gradient */}
+        <motion.div
+          className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500"
+          style={{
+            background: "radial-gradient(circle at top right, rgba(147, 51, 234, 0.1), transparent 70%)",
+          }}
+        />
+
+        {/* Stars with stagger animation */}
+        <motion.div 
+          className="flex mb-6"
+          initial="hidden"
+          animate="visible"
+          variants={{
+            hidden: {},
+            visible: {
+              transition: {
+                staggerChildren: 0.1
+              }
+            }
+          }}
+        >
+          {[...Array(rating)].map((_, i) => (
+            <motion.div
+              key={i}
+              variants={{
+                hidden: { opacity: 0, scale: 0, rotate: -180 },
+                visible: { 
+                  opacity: 1, 
+                  scale: 1, 
+                  rotate: 0,
+                  transition: {
+                    type: "spring",
+                    stiffness: 200,
+                    damping: 15
+                  }
+                }
+              }}
+              whileHover={{ 
+                scale: 1.3, 
+                rotate: 360,
+                color: "#fbbf24"
+              }}
+              transition={{ 
+                scale: { duration: 0.2 },
+                rotate: { duration: 0.6 },
+                color: { duration: 0.3 }
+              }}
+            >
+              <Star className="h-5 w-5 text-amber-400 fill-current cursor-pointer" />
+            </motion.div>
+          ))}
+        </motion.div>
+
+        {/* Quote with typewriter effect simulation */}
+        <motion.p 
+          className="text-purple-200 mb-6 italic leading-relaxed relative"
+          whileHover={{ 
+            color: "#e2e8f0",
+            x: 5 
+          }}
+          transition={{ duration: 0.3 }}
+        >
+          <motion.span
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.1, delay: 0.5 }}
+          >
+            "
+          </motion.span>
+          <motion.span
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: quote.length * 0.02, delay: 0.6 }}
+          >
+            {quote}
+          </motion.span>
+          <motion.span
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.1, delay: 0.8 }}
+          >
+            "
+          </motion.span>
+          
+          {/* Quote decoration */}
+          <motion.div
+            className="absolute -top-4 -left-2 text-4xl text-purple-400/30 font-serif"
+            animate={{
+              rotate: [0, 5, -5, 0],
+            }}
+            transition={{
+              duration: 4,
+              repeat: Infinity,
+              ease: "easeInOut",
+            }}
+          >
+            "
+          </motion.div>
+        </motion.p>
+
+        <motion.div 
+          className="mt-auto"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 1, duration: 0.5 }}
+        >
+          <motion.p 
+            className="font-semibold text-white mb-1"
+            whileHover={{ 
+              color: "#c084fc",
+              x: 3
+            }}
+            transition={{ duration: 0.3 }}
+          >
+            {author}
+          </motion.p>
+          <motion.p 
+            className="text-sm text-purple-300"
+            whileHover={{ 
+              color: "#e2e8f0",
+              x: 3
+            }}
+            transition={{ duration: 0.3 }}
+          >
+            {role}
+          </motion.p>
+        </motion.div>
+
+        {/* Subtle border glow on hover */}
+        <motion.div
+          className="absolute inset-0 rounded-2xl border border-transparent opacity-0 group-hover:opacity-100 pointer-events-none"
+          style={{
+            borderImage: "linear-gradient(45deg, #8b5cf6, transparent, #3b82f6, transparent) 1",
+          }}
+          transition={{ duration: 0.3 }}
+        />
+      </Card>
+    </motion.div>
   );
 }
