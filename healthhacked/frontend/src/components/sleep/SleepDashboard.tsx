@@ -60,18 +60,36 @@ export const SleepDashboard: React.FC<SleepDashboardProps> = ({ className }) => 
   };
 
   if (loading) {
-    return (
-      <Card className="p-6">
-        <div className="flex justify-center items-center h-64">
+      return (
+        <motion.div
+          className="min-h-screen bg-gradient-to-br from-slate-900 to-black flex items-center justify-center"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+        >
           <motion.div
-            animate={{ rotate: 360 }}
-            transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
-            className="rounded-full h-12 w-12 border-b-2 border-purple-500"
-          />
-        </div>
-      </Card>
-    );
-  }
+            className="text-center"
+            initial={{ scale: 0.9 }}
+            animate={{ scale: 1 }}
+            transition={{ duration: 0.3 }}
+          >
+            <motion.div
+              className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-600 mx-auto"
+              animate={{ rotate: 360 }}
+              transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
+            />
+            <motion.p
+              className="mt-4 text-gray-600"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.2 }}
+            >
+              Loading your health dashboard...
+            </motion.p>
+          </motion.div>
+        </motion.div>
+      );
+    }
 
   // Show setup wizard if no profile or explicitly requested
   if (showSetup || !dashboardData) {
@@ -79,7 +97,7 @@ export const SleepDashboard: React.FC<SleepDashboardProps> = ({ className }) => 
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        className={className}
+        className={"bg-gradient-to-br from-slate-900 to-black"}
       >
         <Card className="p-6 text-center">
           <motion.div
@@ -87,7 +105,7 @@ export const SleepDashboard: React.FC<SleepDashboardProps> = ({ className }) => 
             animate={{ scale: 1 }}
             transition={{ delay: 0.2 }}
           >
-            <Moon className="h-16 w-16 mx-auto mb-4 text-purple-400" />
+            <Moon className="h-16 w-16 mx-auto mb-4 text-purple-400 mt-16" />
             <h3 className="text-xl font-semibold text-white mb-2">Welcome to Sleep Intelligence</h3>
             <p className="text-gray-400 mb-6">
               Track your sleep patterns and unlock personalized productivity insights
@@ -119,11 +137,20 @@ export const SleepDashboard: React.FC<SleepDashboardProps> = ({ className }) => 
 
   const { currentProductivity, sleepDebt, productivity, insights, stats } = dashboardData;
 
+  // Animation variants for cards
+  const cardVariants = {
+    hover: {
+      scale: 1.03,
+      boxShadow: "0 8px 32px 0 rgba(88, 101, 242, 0.2)",
+      transition: { duration: 0.2 }
+    }
+  };
+
   return (
-    <div className={`space-y-6 ${className}`}>
+    <div className={`space-y-6 bg-gradient-to-br from-slate-900 to-black p-5`}>
       {/* Header */}
-      <Card className="p-6">
-        <div className="flex items-center justify-between">
+      <Card className="p-6 mt-16">
+        <div className="flex items-center justify-between ">
           <div>
             <h2 className="text-xl font-semibold text-white mb-2">Sleep Intelligence</h2>
             <p className="text-gray-400">Your personalized sleep and productivity insights</p>
@@ -142,87 +169,70 @@ export const SleepDashboard: React.FC<SleepDashboardProps> = ({ className }) => 
 
       {/* Header Stats */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.1 }}
-        >
-          <Card className="p-4">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm text-gray-400">Current Focus</p>
-                <p className="text-2xl font-bold text-white">
-                  {currentProductivity ? Math.round(currentProductivity.productivity * 100) : 0}%
-                </p>
-              </div>
-              <Battery className={`h-8 w-8 ${
-                currentProductivity?.productivity > 0.8 ? 'text-green-400' :
-                currentProductivity?.productivity > 0.5 ? 'text-yellow-400' : 'text-red-400'
-              }`} />
-            </div>
-          </Card>
-        </motion.div>
-
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.2 }}
-        >
-          <Card className="p-4">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm text-gray-400">Sleep Debt</p>
-                <p className="text-2xl font-bold text-white">
-                  {sleepDebt?.toFixed(1) || '0.0'}h
-                </p>
-              </div>
-              <Moon className={`h-8 w-8 ${
-                sleepDebt < 2 ? 'text-green-400' :
-                sleepDebt < 5 ? 'text-yellow-400' : 'text-red-400'
-              }`} />
-            </div>
-          </Card>
-        </motion.div>
-
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.3 }}
-        >
-          <Card className="p-4">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm text-gray-400">Consistency</p>
-                <p className="text-2xl font-bold text-white">
-                  {stats?.consistency || 0}%
-                </p>
-              </div>
-              <Target className={`h-8 w-8 ${
-                stats?.consistency > 80 ? 'text-green-400' :
-                stats?.consistency > 60 ? 'text-yellow-400' : 'text-red-400'
-              }`} />
-            </div>
-          </Card>
-        </motion.div>
-
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.4 }}
-        >
-          <Card className="p-4">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm text-gray-400">Data Points</p>
-                <p className="text-2xl font-bold text-white">
-                  {stats?.entriesLogged || 0}
-                </p>
-              </div>
-              <TrendingUp className="h-8 w-8 text-blue-400" />
-            </div>
-          </Card>
-        </motion.div>
-      </div>
+  {[
+    {
+      icon: Battery,
+      label: "Current Focus",
+      value: `${currentProductivity ? Math.round(currentProductivity.productivity * 100) : 0}%`,
+      color: currentProductivity?.productivity > 0.8 ? 'green' :
+             currentProductivity?.productivity > 0.5 ? 'yellow' : 'red'
+    },
+    {
+      icon: Moon,
+      label: "Sleep Debt",
+      value: `${sleepDebt?.toFixed(1) || '0.0'}h`,
+      color: sleepDebt < 2 ? 'green' :
+             sleepDebt < 5 ? 'yellow' : 'red'
+    },
+    {
+      icon: Target,
+      label: "Consistency",
+      value: `${stats?.consistency || 0}%`,
+      color: stats?.consistency > 80 ? 'green' :
+             stats?.consistency > 60 ? 'yellow' : 'red'
+    },
+    {
+      icon: TrendingUp,
+      label: "Data Points",
+      value: stats?.entriesLogged || 0,
+      color: 'blue'
+    }
+  ].map((stat, index) => (
+    <motion.div
+      key={stat.label}
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ delay: index * 0.1 + 0.1 }}
+      variants={cardVariants}
+      whileHover="hover"
+      className="cursor-pointer"
+    >
+      <Card className={`p-4 hover:shadow-lg hover:shadow-${stat.color}-500/20 transition-shadow duration-300`}>
+        <div className="flex items-center justify-between">
+          <div>
+            <p className="text-sm text-gray-400">{stat.label}</p>
+            <motion.p
+              className="text-2xl font-bold text-white"
+              whileHover={{ scale: 1.1 }}
+              transition={{ duration: 0.2 }}
+            >
+              {stat.value}
+            </motion.p>
+          </div>
+          <motion.div
+            whileHover={{
+              scale: 1.1,
+              rotate: [0, -5, 5, 0]
+            }}
+            transition={{ duration: 0.3 }}
+          >
+            <stat.icon className={`h-8 w-8 text-${stat.color}-400`} />
+          </motion.div>
+        </div>
+      </Card>
+    </motion.div>
+  ))}
+</div>
 
       {/* Main Content */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -233,7 +243,7 @@ export const SleepDashboard: React.FC<SleepDashboardProps> = ({ className }) => 
           animate={{ opacity: 1, x: 0 }}
           transition={{ delay: 0.5 }}
         >
-          <Card className="p-6">
+          <Card className="p-14">
             <div className="flex items-center justify-between mb-6">
               <h3 className="text-xl font-semibold text-white">Today's Productivity Curve</h3>
               <div className="flex items-center text-sm text-gray-400">
