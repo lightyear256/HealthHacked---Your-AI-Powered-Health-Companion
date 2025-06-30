@@ -32,6 +32,14 @@ HealthHacked is a cutting-edge, AI-powered health assistance platform that provi
 - **Follow-up Reminders**: Timely check-ins and reminders to stay on top of your health goals
 - **Continuous Health Monitoring**: Real-time tracking of symptoms and health progress
 
+### 💊 Pill Profile System
+**Advanced Pharmaceutical Intelligence**
+- Verified information database for a wide range of medicines
+- Detailed composition, usage, and dosage guidelines
+- Comprehensive side effects and precautions database
+- Drug interaction warnings and alerts
+- Reliable reference for making informed medication decisions
+
 ### 👤 User Experience & Security
 - **Secure Authentication**: JWT-based authentication with bcrypt password hashing
 - **Personal Health Dashboard**: Comprehensive overview of your health status and active care plans
@@ -47,14 +55,6 @@ HealthHacked is a cutting-edge, AI-powered health assistance platform that provi
 
 ## 🚀 Upcoming Features
 
-### 💊 Pill Profile System
-**Advanced Pharmaceutical Intelligence**
-- Verified information database for a wide range of medicines
-- Detailed composition, usage, and dosage guidelines
-- Comprehensive side effects and precautions database
-- Drug interaction warnings and alerts
-- Reliable reference for making informed medication decisions
-
 ### 🏥 NearbyCare Location Services
 **Real-time Healthcare Facility Locator**
 - GPS-powered location of nearby hospitals and medical facilities
@@ -69,7 +69,6 @@ HealthHacked is a cutting-edge, AI-powered health assistance platform that provi
 - **React 18** with TypeScript for type-safe development
 - **Tailwind CSS** for responsive, utility-first styling
 - **React Router** for seamless navigation
-- **Zustand** for efficient state management
 - **React Hot Toast** for user notifications
 - **Lucide React** for beautiful icons
 
@@ -82,58 +81,11 @@ HealthHacked is a cutting-edge, AI-powered health assistance platform that provi
 - **Redis** for caching and session management (optional)
 
 ### DevOps & Security
-- **Helmet.js** for security headers
 - **CORS** for cross-origin resource sharing
 - **Compression** middleware for performance
 - **Rate Limiting** for API protection
 - **Environment Configuration** with dotenv
 
-## 📋 API Endpoints
-
-### Authentication
-```
-POST /api/auth/register    # User registration
-POST /api/auth/login       # User authentication
-GET  /api/auth/me          # Get current user profile
-```
-
-### Health Management
-```
-GET  /api/health/dashboard     # Personal health dashboard
-GET  /api/health/contexts      # Health contexts management
-GET  /api/health/care-plans    # Active care plans
-PUT  /api/health/contexts/:id/status  # Update context status
-```
-
-### AI Chat
-```
-POST /api/chat             # Send message to AI assistant
-```
-
-## 🏗️ Project Structure
-
-```
-healthhacked/
-├── backend/
-│   ├── src/
-│   │   ├── controllers/      # Request handlers
-│   │   ├── models/          # MongoDB schemas
-│   │   ├── routes/          # API route definitions
-│   │   ├── services/        # Business logic & AI services
-│   │   ├── middleware/      # Custom middleware
-│   │   └── utils/           # Utility functions
-│   ├── logs/               # Application logs
-│   └── package.json
-├── frontend/
-│   ├── src/
-│   │   ├── components/     # Reusable UI components
-│   │   ├── pages/         # Application pages
-│   │   ├── hooks/         # Custom React hooks
-│   │   ├── services/      # API service functions
-│   │   └── utils/         # Helper utilities
-│   └── package.json
-└── README.md
-```
 
 ## 🚀 Quick Start
 
