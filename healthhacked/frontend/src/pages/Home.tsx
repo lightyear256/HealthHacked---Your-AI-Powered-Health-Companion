@@ -714,32 +714,7 @@ export function Home() {
             <p className="text-purple-200 text-sm">
               © 2025 HealthHacked. All rights reserved.
             </p>
-            <div className="flex space-x-6 mt-4 md:mt-0">
-              <motion.div whileHover={{ y: -2 }}>
-                <Link
-                  to="/privacy"
-                  className="text-purple-200 hover:text-purple-400 text-sm"
-                >
-                  Privacy
-                </Link>
-              </motion.div>
-              <motion.div whileHover={{ y: -2 }}>
-                <Link
-                  to="/terms"
-                  className="text-purple-200 hover:text-purple-400 text-sm"
-                >
-                  Terms
-                </Link>
-              </motion.div>
-              <motion.div whileHover={{ y: -2 }}>
-                <Link
-                  to="/cookies"
-                  className="text-purple-200 hover:text-purple-400 text-sm"
-                >
-                  Cookies
-                </Link>
-              </motion.div>
-            </div>
+            
           </div>
         </div>
       </footer>
