@@ -118,6 +118,7 @@ export function Header() {
               <>
                 <NavLink to="/about">About</NavLink>
                 <NavLink to="/features">Features</NavLink>
+                <NavLink to="/creators">Creators</NavLink>
               </>
             )}
           </nav>
