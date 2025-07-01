@@ -4,7 +4,7 @@
 // ================================
 import { useState, useCallback } from 'react';
 import { ChatMessage } from '../types';
-import { apiClient } from '../services/api';
+import apiClient from '../services/api';
 
 export function useChat() {
   const [messages, setMessages] = useState<ChatMessage[]>([]);

@@ -297,7 +297,7 @@ export function CarePlans() {
                   className={` rounded-lg p-4 transition-all ${
                     recommendation.completed 
                       ? 'bg-gray-800 border-green-200  ' 
-                      : 'bg-white border-gray-200 hover:shadow-md'
+                      : 'bg-gray-800 border-gray-200 hover:shadow-md'
                   }`}
                 >
                   <div className="flex items-start space-x-4">
@@ -320,10 +320,10 @@ export function CarePlans() {
                     <div className="flex-1">
                       <div className="flex items-start justify-between">
                         <div>
-                          <h3 className={`font-medium ${recommendation.completed ? 'text-white line-through' : 'text-gray-900'}`}>
+                          <h3 className={`font-medium ${recommendation.completed ? 'text-white line-through' : 'text-white'}`}>
                             {recommendation.title}
                           </h3>
-                          <p className={`text-sm mt-1 ${recommendation.completed ? 'text-white' : 'text-gray-600'}`}>
+                          <p className={`text-sm mt-1 ${recommendation.completed ? 'text-white' : 'text-white'}`}>
                             {recommendation.description}
                           </p>
                         </div>
@@ -344,7 +344,7 @@ export function CarePlans() {
                         <p className={`text-xs mt-2 ${
                           recommendation.completed ? 'text-white' :
                           isOverdue(recommendation.dueDate) ? 'text-red-600 font-medium' :
-                          'text-gray-500'
+                          'text-white'
                         }`}>
                           {recommendation.completed ? (
                             `Completed: ${new Date(recommendation.completedAt!).toLocaleDateString()}`

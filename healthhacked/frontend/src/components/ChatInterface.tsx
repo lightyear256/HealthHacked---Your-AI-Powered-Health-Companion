@@ -150,7 +150,7 @@ function MessageBubble({ message }: MessageBubbleProps) {
           'px-4 py-3',
           isUser ? 'bg-primary-600 text-white' : 'bg-gray-50',
           isEmergency && !isUser && 'border-red-500 bg-red-50'
-        )} padding="none">
+        )}>
           {isEmergency && !isUser && (
             <div className="flex items-center space-x-2 mb-2 text-red-600">
               <AlertTriangle className="h-4 w-4" />

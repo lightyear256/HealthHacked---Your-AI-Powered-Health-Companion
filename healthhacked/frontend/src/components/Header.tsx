@@ -161,8 +161,8 @@ export function Header() {
                 {/* Sleep Intelligence Dropdown */}
                 <div 
                   className="relative"
-                  onMouseEnter={() => setSleepDropdownOpen(true)}
-                  onMouseLeave={() => setSleepDropdownOpen(false)}
+                  onClick={() => setSleepDropdownOpen(true)}
+                  onClickCapture={() => setSleepDropdownOpen(false)}
                 >
                   <div className={`px-3 py-2 rounded-md text-sm font-medium transition-colors cursor-pointer flex items-center space-x-2 ${
                     isActivePath('/sleep')
