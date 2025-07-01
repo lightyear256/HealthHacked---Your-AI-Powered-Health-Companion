@@ -57,7 +57,8 @@ function ConditionalHeader() {
     '/care-plans',
     '/meal-plans',
     '/sleep',
-    '/pill-profile'
+    '/pill-profile',
+    '/creators'
   ];
   
   const isValidPath = validPaths.some(path => 
