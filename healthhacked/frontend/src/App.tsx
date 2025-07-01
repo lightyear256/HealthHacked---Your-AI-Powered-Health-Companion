@@ -1,5 +1,3 @@
-
-
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import { Toaster } from 'react-hot-toast';
@@ -15,9 +13,13 @@ import { Chat } from './pages/Chat';
 import { CarePlans } from './pages/CarePlans';
 import { MealPlans } from './pages/MealPlans';
 import { PillProfile } from './pages/PillProfile';
+
+import SleepCalendar from './components/sleep/SleepCalendar';
+import SleepDebtDashboard from './components/sleep/SleepDebtDashboard';
 import { Creators } from './pages/Creators';
 import { SleepDashboard } from './components/sleep/SleepDashboard';
 import { Error } from './pages/error';
+
 
 
 // Protected Route Component
@@ -148,17 +150,29 @@ function App() {
             }
           />
 
-          <Route path="/sleep" 
-           element={ <ProtectedRoute>
-                <SleepDashboard />
-              </ProtectedRoute>} />
-
-          {/* Pill Profile Route - WITHOUT ID */}
           <Route
             path="/pill-profile"
             element={
               <ProtectedRoute>
                 <PillProfile />
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/sleep/calendar"
+            element={
+              <ProtectedRoute>
+                <SleepCalendar />
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/sleep/dashboard"
+            element={
+              <ProtectedRoute>
+                <SleepDebtDashboard />
               </ProtectedRoute>
             }
           />
@@ -195,7 +209,6 @@ function App() {
         />
       </div>
     </Router>
-
   );
 }
 
