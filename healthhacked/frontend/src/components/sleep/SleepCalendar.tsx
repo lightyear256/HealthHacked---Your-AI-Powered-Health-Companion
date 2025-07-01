@@ -92,7 +92,7 @@ const SleepCalendar = () => {
   };
 
   return (
-    <div className="max-w-6xl mx-auto p-6 bg-gray-900 min-h-screen">
+    <div className="max-w-6xl mx-auto mt-28  rounded-md bg-gradient-to-br from-slate-800/50 to-slate-900/50  rounded-lg backdrop-blur-sm border border-slate-700/50 hover:border-purple-500/50 hover:shadow-lg hover:shadow-purple-500/20 transition-all duration-300  p-6 bg-gray-900">
       {/* Header */}
       <div className="mb-8">
         <div className="flex items-center justify-between mb-4">
