@@ -67,7 +67,7 @@ export const Creators: React.FC = () => {
                     ))}
                     <br />
                     
-                    {" World-Class Team ".split("").map((char, index) => (
+                    {"Team ".split("").map((char, index) => (
                       <motion.span
                         key={index + 100}
                         variants={letterVariants}

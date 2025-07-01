@@ -89,11 +89,11 @@ export function PillProfile() {
     
     return (
       <div className="mb-6">
-        <h3 className="text-lg font-semibold text-gray-900 mb-2 flex items-center">
+        <h3 className="text-lg font-semibold text-white mb-2 flex items-center">
           {icon && <span className="mr-2">{icon}</span>}
           {title}
         </h3>
-        <p className="text-gray-700 whitespace-pre-line leading-relaxed">{content}</p>
+        <p className="text-white whitespace-pre-line leading-relaxed">{content}</p>
       </div>
     );
   };
@@ -211,18 +211,18 @@ export function PillProfile() {
         {drugInfo && (
           <Card className="p-8">
             <div className="mb-6">
-              <h2 className="text-2xl font-bold text-gray-900 mb-2">
+              <h2 className="text-2xl font-bold text-white mb-2">
                 {drugInfo.name}
               </h2>
               {drugInfo.genericName && drugInfo.genericName !== drugInfo.name && (
-                <p className="text-gray-600">
+                <p className="text-white">
                   Generic Name: <span className="font-medium">{drugInfo.genericName}</span>
                 </p>
               )}
               {drugInfo.brandNames.length > 0 && (
                 <div className="mt-2">
-                  <span className="text-sm text-gray-500">Also known as: </span>
-                  <span className="text-sm text-gray-700">
+                  <span className="text-sm text-white">Also known as: </span>
+                  <span className="text-sm text-gray-400">
                     {drugInfo.brandNames.slice(0, 5).join(', ')}
                     {drugInfo.brandNames.length > 5 && ` and ${drugInfo.brandNames.length - 5} more`}
                   </span>

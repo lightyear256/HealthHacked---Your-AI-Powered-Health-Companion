@@ -216,7 +216,7 @@ export function MealPlans() {
   };
 
   const RecipeCard = ({ recipe, showAddButton = true }: { recipe: Recipe; showAddButton?: boolean }) => (
-    <Card className="overflow-hidden hover:shadow-lg transition-shadow cursor-pointer">
+    <Card className="overflow-hidden hover:shadow-lg transition-shadow cursor-pointer text-white">
       <div onClick={() => setSelectedRecipe(recipe)}>
         <img
           src={recipe.image}
@@ -225,18 +225,18 @@ export function MealPlans() {
         />
         <div className="p-4">
           <h3 className="font-semibold text-lg mb-2 line-clamp-2">{recipe.label}</h3>
-          <p className="text-sm text-gray-600 mb-2">by {recipe.source}</p>
+          <p className="text-sm text-gray-200 mb-2">by {recipe.source}</p>
           
           <div className="flex flex-wrap gap-2 mb-3">
-            <div className="flex items-center text-sm text-gray-500">
+            <div className="flex items-center text-sm text-gray-400">
               <Clock className="h-4 w-4 mr-1" />
               {recipe.totalTime ? `${recipe.totalTime} min` : 'Quick'}
             </div>
-            <div className="flex items-center text-sm text-gray-500">
+            <div className="flex items-center text-sm text-gray-400">
               <Users className="h-4 w-4 mr-1" />
               {recipe.yield} servings
             </div>
-            <div className="flex items-center text-sm text-gray-500">
+            <div className="flex items-center text-sm text-gray-400">
               <Heart className="h-4 w-4 mr-1" />
               {Math.round(recipe.calories)} cal
             </div>
@@ -411,7 +411,7 @@ export function MealPlans() {
         {/* Recipe Results */}
         {recipes.length > 0 && (
           <div className="mb-8">
-            <h2 className="text-2xl font-semibold mb-6">Recipe Results</h2>
+            <h2 className="text-2xl font-semibold mb-6 text-white">Recipe Results</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {recipes.map((recipe, index) => (
                 <RecipeCard key={`${recipe.uri}-${index}`} recipe={recipe} />
@@ -453,7 +453,7 @@ export function MealPlans() {
               </div>
               
               <div className="p-6">
-                <h2 className="text-2xl font-bold mb-4">{selectedRecipe.label}</h2>
+                <h2 className="text-2xl font-bold mb-4 ">{selectedRecipe.label}</h2>
                 
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
                   <div className="text-center">
