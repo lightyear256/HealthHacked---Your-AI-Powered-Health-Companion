@@ -1,7 +1,7 @@
 
 
 import React from 'react';
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import { Toaster } from 'react-hot-toast';
 import { useAuthStore } from './hooks/useAuth';
 import { Header } from './components/Header';
@@ -16,6 +16,8 @@ import { CarePlans } from './pages/CarePlans';
 import { MealPlans } from './pages/MealPlans';
 import { PillProfile } from './pages/PillProfile';
 import { SleepDashboard } from './components/sleep/SleepDashboard';
+import { Error } from './pages/error';
+
 
 // Protected Route Component
 function ProtectedRoute({ children }: { children: React.ReactNode }) {
@@ -38,12 +40,43 @@ function PublicRoute({ children }: { children: React.ReactNode }) {
 
   return <>{children}</>;
 }
+function ConditionalHeader() {
+  const location = useLocation();
+  
+  // List of paths where Header should NOT be shown
+  const hideHeaderPaths = ['/error', '/404'];
+  
+  // Check if current path matches any route that exists
+  const validPaths = [
+    '/',
+    '/login',
+    '/register',
+    '/dashboard',
+    '/chat',
+    '/care-plans',
+    '/meal-plans',
+    '/sleep',
+    '/pill-profile'
+  ];
+  
+  const isValidPath = validPaths.some(path => 
+    location.pathname === path || 
+    location.pathname.startsWith('/care-plans/')
+  );
+  
+  // Don't show header on 404 pages (invalid paths) or explicitly hidden paths
+  if (!isValidPath || hideHeaderPaths.includes(location.pathname)) {
+    return null;
+  }
+  
+  return <Header />;
+}
 
 function App() {
   return (
     <Router>
       <div className="min-h-screen bg-gray-50">
-        <Header />
+        <ConditionalHeader/>
 
         <Routes>
           {/* Public Routes */}
@@ -129,7 +162,7 @@ function App() {
           />
 
           {/* Redirect unknown routes */}
-          <Route path="*" element={<Navigate to="/" replace />} />
+           <Route path="*" element={<Error/>} />
         </Routes>
 
         {/* Toast Notifications */}
