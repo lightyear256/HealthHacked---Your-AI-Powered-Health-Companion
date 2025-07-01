@@ -15,25 +15,50 @@ const ANIMATION_CONFIG = {
   INITIAL_Y_OFFSET: 60,
 };
 
-const clamp = (value, min = 0, max = 100) =>
+const clamp = (value: number, min = 0, max = 100) =>
   Math.min(Math.max(value, min), max);
 
-const round = (value, precision = 3) =>
+const round = (value: number, precision = 3) =>
   parseFloat(value.toFixed(precision));
 
 const adjust = (
-  value,
-  fromMin,
-  fromMax,
-  toMin,
-  toMax
+  value: number,
+  fromMin: number,
+  fromMax: number,
+  toMin: number,
+  toMax: number
 ) =>
   round(toMin + ((toMax - toMin) * (value - fromMin)) / (fromMax - fromMin));
 
-const easeInOutCubic = (x) =>
+const easeInOutCubic = (x: number) =>
   x < 0.5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2;
 
-const ProfileCardComponent = ({
+interface ProfileCardProps {
+  avatarUrl?: string;
+  iconUrl?: string;
+  grainUrl?: string;
+  behindGradient?: string;
+  innerGradient?: string;
+  showBehindGradient?: boolean;
+  className?: string;
+  enableTilt?: boolean;
+  miniAvatarUrl?: string;
+  name?: string;
+  title?: string;
+  handle?: string;
+  status?: string;
+  showUserInfo?: boolean;
+  // Social links props
+  linkedinUrl?: string;
+  githubUrl?: string;
+  onLinkedinClick?: () => void;
+  onGithubClick?: () => void;
+  // Legacy contact props
+  contactText?: string;
+  onContactClick?: () => void;
+}
+
+const ProfileCardComponent: React.FC<ProfileCardProps> = ({
   avatarUrl = "<Placeholder for avatar URL>",
   iconUrl = "<Placeholder for icon URL>",
   grainUrl = "<Placeholder for grain URL>",
@@ -48,28 +73,28 @@ const ProfileCardComponent = ({
   handle = "javicodes",
   status = "Online",
   showUserInfo = true,
-  // New props for social links
+  // Social links props
   linkedinUrl,
   githubUrl,
   onLinkedinClick,
   onGithubClick,
-  // Keep backward compatibility
+  // Legacy contact props
   contactText = "Contact",
   onContactClick,
 }) => {
-  const wrapRef = useRef(null);
-  const cardRef = useRef(null);
+  const wrapRef = useRef<HTMLDivElement>(null);
+  const cardRef = useRef<HTMLElement>(null);
 
   const animationHandlers = useMemo(() => {
     if (!enableTilt) return null;
 
-    let rafId = null;
+    let rafId: number | null = null;
 
     const updateCardTransform = (
-      offsetX,
-      offsetY,
-      card,
-      wrap
+      offsetX: number,
+      offsetY: number,
+      card: HTMLElement,
+      wrap: HTMLDivElement
     ) => {
       const width = card.clientWidth;
       const height = card.clientHeight;
@@ -98,17 +123,17 @@ const ProfileCardComponent = ({
     };
 
     const createSmoothAnimation = (
-      duration,
-      startX,
-      startY,
-      card,
-      wrap
+      duration: number,
+      startX: number,
+      startY: number,
+      card: HTMLElement,
+      wrap: HTMLDivElement
     ) => {
       const startTime = performance.now();
       const targetX = wrap.clientWidth / 2;
       const targetY = wrap.clientHeight / 2;
 
-      const animationLoop = (currentTime) => {
+      const animationLoop = (currentTime: number) => {
         const elapsed = currentTime - startTime;
         const progress = clamp(elapsed / duration);
         const easedProgress = easeInOutCubic(progress);
@@ -139,7 +164,7 @@ const ProfileCardComponent = ({
   }, [enableTilt]);
 
   const handlePointerMove = useCallback(
-    (event) => {
+    (event: PointerEvent) => {
       const card = cardRef.current;
       const wrap = wrapRef.current;
 
@@ -168,7 +193,7 @@ const ProfileCardComponent = ({
   }, [animationHandlers]);
 
   const handlePointerLeave = useCallback(
-    (event) => {
+    (event: PointerEvent) => {
       const card = cardRef.current;
       const wrap = wrapRef.current;
 
@@ -297,7 +322,7 @@ const ProfileCardComponent = ({
                       onError={(e) => {
                         const target = e.target as HTMLImageElement;
                         target.style.opacity = "0.5";
-                        target.src = avatarUrl;
+                        target.src = avatarUrl || "";
                       }}
                     />
                   </div>
@@ -333,7 +358,7 @@ const ProfileCardComponent = ({
                       </button>
                     )}
                   </div>
-                ) : (
+                ) : onContactClick ? (
                   <button
                     className="pc-contact-btn"
                     onClick={handleContactClick}
@@ -343,7 +368,7 @@ const ProfileCardComponent = ({
                   >
                     {contactText}
                   </button>
-                )}
+                ) : null}
               </div>
             )}
           </div>
