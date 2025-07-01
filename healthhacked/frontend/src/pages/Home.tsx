@@ -33,6 +33,7 @@ import {
   type Testimonial,
 } from "../data/testimonial";
 import { Header } from "@/components/Header";
+import { Footer } from "@/components/Footer";
 
 export function Home() {
   const { isAuthenticated } = useAuthStore();
@@ -249,56 +250,128 @@ export function Home() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1, ease: "easeOut" }}
           >
-            <motion.div
-              variants={containerVariants}
-              initial="hidden"
-              animate="visible"
-              className="text-4xl font-bold tracking-tight text-white sm:text-6xl drop-shadow-lg mt-20"
-            >
-              {"Your AI-Powered".split("").map((char, index) => (
-                <motion.span
-                  key={index}
-                  variants={letterVariants}
-                  style={{ display: 'inline-block' }}
-                >
-                  {char === " " ? "\u00A0" : char}
-                </motion.span>
-              ))}
-              <br />
-              <motion.span 
-                className="text-purple-400" 
-                animate={{ 
-                  textShadow: [
-                    "0 0 10px rgba(168, 85, 247, 0.5)",
-                    "0 0 30px rgba(168, 85, 247, 1)",
-                    "0 0 20px rgba(168, 85, 247, 0.8)",
-                    "0 0 30px rgba(168, 85, 247, 1)",
-                    "0 0 10px rgba(168, 85, 247, 0.5)"
-                  ]
-                }}
-                transition={{ 
-                  duration: 4, 
-                  repeat: Infinity, 
-                  ease: "easeInOut" 
-                }}
-                whileHover={{
-                  scale: 1.1,
-                  rotate: [0, -2, 2, 0],
-                  transition: { duration: 0.5 }
-                }}
-              >
-                {" Health "}
-              </motion.span>
-              {"Companion".split("").map((char, index) => (
-                <motion.span
-                  key={index + 100}
-                  variants={letterVariants}
-                  style={{ display: 'inline-block' }}
-                >
-                  {char}
-                </motion.span>
-              ))}
-            </motion.div>
+           <div className="flex items-center justify-center relative">
+      <motion.div
+        variants={containerVariants}
+        initial="hidden"
+        animate="visible"
+        className="text-4xl font-bold tracking-tight text-white sm:text-6xl z-10 drop-shadow-lg mt-20 text-center"
+      >
+        {"Your AI-Powered".split("").map((char, index) => (
+          <motion.span
+            key={index}
+            variants={letterVariants}
+            style={{ display: 'inline-block' }}
+          >
+            {char === " " ? "\u00A0" : char}
+          </motion.span>
+        ))}
+        <br />
+        <motion.span 
+          className="text-purple-400" 
+          animate={{ 
+            textShadow: [
+              "0 0 10px rgba(168, 85, 247, 0.5)",
+              "0 0 30px rgba(168, 85, 247, 1)",
+              "0 0 20px rgba(168, 85, 247, 0.8)",
+              "0 0 30px rgba(168, 85, 247, 1)",
+              "0 0 10px rgba(168, 85, 247, 0.5)"
+            ]
+          }}
+          transition={{ 
+            duration: 4, 
+            repeat: Infinity, 
+            ease: "easeInOut" 
+          }}
+          whileHover={{
+            scale: 1.1,
+            rotate: [0, -2, 2, 0],
+            transition: { duration: 0.5 }
+          }}
+        >
+          {" Health "}
+        </motion.span>
+        {"Companion".split("").map((char, index) => (
+          <motion.span
+            key={index + 100}
+            variants={letterVariants}
+            style={{ display: 'inline-block' }}
+          >
+            {char}
+          </motion.span>
+        ))}
+      </motion.div>
+      
+      {/* Floating Robot on the right */}
+      <motion.div
+        className="absolute z-5 right-0 top-0"
+        animate={{
+          y: [0, -20, 0],
+          rotate: [0, 5, -5, 0]
+        }}
+        transition={{
+          y: {
+            duration: 3,
+            repeat: Infinity,
+            ease: "easeInOut"
+          },
+          rotate: {
+            duration: 4,
+            repeat: Infinity,
+            ease: "easeInOut"
+          }
+        }}
+        whileHover={{
+          scale: 1.2,
+          rotate: [0, 10, -10, 0],
+          transition: { duration: 0.5 }
+        }}
+      >
+        <motion.img 
+          src="https://framerusercontent.com/images/IgecgZtCrDbm170U2W4lLbyak.png" 
+          height={120} 
+          width={120}
+          alt="Robot"
+          className="drop-shadow-lg hover:drop-shadow-2xl transition-all duration-300"
+          animate={{
+            filter: [
+              "drop-shadow(0 10px 20px rgba(168, 85, 247, 0.3))",
+              "drop-shadow(0 15px 30px rgba(168, 85, 247, 0.6))",
+              "drop-shadow(0 10px 20px rgba(168, 85, 247, 0.3))"
+            ]
+          }}
+          transition={{
+            duration: 2,
+            repeat: Infinity,
+            ease: "easeInOut"
+          }}
+        />
+        
+        {/* Floating particles around robot */}
+        {Array.from({ length: 6 }).map((_, i) => (
+          <motion.div
+            key={i}
+            className="absolute w-2 h-2 bg-purple-400 rounded-full opacity-60"
+            style={{
+              left: `${30 + Math.random() * 60}%`,
+              top: `${20 + Math.random() * 60}%`,
+            }}
+            animate={{
+              y: [0, -30, 0],
+              x: [0, Math.random() * 20 - 10, 0],
+              opacity: [0.6, 1, 0.6],
+              scale: [1, 1.5, 1]
+            }}
+            transition={{
+              duration: 2 + Math.random() * 2,
+              repeat: Infinity,
+              delay: Math.random() * 2,
+              ease: "easeInOut"
+            }}
+          />
+        ))}
+      </motion.div>
+    </div>
             
             <motion.p 
               className="mt-6 text-lg leading-8 text-purple-200 drop-shadow"
@@ -609,115 +682,6 @@ export function Home() {
           </div>
         </div>
       </section>
-
-      <footer className="bg-slate-900 border-t border-slate-800">
-        <div className="mx-auto max-w-7xl px-6 lg:px-8 py-12">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-            {/* Logo and Description */}
-            <div className="md:col-span-1">
-              <motion.h3 
-                className="text-xl font-bold text-white mb-4"
-                whileHover={{ 
-                  scale: 1.05,
-                  color: "#a855f7",
-                  transition: { duration: 0.2 }
-                }}
-              >
-                HealthHacked
-              </motion.h3>
-              <p className="text-purple-200 text-sm leading-relaxed">
-                Your AI-powered health companion providing personalized guidance
-                and support for your wellness journey.
-              </p>
-            </div>
-
-            {/* Quick Links */}
-            <div>
-              <h4 className="text-white font-semibold mb-4">Quick Links</h4>
-              <ul className="space-y-2">
-                <li>
-                  <motion.div whileHover={{ x: 5 }}>
-                    <Link
-                      to="/#about"
-                      className="text-purple-200 hover:text-purple-400 text-sm"
-                      onClick={(e) => {
-                        if (window.location.pathname === "/") {
-                          e.preventDefault();
-                          document.getElementById("about")?.scrollIntoView({
-                            behavior: "smooth",
-                            block: "start",
-                          });
-                        }
-                      }}
-                    >
-                      About Us
-                    </Link>
-                  </motion.div>
-                </li>
-                <li>
-                  <motion.div whileHover={{ x: 5 }}>
-                    <Link
-                      to="/#features"
-                      className="text-purple-200 hover:text-purple-400 text-sm"
-                      onClick={(e) => {
-                        if (window.location.pathname === "/") {
-                          e.preventDefault();
-                          document.getElementById("features")?.scrollIntoView({
-                            behavior: "smooth",
-                            block: "start",
-                          });
-                        }
-                      }}
-                    >
-                      Features
-                    </Link>
-                  </motion.div>
-                </li>
-                <li>
-                  <motion.div whileHover={{ x: 5 }}>
-                    <Link
-                      to="mailto:healthhacked1@gmail.com"
-                      className="text-purple-200 hover:text-purple-400 text-sm"
-                    >
-                      Contact
-                    </Link>
-                  </motion.div>
-                </li>
-              </ul>
-            </div>
-
-            {/* Connect */}
-            <div>
-              <h4 className="text-white font-semibold mb-4">Connect With Us</h4>
-              <p className="text-purple-200 text-sm mb-4">
-                Stay updated with our latest news and health tips
-              </p>
-              <div className="flex space-x-4">
-                <motion.a
-                  href="mailto:healthhacked1@gmail.com"
-                  className="text-purple-200 hover:text-purple-400 transition-colors"
-                  whileHover={{ 
-                    scale: 1.2,
-                    rotate: 15,
-                    color: "#a855f7"
-                  }}
-                  whileTap={{ scale: 0.9 }}
-                >
-                  <Mail className="h-5 w-5" />
-                </motion.a>
-              </div>
-            </div>
-          </div>
-
-          {/* Bottom Section */}
-          <div className="mt-8 pt-8 border-t border-slate-800 flex flex-col md:flex-row justify-between items-center">
-            <p className="text-purple-200 text-sm">
-              © 2025 HealthHacked. All rights reserved.
-            </p>
-            
-          </div>
-        </div>
-      </footer>
       <BubbleCursor />
     </>
   );

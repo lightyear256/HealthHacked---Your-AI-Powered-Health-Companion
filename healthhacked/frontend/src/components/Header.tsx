@@ -1,5 +1,6 @@
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { useAuthStore } from "../hooks/useAuth";
+import { useScrollToSection } from "../hooks/useScrollToSection"; // Import your custom hook
 import { Button } from "../components/ui/Button";
 import {
   Heart,
@@ -22,6 +23,7 @@ export function Header() {
   const { user, isAuthenticated, logout } = useAuthStore();
   const navigate = useNavigate();
   const location = useLocation();
+  const { scrollToSection } = useScrollToSection(); // Use your custom hook
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [sleepDropdownOpen, setSleepDropdownOpen] = useState(false);
 
@@ -34,6 +36,30 @@ export function Header() {
   const isActivePath = (path: string) => {
     return location.pathname === path || 
            (path === '/sleep' && location.pathname.startsWith('/sleep'));
+  };
+
+  // Handle smooth scrolling to sections
+  const handleSectionClick = (sectionId: string) => {
+    // If we're not on the home page, navigate there first
+    if (location.pathname !== '/') {
+      navigate('/', { replace: true });
+      // Wait for navigation to complete, then scroll
+      setTimeout(() => {
+        scrollToSection(sectionId, { 
+          behavior: 'smooth', 
+          block: 'start',
+          offset: 80 // Account for fixed header height
+        });
+      }, 100);
+    } else {
+      // If we're already on home page, just scroll
+      scrollToSection(sectionId, { 
+        behavior: 'smooth', 
+        block: 'start',
+        offset: 80 // Account for fixed header height
+      });
+    }
+    setMobileMenuOpen(false);
   };
 
   const NavLink = ({
@@ -55,6 +81,27 @@ export function Header() {
     >
       {children}
     </Link>
+  );
+
+  // Component for section navigation buttons (not links)
+  const SectionButton = ({
+    sectionId,
+    children,
+    onClick,
+  }: {
+    sectionId: string;
+    children: React.ReactNode;
+    onClick?: () => void;
+  }) => (
+    <button
+      onClick={() => {
+        handleSectionClick(sectionId);
+        onClick?.();
+      }}
+      className="px-3 py-2 rounded-md text-sm font-medium transition-colors text-white hover:text-purple-300 hover:bg-white/10"
+    >
+      {children}
+    </button>
   );
 
   return (
@@ -154,8 +201,9 @@ export function Header() {
               </>
             ) : (
               <>
-                <NavLink to="/about">About</NavLink>
-                <NavLink to="/features">Features</NavLink>
+                <SectionButton sectionId="about">About</SectionButton>
+                <SectionButton sectionId="features">Features</SectionButton>
+                <NavLink to="/creators">Creators</NavLink>
               </>
             )}
           </nav>
@@ -311,14 +359,20 @@ export function Header() {
                 </>
               ) : (
                 <>
-                  <NavLink to="/about" onClick={() => setMobileMenuOpen(false)}>
+                  <SectionButton 
+                    sectionId="about" 
+                    onClick={() => setMobileMenuOpen(false)}
+                  >
                     About
-                  </NavLink>
-                  <NavLink
-                    to="/features"
+                  </SectionButton>
+                  <SectionButton 
+                    sectionId="features" 
                     onClick={() => setMobileMenuOpen(false)}
                   >
                     Features
+                  </SectionButton>
+                  <NavLink to="/creators" onClick={() => setMobileMenuOpen(false)}>
+                    Creators
                   </NavLink>
                   <div className="px-3 py-2 space-y-2">
                     <Link to="/login" onClick={() => setMobileMenuOpen(false)}>
