@@ -81,7 +81,7 @@ export const Creators: React.FC = () => {
           </div>
 
           {/* Team Grid */}
-           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8 max-w-6xl mx-auto mb-12 sm:mb-16 lg:mb-20 px-2 sm:px-4">
+           <div className="flex flex-col md:flex-row gap-x-10 gap-y-10 justify-center items-center ">
             
             <div className="flex justify-center">
               <ProfileCard 
