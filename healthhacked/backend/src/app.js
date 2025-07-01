@@ -21,7 +21,7 @@ const app = express();
 // Security middleware
 app.use(helmet());
 app.use(cors({
-  origin: ['http://localhost:5173', 'http://localhost:5174', 'http://localhost:5175'],
+  origin: ['http://localhost:5173', 'http://localhost:5174', 'http://localhost:5175', 'https://healthhacked-your-ai.onrender.com', 'https://health-hacked-your-ai-powered-healt.vercel.app/'],
   credentials: true
 }));
 
