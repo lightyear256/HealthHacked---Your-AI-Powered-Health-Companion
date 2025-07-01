@@ -240,7 +240,7 @@ What can I help you with today?`,
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 to-black">
-    <style jsx>{`
+    <style>{`
       .scrollbar-custom::-webkit-scrollbar {
         width: 8px;
       }

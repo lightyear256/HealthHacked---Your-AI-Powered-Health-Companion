@@ -88,7 +88,7 @@ export const Creators: React.FC = () => {
                 name="Hammad Malik"
                 title="AI & Backend"
                 handle="hammad"
-                status="Online"
+                status="B.Tech 2nd Year"
                 avatarUrl={hammad}
                 showUserInfo={true}
                 enableTilt={true}
@@ -100,9 +100,9 @@ export const Creators: React.FC = () => {
             <div className="flex justify-center">
               <ProfileCard 
                 name="K L N Sai Aditya"
-                title="Frontend Developer"
+                title="Frontend & Design"
                 handle="saiaditya10"
-                status="Online"
+                status="B.Tech 2nd Year"
                 avatarUrl={aditya}
                 showUserInfo={true}
                 enableTilt={true}
@@ -116,7 +116,7 @@ export const Creators: React.FC = () => {
                 name="Ayushmaan Kumar"
                 title="Frontend & Animations"
                 handle="ayushmaan"
-                status="Online"
+               status="B.Tech 2nd Year"
                 avatarUrl={ayushmaan}
                 showUserInfo={true}
                 enableTilt={true}
@@ -128,7 +128,7 @@ export const Creators: React.FC = () => {
           </div>
         </div>
 
-        <style jsx>{`
+        <style>{`
           @keyframes shine {
             0% { left: -100%; }
             100% { left: 100%; }

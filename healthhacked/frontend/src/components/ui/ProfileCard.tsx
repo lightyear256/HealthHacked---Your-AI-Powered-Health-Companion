@@ -229,16 +229,16 @@ const ProfileCardComponent = ({
     handlePointerLeave,
   ]);
 
-  const cardStyle = useMemo(
+  const cardStyle = useMemo<React.CSSProperties>(
     () =>
     ({
       "--icon": iconUrl ? `url(${iconUrl})` : "none",
       "--grain": grainUrl ? `url(${grainUrl})` : "none",
       "--behind-gradient": showBehindGradient
-        ? (behindGradient ?? DEFAULT_BEHIND_GRADIENT)
+        ? String(behindGradient ?? DEFAULT_BEHIND_GRADIENT)
         : "none",
-      "--inner-gradient": innerGradient ?? DEFAULT_INNER_GRADIENT,
-    }),
+      "--inner-gradient": String(innerGradient ?? DEFAULT_INNER_GRADIENT),
+    } as React.CSSProperties),
     [iconUrl, grainUrl, showBehindGradient, behindGradient, innerGradient]
   );
 
@@ -282,7 +282,7 @@ const ProfileCardComponent = ({
               alt={`${name || "User"} avatar`}
               loading="lazy"
               onError={(e) => {
-                const target = e.target;
+                const target = e.target as HTMLImageElement;
                 target.style.display = "none";
               }}
             />
@@ -295,7 +295,7 @@ const ProfileCardComponent = ({
                       alt={`${name || "User"} mini avatar`}
                       loading="lazy"
                       onError={(e) => {
-                        const target = e.target;
+                        const target = e.target as HTMLImageElement;
                         target.style.opacity = "0.5";
                         target.src = avatarUrl;
                       }}
