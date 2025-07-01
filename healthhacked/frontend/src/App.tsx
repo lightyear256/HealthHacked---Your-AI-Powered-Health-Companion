@@ -15,6 +15,7 @@ import { Chat } from './pages/Chat';
 import { CarePlans } from './pages/CarePlans';
 import { MealPlans } from './pages/MealPlans';
 import { PillProfile } from './pages/PillProfile';
+import { Creators } from './pages/Creators';
 import { SleepDashboard } from './components/sleep/SleepDashboard';
 import { Error } from './pages/error';
 
@@ -81,7 +82,7 @@ function App() {
         <Routes>
           {/* Public Routes */}
           <Route path="/" element={<Home />} />
-
+          <Route path="/creators" element={<Creators />} />
           <Route
             path="/login"
             element={
