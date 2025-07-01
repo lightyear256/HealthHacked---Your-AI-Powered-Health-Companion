@@ -86,6 +86,7 @@
   display: none;
 }
 
+/* User info container - Enhanced flex layout */
 .pc-user-info {
   position: absolute;
   bottom: 20px;
@@ -101,12 +102,16 @@
   border-radius: 15px;
   padding: 12px 14px;
   pointer-events: auto;
+  gap: 12px;
+  min-height: 52px;
 }
 
 .pc-user-details {
   display: flex;
   align-items: center;
   gap: 12px;
+  flex: 1;
+  min-width: 0; /* Allow text to shrink */
 }
 
 .pc-mini-avatar {
@@ -163,13 +168,16 @@
   transform: translateY(-1px);
 }
 
-/* Social buttons container */
+/* Social buttons container - Enhanced responsiveness */
 .pc-social-buttons {
   display: flex;
   gap: 8px;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
 }
 
-/* Base social button styles */
+/* Base social button styles - Responsive sizing */
 .pc-social-btn {
   background: rgba(255, 255, 255, 0.1);
   border: 1px solid rgba(255, 255, 255, 0.3);
@@ -183,6 +191,9 @@
   justify-content: center;
   width: 36px;
   height: 36px;
+  flex-shrink: 0;
+  min-width: 32px;
+  min-height: 32px;
 }
 
 .pc-social-btn:hover {
@@ -201,6 +212,14 @@
   background: rgba(51, 51, 51, 0.3);
   border-color: rgba(51, 51, 51, 0.6);
   color: #333;
+}
+
+/* Ensure icons scale properly within buttons */
+.pc-social-btn svg {
+  width: 100%;
+  height: 100%;
+  max-width: 16px;
+  max-height: 16px;
 }
 
 .pc-content {
@@ -241,6 +260,7 @@
   text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
 }
 
+/* Tablet styles */
 @media (max-width: 768px) {
   .pc-card {
     height: 70svh;
@@ -264,6 +284,8 @@
     left: 15px;
     right: 15px;
     padding: 10px 12px;
+    gap: 10px;
+    min-height: 48px;
   }
 
   .pc-mini-avatar {
@@ -287,8 +309,27 @@
     padding: 6px 12px;
     font-size: 12px;
   }
+
+  .pc-social-buttons {
+    gap: 6px;
+  }
+
+  .pc-social-btn {
+    width: 32px;
+    height: 32px;
+    padding: 6px;
+    border-radius: 6px;
+    min-width: 28px;
+    min-height: 28px;
+  }
+
+  .pc-social-btn svg {
+    max-width: 14px;
+    max-height: 14px;
+  }
 }
 
+/* Mobile styles */
 @media (max-width: 480px) {
   .pc-card {
     height: 60svh;
@@ -314,6 +355,8 @@
     right: 12px;
     padding: 8px 10px;
     border-radius: 12px;
+    gap: 8px;
+    min-height: 44px;
   }
 
   .pc-mini-avatar {
@@ -323,6 +366,10 @@
 
   .pc-user-details {
     gap: 8px;
+  }
+
+  .pc-user-text {
+    gap: 4px;
   }
 
   .pc-handle {
@@ -337,8 +384,29 @@
     padding: 5px 10px;
     font-size: 11px;
   }
+
+  .pc-social-buttons {
+    gap: 4px;
+    flex-direction: row;
+    flex-wrap: nowrap;
+  }
+
+  .pc-social-btn {
+    width: 28px;
+    height: 28px;
+    padding: 4px;
+    border-radius: 4px;
+    min-width: 24px;
+    min-height: 24px;
+  }
+
+  .pc-social-btn svg {
+    max-width: 12px;
+    max-height: 12px;
+  }
 }
 
+/* Extra small mobile styles */
 @media (max-width: 320px) {
   .pc-card {
     height: 55svh;
@@ -355,11 +423,13 @@
 
   .pc-user-info {
     padding: 6px 8px;
+    gap: 6px;
+    min-height: 40px;
   }
 
   .pc-mini-avatar {
-    width: 32px;
-    height: 32px;
+    width: 28px;
+    height: 28px;
   }
 
   .pc-user-details {
@@ -377,5 +447,23 @@
   .pc-contact-btn {
     padding: 4px 8px;
     font-size: 10px;
+  }
+
+  .pc-social-buttons {
+    gap: 2px;
+  }
+
+  .pc-social-btn {
+    width: 24px;
+    height: 24px;
+    padding: 2px;
+    border-radius: 3px;
+    min-width: 20px;
+    min-height: 20px;
+  }
+
+  .pc-social-btn svg {
+    max-width: 10px;
+    max-height: 10px;
   }
 }
