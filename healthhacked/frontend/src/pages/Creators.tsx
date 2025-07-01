@@ -5,12 +5,36 @@ import hammad from '../assets/hammad.jpg'
 import { Footer } from '@/components/Footer';
 import { BubbleCursor } from '@/components/ui/BubbleCursor';
 import ProfileCard from '@/components/ui/ProfileCard';
+import { motion } from 'framer-motion';
 
 export const Creators: React.FC = () => {
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.1,
+        delayChildren: 0.3,
+      },
+    },
+  };
+  const letterVariants = {
+    hidden: { opacity: 0, y: 50, rotateX: -90 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      rotateX: 0,
+      transition: {
+        type: "spring",
+        damping: 12,
+        stiffness: 200,
+      },
+    },
+  };
 
   return (
     <>
-      <div className="relative overflow-hidden py-20 sm:py-20 absolute top-0">
+      <div className="relative overflow-hidden py-8 sm:py-12 lg:py-16">
         {/* Background Pattern */}
         <div className="absolute inset-0 bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900"
         style={{
@@ -18,61 +42,88 @@ export const Creators: React.FC = () => {
             minHeight: '100vh'
           }}  >
           <div className="absolute inset-0 opacity-20">
-            <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl"></div>
-            <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-purple-500/10 rounded-full blur-3xl"></div>
+            <div className="absolute top-1/4 left-1/4 w-48 h-48 sm:w-72 sm:h-72 lg:w-96 lg:h-96 bg-blue-500/10 rounded-full blur-3xl"></div>
+            <div className="absolute bottom-1/4 right-1/4 w-48 h-48 sm:w-72 sm:h-72 lg:w-96 lg:h-96 bg-purple-500/10 rounded-full blur-3xl"></div>
           </div>
         </div>
 
-        <div className="relative z-10 container mx-auto px-6 py-16">
+        <div className="relative z-10 container mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-6">
           {/* Header */}
-          <div className="text-center mb-16">
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-4 tracking-tight">
-              Meet Our Highly Talented
-              <br />
-              <span className="bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
-                World-Class Team
-              </span>
-            </h1>
+          <div className="text-center mb-8 sm:mb-12 lg:mb-16">
+            <motion.div
+                    variants={containerVariants}
+                    initial="hidden"
+                    animate="visible"
+                    className="text-2xl sm:text-4xl lg:text-6xl font-bold tracking-tight text-white z-10 drop-shadow-lg mt-8 sm:mt-12 lg:mt-16 text-center"
+                  >
+                    {"Meet Our Highly Talented".split("").map((char, index) => (
+                      <motion.span
+                        key={index}
+                        variants={letterVariants}
+                        style={{ display: 'inline-block' }}
+                      >
+                        {char === " " ? "\u00A0" : char}
+                      </motion.span>
+                    ))}
+                    <br />
+                    
+                    {" World-Class Team ".split("").map((char, index) => (
+                      <motion.span
+                        key={index + 100}
+                        variants={letterVariants}
+                        style={{ display: 'inline-block' }}
+                        className='bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 bg-clip-text text-transparent'
+                      >
+                        {char}
+                      </motion.span>
+                    ))}
+                  </motion.div>
           </div>
 
           {/* Team Grid */}
-           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-48 max-w-7xl mx-auto">
+           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8 max-w-6xl mx-auto mb-12 sm:mb-16 lg:mb-20 px-2 sm:px-4">
             
-            <ProfileCard 
-              name="Hammad Malik"
-              title="AI & Backend"
-              handle="hammad"
-              status="Online"
-              avatarUrl={hammad}
-              showUserInfo={true}
-              enableTilt={true}
-              linkedinUrl="https://www.linkedin.com/in/hammad-malik-/"
-              githubUrl="https://github.com/hammadmalik17"
-            />
+            <div className="flex justify-center">
+              <ProfileCard 
+                name="Hammad Malik"
+                title="AI & Backend"
+                handle="hammad"
+                status="Online"
+                avatarUrl={hammad}
+                showUserInfo={true}
+                enableTilt={true}
+                linkedinUrl="https://www.linkedin.com/in/hammad-malik-/"
+                githubUrl="https://github.com/hammadmalik17"
+              />
+            </div>
             
-            <ProfileCard 
-              name="K L N Sai Aditya"
-              title="Frontend Developer"
-              handle="saiaditya10"
-              status="Online"
-              avatarUrl={aditya}
-              showUserInfo={true}
-              enableTilt={true}
-              linkedinUrl="https://www.linkedin.com/in/sai-aditya-10x/"
-              githubUrl="https://github.com/Aditya-0510"
-            />
+            <div className="flex justify-center">
+              <ProfileCard 
+                name="K L N Sai Aditya"
+                title="Frontend Developer"
+                handle="saiaditya10"
+                status="Online"
+                avatarUrl={aditya}
+                showUserInfo={true}
+                enableTilt={true}
+                linkedinUrl="https://www.linkedin.com/in/sai-aditya-10x/"
+                githubUrl="https://github.com/Aditya-0510"
+              />
+            </div>
             
-            <ProfileCard 
-              name="Ayushmaan Kumar"
-              title="Frontend & Animations"
-              handle="ayushmaan"
-              status="Online"
-              avatarUrl={ayushmaan}
-              showUserInfo={true}
-              enableTilt={true}
-              linkedinUrl="https://www.linkedin.com/in/ayushmaan-kumar/"
-              githubUrl="https://github.com/lightyear256"
-            />
+            <div className="flex justify-center sm:col-span-2 lg:col-span-1">
+              <ProfileCard 
+                name="Ayushmaan Kumar"
+                title="Frontend & Animations"
+                handle="ayushmaan"
+                status="Online"
+                avatarUrl={ayushmaan}
+                showUserInfo={true}
+                enableTilt={true}
+                linkedinUrl="https://www.linkedin.com/in/ayushmaan-kumar/"
+                githubUrl="https://github.com/lightyear256"
+              />
+            </div>
             
           </div>
         </div>
