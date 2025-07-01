@@ -19,6 +19,7 @@ import SleepDebtDashboard from './components/sleep/SleepDebtDashboard';
 import { Creators } from './pages/Creators';
 import { SleepDashboard } from './components/sleep/SleepDashboard';
 import { Error } from './pages/error';
+import SleepCalendarPage from './pages/SleepCalanderpage';
 
 
 
@@ -60,7 +61,9 @@ function ConditionalHeader() {
     '/meal-plans',
     '/sleep',
     '/pill-profile',
-    '/creators'
+    '/creators',
+    '/sleep/dashboard',
+    '/sleep/calendar'
   ];
   
   const isValidPath = validPaths.some(path => 
@@ -163,7 +166,7 @@ function App() {
             path="/sleep/calendar"
             element={
               <ProtectedRoute>
-                <SleepCalendar />
+                <SleepCalendarPage />
               </ProtectedRoute>
             }
           />
