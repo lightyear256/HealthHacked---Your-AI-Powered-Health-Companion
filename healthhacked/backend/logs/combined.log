@@ -755,3 +755,44 @@
 {"level":"info","message":"📍 Environment: development","service":"healthhacked-api","timestamp":"2025-06-22T17:29:13.287Z"}
 {"level":"info","message":"🔗 API Base URL: http://localhost:5000/api","service":"healthhacked-api","timestamp":"2025-06-22T17:29:13.287Z"}
 {"level":"info","message":"🍃 MongoDB Connected: ac-bjeavys-shard-00-01.hhokcxn.mongodb.net","service":"healthhacked-api","timestamp":"2025-06-22T17:29:13.761Z"}
+{"level":"info","message":"🤖 Gemini Service initialized","service":"healthhacked-api","timestamp":"2025-07-01T14:11:44.334Z"}
+{"level":"info","message":"🚀 HealthHacked server running on port 5000","service":"healthhacked-api","timestamp":"2025-07-01T14:11:45.698Z"}
+{"level":"info","message":"📍 Environment: development","service":"healthhacked-api","timestamp":"2025-07-01T14:11:45.699Z"}
+{"level":"info","message":"🔗 API Base URL: http://localhost:5000/api","service":"healthhacked-api","timestamp":"2025-07-01T14:11:45.699Z"}
+{"level":"info","message":"🍃 MongoDB Connected: ac-bjeavys-shard-00-01.hhokcxn.mongodb.net","service":"healthhacked-api","timestamp":"2025-07-01T14:11:46.290Z"}
+{"level":"info","message":"🤖 Gemini Service initialized","service":"healthhacked-api","timestamp":"2025-07-01T14:12:05.318Z"}
+{"level":"info","message":"🚀 HealthHacked server running on port 5000","service":"healthhacked-api","timestamp":"2025-07-01T14:12:06.191Z"}
+{"level":"info","message":"📍 Environment: development","service":"healthhacked-api","timestamp":"2025-07-01T14:12:06.192Z"}
+{"level":"info","message":"🔗 API Base URL: http://localhost:5000/api","service":"healthhacked-api","timestamp":"2025-07-01T14:12:06.193Z"}
+{"level":"info","message":"🍃 MongoDB Connected: ac-bjeavys-shard-00-00.hhokcxn.mongodb.net","service":"healthhacked-api","timestamp":"2025-07-01T14:12:06.972Z"}
+{"level":"info","message":"🤖 Gemini Service initialized","service":"healthhacked-api","timestamp":"2025-07-01T14:12:14.804Z"}
+{"level":"info","message":"🚀 HealthHacked server running on port 5000","service":"healthhacked-api","timestamp":"2025-07-01T14:12:15.547Z"}
+{"level":"info","message":"📍 Environment: development","service":"healthhacked-api","timestamp":"2025-07-01T14:12:15.548Z"}
+{"level":"info","message":"🔗 API Base URL: http://localhost:5000/api","service":"healthhacked-api","timestamp":"2025-07-01T14:12:15.549Z"}
+{"level":"info","message":"🍃 MongoDB Connected: ac-bjeavys-shard-00-00.hhokcxn.mongodb.net","service":"healthhacked-api","timestamp":"2025-07-01T14:12:16.224Z"}
+{"level":"info","message":"🤖 Gemini Service initialized","service":"healthhacked-api","timestamp":"2025-07-01T14:12:57.539Z"}
+{"level":"info","message":"🚀 HealthHacked server running on port 5000","service":"healthhacked-api","timestamp":"2025-07-01T14:12:58.538Z"}
+{"level":"info","message":"📍 Environment: development","service":"healthhacked-api","timestamp":"2025-07-01T14:12:58.538Z"}
+{"level":"info","message":"🔗 API Base URL: http://localhost:5000/api","service":"healthhacked-api","timestamp":"2025-07-01T14:12:58.539Z"}
+{"level":"info","message":"🍃 MongoDB Connected: ac-bjeavys-shard-00-00.hhokcxn.mongodb.net","service":"healthhacked-api","timestamp":"2025-07-01T14:12:59.231Z"}
+{"level":"info","message":"🤖 Gemini Service initialized","service":"healthhacked-api","timestamp":"2025-07-01T14:13:41.592Z"}
+{"level":"info","message":"🚀 HealthHacked server running on port 5000","service":"healthhacked-api","timestamp":"2025-07-01T14:13:42.180Z"}
+{"level":"info","message":"📍 Environment: development","service":"healthhacked-api","timestamp":"2025-07-01T14:13:42.181Z"}
+{"level":"info","message":"🔗 API Base URL: http://localhost:5000/api","service":"healthhacked-api","timestamp":"2025-07-01T14:13:42.181Z"}
+{"level":"info","message":"🍃 MongoDB Connected: ac-bjeavys-shard-00-02.hhokcxn.mongodb.net","service":"healthhacked-api","timestamp":"2025-07-01T14:13:42.854Z"}
+{"level":"info","message":"🤖 Gemini Service initialized","service":"healthhacked-api","timestamp":"2025-07-01T14:19:12.724Z"}
+{"level":"info","message":"🚀 HealthHacked server running on port 5000","service":"healthhacked-api","timestamp":"2025-07-01T14:19:13.669Z"}
+{"level":"info","message":"📍 Environment: development","service":"healthhacked-api","timestamp":"2025-07-01T14:19:13.670Z"}
+{"level":"info","message":"🔗 API Base URL: http://localhost:5000/api","service":"healthhacked-api","timestamp":"2025-07-01T14:19:13.670Z"}
+{"level":"info","message":"🍃 MongoDB Connected: ac-bjeavys-shard-00-01.hhokcxn.mongodb.net","service":"healthhacked-api","timestamp":"2025-07-01T14:19:14.287Z"}
+{"isOperational":true,"level":"error","message":"Not found - /favicon.ico","service":"healthhacked-api","stack":"Error: Not found - /favicon.ico\n    at notFound (C:\\Users\\hp\\Documents\\100 days\\HealthHacked---Your-AI-Powered-Health-Companion\\healthhacked\\backend\\src\\middleware\\errorHandler.js:15:17)\n    at Layer.handle [as handle_request] (C:\\Users\\hp\\Documents\\100 days\\HealthHacked---Your-AI-Powered-Health-Companion\\healthhacked\\backend\\node_modules\\express\\lib\\router\\layer.js:95:5)\n    at trim_prefix (C:\\Users\\hp\\Documents\\100 days\\HealthHacked---Your-AI-Powered-Health-Companion\\healthhacked\\backend\\node_modules\\express\\lib\\router\\index.js:328:13)\n    at C:\\Users\\hp\\Documents\\100 days\\HealthHacked---Your-AI-Powered-Health-Companion\\healthhacked\\backend\\node_modules\\express\\lib\\router\\index.js:286:9\n    at Function.process_params (C:\\Users\\hp\\Documents\\100 days\\HealthHacked---Your-AI-Powered-Health-Companion\\healthhacked\\backend\\node_modules\\express\\lib\\router\\index.js:346:12)\n    at next (C:\\Users\\hp\\Documents\\100 days\\HealthHacked---Your-AI-Powered-Health-Companion\\healthhacked\\backend\\node_modules\\express\\lib\\router\\index.js:280:10)\n    at logger (C:\\Users\\hp\\Documents\\100 days\\HealthHacked---Your-AI-Powered-Health-Companion\\healthhacked\\node_modules\\morgan\\index.js:144:5)\n    at Layer.handle [as handle_request] (C:\\Users\\hp\\Documents\\100 days\\HealthHacked---Your-AI-Powered-Health-Companion\\healthhacked\\backend\\node_modules\\express\\lib\\router\\layer.js:95:5)\n    at trim_prefix (C:\\Users\\hp\\Documents\\100 days\\HealthHacked---Your-AI-Powered-Health-Companion\\healthhacked\\backend\\node_modules\\express\\lib\\router\\index.js:328:13)\n    at C:\\Users\\hp\\Documents\\100 days\\HealthHacked---Your-AI-Powered-Health-Companion\\healthhacked\\backend\\node_modules\\express\\lib\\router\\index.js:286:9","status":"fail","statusCode":404,"timestamp":"2025-07-01T14:19:33.255Z"}
+{"level":"info","message":"🤖 Gemini Service initialized","service":"healthhacked-api","timestamp":"2025-07-01T14:19:56.140Z"}
+{"level":"info","message":"🚀 HealthHacked server running on port 5000","service":"healthhacked-api","timestamp":"2025-07-01T14:19:56.987Z"}
+{"level":"info","message":"📍 Environment: development","service":"healthhacked-api","timestamp":"2025-07-01T14:19:56.988Z"}
+{"level":"info","message":"🔗 API Base URL: http://localhost:5000/api","service":"healthhacked-api","timestamp":"2025-07-01T14:19:56.988Z"}
+{"level":"info","message":"🍃 MongoDB Connected: ac-bjeavys-shard-00-02.hhokcxn.mongodb.net","service":"healthhacked-api","timestamp":"2025-07-01T14:19:57.601Z"}
+{"level":"info","message":"🤖 Gemini Service initialized","service":"healthhacked-api","timestamp":"2025-07-01T14:20:00.584Z"}
+{"level":"info","message":"🚀 HealthHacked server running on port 5000","service":"healthhacked-api","timestamp":"2025-07-01T14:20:01.368Z"}
+{"level":"info","message":"📍 Environment: development","service":"healthhacked-api","timestamp":"2025-07-01T14:20:01.369Z"}
+{"level":"info","message":"🔗 API Base URL: http://localhost:5000/api","service":"healthhacked-api","timestamp":"2025-07-01T14:20:01.370Z"}
+{"level":"info","message":"🍃 MongoDB Connected: ac-bjeavys-shard-00-01.hhokcxn.mongodb.net","service":"healthhacked-api","timestamp":"2025-07-01T14:20:02.106Z"}

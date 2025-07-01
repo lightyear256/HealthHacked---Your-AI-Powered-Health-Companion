@@ -13,6 +13,8 @@ import {
   MessageCircle,
   ClipboardList,
   Moon,
+  Calendar,
+  ChevronDown,
 } from "lucide-react";
 import { useState } from "react";
 
@@ -21,6 +23,7 @@ export function Header() {
   const navigate = useNavigate();
   const location = useLocation();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [sleepDropdownOpen, setSleepDropdownOpen] = useState(false);
 
   const handleLogout = () => {
     logout();
@@ -29,7 +32,8 @@ export function Header() {
   };
 
   const isActivePath = (path: string) => {
-    return location.pathname === path;
+    return location.pathname === path || 
+           (path === '/sleep' && location.pathname.startsWith('/sleep'));
   };
 
   const NavLink = ({
@@ -107,12 +111,46 @@ export function Header() {
                   </div>
                 </NavLink>
                 
-                <NavLink to="/sleep">
-                  <div className="flex items-center space-x-2">
+                {/* Sleep Intelligence Dropdown */}
+                <div 
+                  className="relative"
+                  onMouseEnter={() => setSleepDropdownOpen(true)}
+                  onMouseLeave={() => setSleepDropdownOpen(false)}
+                >
+                  <div className={`px-3 py-2 rounded-md text-sm font-medium transition-colors cursor-pointer flex items-center space-x-2 ${
+                    isActivePath('/sleep')
+                      ? "bg-purple-100 text-purple-800"
+                      : "text-white hover:text-purple-300 hover:bg-white/10"
+                  }`}>
                     <Moon className="h-4 w-4" />
                     <span>Sleep Intelligence</span>
+                    <ChevronDown className={`h-3 w-3 transition-transform ${sleepDropdownOpen ? 'rotate-180' : ''}`} />
                   </div>
-                </NavLink>
+                  
+                  {/* Dropdown Menu */}
+                  {sleepDropdownOpen && (
+                    <div className="absolute top-full left-0 mt-1 w-48 bg-white/95 backdrop-blur-md border border-gray-200 rounded-md shadow-lg py-1 z-50">
+                      <Link
+                        to="/sleep/dashboard"
+                        className="block px-4 py-2 text-sm text-gray-700 hover:bg-purple-50 hover:text-purple-900 transition-colors"
+                      >
+                        <div className="flex items-center space-x-2">
+                          <Moon className="h-4 w-4" />
+                          <span>Sleep Dashboard</span>
+                        </div>
+                      </Link>
+                      <Link
+                        to="/sleep/calendar"
+                        className="block px-4 py-2 text-sm text-gray-700 hover:bg-purple-50 hover:text-purple-900 transition-colors"
+                      >
+                        <div className="flex items-center space-x-2">
+                          <Calendar className="h-4 w-4" />
+                          <span>Sleep Calendar</span>
+                        </div>
+                      </Link>
+                    </div>
+                  )}
+                </div>
               </>
             ) : (
               <>
@@ -240,6 +278,29 @@ export function Header() {
                       <span>Pill Profile</span>
                     </div>
                   </NavLink>
+                  
+                  {/* Mobile Sleep Intelligence Options */}
+                  <div className="px-3 py-2">
+                    <div className="text-sm font-medium text-purple-300 mb-2">Sleep Intelligence</div>
+                    <NavLink
+                      to="/sleep/dashboard"
+                      onClick={() => setMobileMenuOpen(false)}
+                    >
+                      <div className="flex items-center space-x-2 ml-4">
+                        <Moon className="h-4 w-4" />
+                        <span>Sleep Dashboard</span>
+                      </div>
+                    </NavLink>
+                    <NavLink
+                      to="/sleep/calendar"
+                      onClick={() => setMobileMenuOpen(false)}
+                    >
+                      <div className="flex items-center space-x-2 ml-4">
+                        <Calendar className="h-4 w-4" />
+                        <span>Sleep Calendar</span>
+                      </div>
+                    </NavLink>
+                  </div>
                   <button
                     onClick={handleLogout}
                     className="w-full text-left px-3 py-2 rounded-md text-sm font-medium text-white hover:text-purple-300 hover:bg-white/10 flex items-center transition-colors"

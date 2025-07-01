@@ -14,7 +14,7 @@ const authRoutes = require('./routes/auth');
 const chatRoutes = require('./routes/chat');
 const healthRoutes = require('./routes/health');
 const drugsRoutes = require('./routes/drugs');
- 
+const sleepRoutes = require('./routes/sleepTracking'); // Add this line
 
 const app = express();
 
@@ -60,7 +60,8 @@ app.get('/api', (req, res) => {
       'Health context tracking', 
       'Automated care plan generation',
       'Progress monitoring',
-      'Real-time chat history'
+      'Real-time chat history',
+      'Sleep Intelligence tracking' // Add this
     ],
     endpoints: [
       'POST /api/auth/register',
@@ -69,7 +70,10 @@ app.get('/api', (req, res) => {
       'POST /api/chat',
       'GET /api/health/dashboard',
       'GET /api/health/contexts',
-      'GET /api/health/care-plans'
+      'GET /api/health/care-plans',
+      'POST /api/sleep/entries',           // Add these
+      'GET /api/sleep/debt/current',       // Add these
+      'GET /api/sleep/calendar/:year/:month' // Add these
     ]
   });
 });
@@ -79,7 +83,7 @@ app.use('/api/auth', authRoutes);
 app.use('/api/chat', chatRoutes);
 app.use('/api/health', healthRoutes);
 app.use('/api/drugs', drugsRoutes);
-app.use('/api/sleep', require('./routes/sleep'));
+app.use('/api/sleep', sleepRoutes); // Add this line
 
 // 404 handler
 app.use(notFound);
