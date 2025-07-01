@@ -1,10 +1,10 @@
 // ================================
-// STEP 6: Create the chat hook
+// STEP 6: Create the chat hook (Alternative version)
 // File: frontend/src/hooks/useChat.ts
 // ================================
 import { useState, useCallback } from 'react';
 import { ChatMessage } from '../types';
-import apiClient from '../services/api';
+import { chatAPI } from '../services/api';
 
 export function useChat() {
   const [messages, setMessages] = useState<ChatMessage[]>([]);
@@ -23,10 +23,14 @@ export function useChat() {
     setIsLoading(true);
 
     try {
-      const response = await apiClient.sendMessage(message, sessionId || undefined);
+      // Only pass the message for now, since your current API only accepts one parameter
+      const response = await chatAPI.sendMessage(message);
       
-      if (response.success && response.data) {
-        const { response: botResponse, sessionId: newSessionId } = response.data;
+      if (response) {
+        // Extract the assistant response from your API response
+        // Adjust this based on your actual API response structure
+        const botResponse = response.response || response.message || response;
+        const newSessionId = response.sessionId || response.session_id;
 
         // Update session ID if new
         if (newSessionId && newSessionId !== sessionId) {
@@ -41,7 +45,7 @@ export function useChat() {
         };
 
         setMessages(prev => [...prev, assistantMessage]);
-        return response.data;
+        return response;
       }
     } catch (error) {
       console.error('Error sending message:', error);
