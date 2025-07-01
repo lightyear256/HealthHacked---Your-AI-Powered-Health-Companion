@@ -250,56 +250,128 @@ export function Home() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1, ease: "easeOut" }}
           >
-            <motion.div
-              variants={containerVariants}
-              initial="hidden"
-              animate="visible"
-              className="text-4xl font-bold tracking-tight text-white sm:text-6xl drop-shadow-lg mt-20"
-            >
-              {"Your AI-Powered".split("").map((char, index) => (
-                <motion.span
-                  key={index}
-                  variants={letterVariants}
-                  style={{ display: 'inline-block' }}
-                >
-                  {char === " " ? "\u00A0" : char}
-                </motion.span>
-              ))}
-              <br />
-              <motion.span 
-                className="text-purple-400" 
-                animate={{ 
-                  textShadow: [
-                    "0 0 10px rgba(168, 85, 247, 0.5)",
-                    "0 0 30px rgba(168, 85, 247, 1)",
-                    "0 0 20px rgba(168, 85, 247, 0.8)",
-                    "0 0 30px rgba(168, 85, 247, 1)",
-                    "0 0 10px rgba(168, 85, 247, 0.5)"
-                  ]
-                }}
-                transition={{ 
-                  duration: 4, 
-                  repeat: Infinity, 
-                  ease: "easeInOut" 
-                }}
-                whileHover={{
-                  scale: 1.1,
-                  rotate: [0, -2, 2, 0],
-                  transition: { duration: 0.5 }
-                }}
-              >
-                {" Health "}
-              </motion.span>
-              {"Companion".split("").map((char, index) => (
-                <motion.span
-                  key={index + 100}
-                  variants={letterVariants}
-                  style={{ display: 'inline-block' }}
-                >
-                  {char}
-                </motion.span>
-              ))}
-            </motion.div>
+           <div className="flex items-center justify-center relative">
+      <motion.div
+        variants={containerVariants}
+        initial="hidden"
+        animate="visible"
+        className="text-4xl font-bold tracking-tight text-white sm:text-6xl z-10 drop-shadow-lg mt-20 text-center"
+      >
+        {"Your AI-Powered".split("").map((char, index) => (
+          <motion.span
+            key={index}
+            variants={letterVariants}
+            style={{ display: 'inline-block' }}
+          >
+            {char === " " ? "\u00A0" : char}
+          </motion.span>
+        ))}
+        <br />
+        <motion.span 
+          className="text-purple-400" 
+          animate={{ 
+            textShadow: [
+              "0 0 10px rgba(168, 85, 247, 0.5)",
+              "0 0 30px rgba(168, 85, 247, 1)",
+              "0 0 20px rgba(168, 85, 247, 0.8)",
+              "0 0 30px rgba(168, 85, 247, 1)",
+              "0 0 10px rgba(168, 85, 247, 0.5)"
+            ]
+          }}
+          transition={{ 
+            duration: 4, 
+            repeat: Infinity, 
+            ease: "easeInOut" 
+          }}
+          whileHover={{
+            scale: 1.1,
+            rotate: [0, -2, 2, 0],
+            transition: { duration: 0.5 }
+          }}
+        >
+          {" Health "}
+        </motion.span>
+        {"Companion".split("").map((char, index) => (
+          <motion.span
+            key={index + 100}
+            variants={letterVariants}
+            style={{ display: 'inline-block' }}
+          >
+            {char}
+          </motion.span>
+        ))}
+      </motion.div>
+      
+      {/* Floating Robot on the right */}
+      <motion.div
+        className="absolute z-5 right-0 top-0"
+        animate={{
+          y: [0, -20, 0],
+          rotate: [0, 5, -5, 0]
+        }}
+        transition={{
+          y: {
+            duration: 3,
+            repeat: Infinity,
+            ease: "easeInOut"
+          },
+          rotate: {
+            duration: 4,
+            repeat: Infinity,
+            ease: "easeInOut"
+          }
+        }}
+        whileHover={{
+          scale: 1.2,
+          rotate: [0, 10, -10, 0],
+          transition: { duration: 0.5 }
+        }}
+      >
+        <motion.img 
+          src="https://framerusercontent.com/images/IgecgZtCrDbm170U2W4lLbyak.png" 
+          height={120} 
+          width={120}
+          alt="Robot"
+          className="drop-shadow-lg hover:drop-shadow-2xl transition-all duration-300"
+          animate={{
+            filter: [
+              "drop-shadow(0 10px 20px rgba(168, 85, 247, 0.3))",
+              "drop-shadow(0 15px 30px rgba(168, 85, 247, 0.6))",
+              "drop-shadow(0 10px 20px rgba(168, 85, 247, 0.3))"
+            ]
+          }}
+          transition={{
+            duration: 2,
+            repeat: Infinity,
+            ease: "easeInOut"
+          }}
+        />
+        
+        {/* Floating particles around robot */}
+        {Array.from({ length: 6 }).map((_, i) => (
+          <motion.div
+            key={i}
+            className="absolute w-2 h-2 bg-purple-400 rounded-full opacity-60"
+            style={{
+              left: `${30 + Math.random() * 60}%`,
+              top: `${20 + Math.random() * 60}%`,
+            }}
+            animate={{
+              y: [0, -30, 0],
+              x: [0, Math.random() * 20 - 10, 0],
+              opacity: [0.6, 1, 0.6],
+              scale: [1, 1.5, 1]
+            }}
+            transition={{
+              duration: 2 + Math.random() * 2,
+              repeat: Infinity,
+              delay: Math.random() * 2,
+              ease: "easeInOut"
+            }}
+          />
+        ))}
+      </motion.div>
+    </div>
             
             <motion.p 
               className="mt-6 text-lg leading-8 text-purple-200 drop-shadow"
@@ -610,8 +682,6 @@ export function Home() {
           </div>
         </div>
       </section>
-
-      <Footer />
       <BubbleCursor />
     </>
   );
