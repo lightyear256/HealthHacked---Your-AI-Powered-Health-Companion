@@ -460,8 +460,10 @@ export function Home() {
                     }}
                     transition={{ type: "spring", stiffness: 400, damping: 20 }}
                   >
-                    <Link
-                      to="/demo"
+                    <a
+                      href="https://youtu.be/yUfKjgpod1Q"
+                      target="_blank"
+                      rel="noopener noreferrer"
                       className="flex items-center border-none bg-transparent text-white hover:bg-transparent hover:text-purple-400 hover:underline"
                     >
                       Watch Demo
@@ -471,7 +473,7 @@ export function Home() {
                       >
                         <ChevronRight className="h-4 w-4 ml-2" />
                       </motion.div>
-                    </Link>
+                    </a>
                   </motion.div>
                 </>
               )}
@@ -1149,3 +1151,4 @@ function TestimonialCard({
     </motion.div>
   );
 }
+
