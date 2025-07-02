@@ -3,6 +3,9 @@ const logger = require('../utils/logger');
 
 const connectDB = async () => {
   try {
+    // Disable buffering entirely
+    mongoose.set('bufferCommands', false);
+    
     const conn = await mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/healthhacked');
     logger.info(`🍃 MongoDB Connected: ${conn.connection.host}`);
   } catch (error) {
@@ -12,4 +15,3 @@ const connectDB = async () => {
 };
 
 module.exports = connectDB;
-
