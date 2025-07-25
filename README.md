@@ -95,40 +95,6 @@ HealthHacked is a cutting-edge, AI-powered health assistance platform that provi
 - Google Gemini API key
 - npm or yarn package manager
 
-### Installation
-
-1. **Clone the repository**
-   ```bash
-   git clone https://github.com/hammadmalik17/healthhacked.git
-   cd healthhacked
-   ```
-
-2. **Backend Setup**
-   ```bash
-   cd backend
-   npm install
-   cp .env.example .env
-   # Configure your environment variables
-   npm run dev
-   ```
-
-3. **Frontend Setup**
-   ```bash
-   cd frontend
-   npm install
-   npm run dev
-   ```
-
-4. **Environment Configuration**
-   ```env
-   # Backend .env
-   NODE_ENV=development
-   PORT=5000
-   MONGODB_URI=your_mongodb_connection_string
-   JWT_SECRET=your_jwt_secret
-   GEMINI_API_KEY=your_gemini_api_key
-   ```
-
 ## 🎯 How It Works
 
 ### 1. **Symptom Description**
@@ -160,26 +126,9 @@ Track progress, receive reminders, and get ongoing support throughout your healt
 - **API Rate Limiting**: Protection against abuse and unauthorized access
 - **Audit Logging**: Comprehensive logging for security monitoring and compliance
 
-## 🤝 Contributing
-
-We welcome contributions to HealthHacked! Please read our contributing guidelines and submit pull requests for any improvements.
-
-### Development Workflow
-1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Add tests if applicable
-5. Submit a pull request
-
 ## 📄 License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-## 📞 Support
-
-For support, feature requests, or bug reports:
-- Create an issue on GitHub
-- Email: drhammadmalik2020@gmail.com
 
 ## 🙏 Acknowledgments
 
@@ -190,8 +139,6 @@ For support, feature requests, or bug reports:
 
 ---
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=flat)](https://opensource.org/licenses/MIT)
-[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat)](https://github.com/hammadmalik17/2--AIs-Integrated-HealthHacked/pulls)
-[![GitHub stars](https://img.shields.io/github/stars/hammadmalik17/2--AIs-Integrated-HealthHacked?style=social)](https://github.com/hammadmalik17/2--AIs-Integrated-HealthHacked/stargazers)
 
 
 <div align="center">
